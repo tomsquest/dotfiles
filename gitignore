@@ -1,0 +1,19 @@
+# Tmp dir and Tmp files
+tmp/**/*
+.*.swp
+*~
+
+# Logs
+*.log
+
+# Databases
+*.sqlite3
+*.sqlite
+
+# OS generated files
+.DS_Store?
+Thumbs.db
+
+# SVN
+.svn
+
