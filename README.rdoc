@@ -15,7 +15,8 @@ My config files, heavily commented for the most part (Zsh).
 
 === ZSH
 
-Heavily commented ZSH configuration : config, completion, key bindings
+Heavily commented ZSH configuration : config, completion, key bindings...
+
 See the files under the "zsh" directory.
   
 
