@@ -1,0 +1,40 @@
+= My Dot Files
+
+My config files, heavily commented for the most part (Zsh).
+
+
+== Installation
+
+  git clone git://github.com/tomsquest/dotfiles ~/.dotfiles
+  cd ~/.dotfiles
+  rake install
+
+
+== Features
+
+
+=== ZSH
+
+Heavily commented ZSH configuration : config, completion, key bindings
+See the files under the "zsh" directory.
+  
+
+=== ACK-GREP
+
+Ack-grep (alias 'ack') is a powerfull replacement for grep, for developpers.
+(http://betterthangrep.com/)
+
+
+=== GIT
+
+A mostly-complete gitignore.
+
+
+== Sources
+
+- https://github.com/ryanb/dotfiles
+- https://github.com/nono/dotfiles
+- http://stackoverflow.com/questions/171563/whats-in-your-zshrc
+- Ubuntu: /etc/zsh/newuser.zshrc.recommended
+- http://zsh.sourceforge.net/Doc/Release/index-frame.html
+- many others...
