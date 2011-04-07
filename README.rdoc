@@ -5,7 +5,7 @@ My config files, heavily commented for the most part (Zsh).
 
 == Installation
 
-  git clone git://github.com/tomsquest/dotfiles ~/.dotfiles
+  git clone git@github.com:tomsquest/dotfiles.git ~/.dotfiles
   cd ~/.dotfiles
   rake install
 
