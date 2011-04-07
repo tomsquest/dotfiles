@@ -1,0 +1,17 @@
+# Emacs style bindings (for Home/End keys...)
+bindkey -e
+
+# Used to make the return key leave menu selection and accepting the match currently selected
+bindkey -M menuselect '^M' .accept-line
+
+# shift-tab : go backward in menu (invert of tab)
+bindkey '^[[Z' reverse-menu-complete
+
+# alt-u : chdir to the parent directory
+bindkey -s '\eu' '^Ucd ..; ls^M'
+
+# alt-s : insert sudo at the start of the line
+insert_sudo () { zle beginning-of-line; zle -U "sudo " }
+zle -N insert-sudo insert_sudo
+bindkey "^[s" insert-sudo
+

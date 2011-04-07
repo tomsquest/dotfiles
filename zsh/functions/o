@@ -1,0 +1,14 @@
+# open the file or ask to open it with sudo if write-protected
+if [[ -w "$1" ]]; then
+  xdg-open $1
+else
+  echo -n "You don't have write permission for $1, use sudo instead? (y/n)? "
+  read reply
+
+  if [[ $reply == "y" ]]; then
+    sudo xdg-open $1
+  else
+    xdg-open $1
+  fi
+fi
+
