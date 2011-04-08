@@ -18,7 +18,22 @@ My config files, heavily commented for the most part (Zsh).
 Heavily commented ZSH configuration : config, completion, key bindings...
 
 See the files under the "zsh" directory.
-  
+
+==== Completions
+
+- Bundler
+- Capistrano
+- Gem
+- Rake
+- Rvm
+
+
+==== Functions
+
+- o : use xdg-open to open the file with the appropriate program and ask for sudo if root privileges needed
+- mcd : mkdir + cd to it
+- last_modified : used in Rake and Capistrano completion to update the task caches
+
 
 === ACK-GREP
 
