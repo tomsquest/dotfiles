@@ -16,8 +16,10 @@ zle -N insert-sudo insert_sudo
 bindkey '^[s' insert-sudo
 
 # ctrl+left/right : move word by word
-bindkey '^[[5~' backward-word
-bindkey '^[[6~' forward-word
-# Page-up/down : move word by word
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
+
+# Page-up/down : complete current command line using history
+bindkey '^[[5~' history-search-backward
+bindkey '^[[6~' history-search-forward
+
