@@ -13,5 +13,11 @@ bindkey -s '\eu' '^Ucd ..; ls^M'
 # alt-s : insert sudo at the start of the line
 insert_sudo () { zle beginning-of-line; zle -U "sudo " }
 zle -N insert-sudo insert_sudo
-bindkey "^[s" insert-sudo
+bindkey '^[s' insert-sudo
 
+# ctrl+left/right : move word by word
+bindkey '^[[5~' backward-word
+bindkey '^[[6~' forward-word
+# Page-up/down : move word by word
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
