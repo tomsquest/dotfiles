@@ -46,6 +46,8 @@ setopt interactive_comments
 setopt notify
 # List jobs in the long format
 setopt long_list_jobs
+# Don't kill background jobs on logout
+setopt nohup
 # Allow functions to have local options
 setopt local_options
 # Allow functions to have local traps
