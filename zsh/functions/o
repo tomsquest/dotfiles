@@ -1,7 +1,5 @@
 # open the file or ask to open it with sudo if write-protected
 if [[ -a "$1" ]]; then
-  echo EXISTS
-
   if [[ -w "$1" ]]; then
     xdg-open $1
   else
