@@ -33,6 +33,7 @@ alias -g .....='../../../..'
 # Rails
 alias c="echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi"
 alias s="echo Launching Rails server...;if [ -f script/server ]; then script/server; else script/rails server; fi"
+alias g="rails generate"
 alias rdm="rake db:migrate"
 alias rdv="rake db:migrate VERSION=0"
 alias rdmv="rdv && rdm"
