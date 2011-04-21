@@ -1,5 +1,5 @@
 # Tmp dir and Tmp files
-tmp/**/*
+tmp/
 .*.swp
 *~
 
