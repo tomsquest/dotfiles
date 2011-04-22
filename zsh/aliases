@@ -1,5 +1,6 @@
 alias grep='grep --color=auto --line-number'
 alias ack='ack-grep'
+alias du='du -h'
 
 # History with timestamps and elapsed time
 alias h='history -iD'
@@ -20,11 +21,11 @@ alias chown='chown -v'
 
 # ZSH global aliases for piping
 # Example : cat myfile.txt G pattern
-alias -g T="| tail"
-alias -g L="| less"
-alias -g G="| grep -in"
+alias -g T='| tail'
+alias -g L='| less'
+alias -g G='| grep -in'
 
-# Add an "alert" alias for long running commands.  Use like so: sleep 10; alert
+# Add an 'alert' alias for long running commands.  Use like so: sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Beep alias
@@ -37,13 +38,13 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 
 # Rails
-alias c="echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi"
-alias s="echo Launching Rails server...; if [ -f script/server ]; then script/server; else script/rails server; fi"
-alias g="rails generate"
-alias rdm="rake db:migrate"
-alias rdr="rake db:migrate:redo"
-alias seed="rake db:seed"
+alias c='echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi'
+alias s='echo Launching Rails server...; if [ -f script/server ]; then script/server; else script/rails server; fi'
+alias g='rails generate'
+alias rdm='rake db:migrate'
+alias rdr='rake db:migrate:redo'
+alias seed='rake db:seed'
 
 # Git
-alias st="git status"
+alias st='git status'
 
