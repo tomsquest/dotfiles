@@ -37,8 +37,8 @@ See the files under the "zsh" directory.
 
 === ACK-GREP
 
-Ack-grep (alias 'ack') is a powerfull replacement for grep, for developpers.
-(http://betterthangrep.com/)
+Ruby/Haml/Sass configuration for Ack-grep (aliased 'ack').
+ACK is a powerfull replacement for grep, written for developpers (http://betterthangrep.com/)
 
 
 === GIT
@@ -54,3 +54,4 @@ A mostly-complete gitignore.
 - Ubuntu: /etc/zsh/newuser.zshrc.recommended
 - http://zsh.sourceforge.net/Doc/Release/index-frame.html
 - many others...
+
