@@ -1,7 +1,7 @@
 --type-set=haml=.haml
 --type-set=sass=.sass,.scss
 
---type-add=ruby=.haml,.rake
+--type-add=ruby=.rake
 --type-add=html=.html.erb,.html.haml
 --type-add=css=.sass,.scss,.less
 
