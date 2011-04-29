@@ -1,4 +1,4 @@
-alias grep='grep --color=auto --line-number'
+alias grep='grep --color=auto'
 alias ack='ack-grep'
 alias du='du -h'
 
