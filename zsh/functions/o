@@ -11,7 +11,7 @@ if [[ -a "$1" ]]; then
     if [[ $reply == "y" ]]; then
       sudo $opener $1
     else
-      opener $1
+      $opener $1
     fi
   fi
 else
