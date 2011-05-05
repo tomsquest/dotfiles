@@ -5,10 +5,10 @@
 # https://github.com/ryanb/dotfiles
 # Ubuntu: /etc/zsh/newuser.zshrc.recommended
 
-. ~/.zsh/config
-. ~/.zsh/completion
-. ~/.zsh/aliases
-. ~/.zsh/bindkey
-. ~/.zsh/prompt
-. ~/.zsh/rvm
+source ~/.zsh/config
+source ~/.zsh/completion
+source ~/.zsh/aliases
+source ~/.zsh/bindkey
+source ~/.zsh/prompt
+source ~/.zsh/rvm
 
