@@ -41,9 +41,9 @@ alias -g .....='../../../..'
 alias c='echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi'
 alias s='echo Launching Rails server...; if [ -f script/server ]; then script/server; else script/rails server; fi'
 alias g='rails generate'
-alias annot='if which annotate > /dev/null; then echo Annotate models; annotate; fi'
-alias rdm='rake db:migrate && annot'
-alias rdr='rake db:migrate:redo && annot'
+alias annot='if which annotate > /dev/null; then echo Annotating models...; annotate; fi'
+alias rdm='echo db:migrate...; rake db:migrate && annot'
+alias rdr='echo db:migrate:redo...; rake db:migrate:redo && annot'
 alias seed='rake db:seed'
 
 # Git
