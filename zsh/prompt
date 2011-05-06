@@ -1,5 +1,65 @@
 autoload -U promptinit
 promptinit
 
-prompt adam2
+# Enable parameter expansion, command substitution and arithmetic expansion in prompts
+setopt prompt_subst
 
+# Load the colors
+source ~/.zsh/colors
+
+#
+# Custom prompt
+#
+# %n : user
+# %m : host
+# %~ : path
+# Doc: http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Prompt-Expansion
+
+
+# Create a separation bar after the path
+# see: http://aperiodic.net/phil/prompt/
+function precmd {
+
+    # Global width
+    local TERMWIDTH
+    (( TERMWIDTH = ${COLUMNS} - 1 ))
+
+    # The horizontal bar
+    PR_FILLBAR=""
+    # The path, truncated if too long
+    PR_PWDLEN=""
+
+    local promptsize
+    local pwdsize
+
+    # Truncate the path if it's too long.
+	promptsize=${#${(%):-%n@%m-hh-mm-ss-}}
+	pwdsize=${#${(%):-%~}}
+    
+    if [[ "$promptsize + $pwdsize" -gt $TERMWIDTH ]]; then
+	    ((PR_PWDLEN=$TERMWIDTH - $promptsize))
+    else
+    	PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..-.)}"
+    fi
+}
+
+# Change user/host color if root
+if [ $UID -eq 0 ]; then usercolor="red"; else usercolor="green"; fi
+
+# Finally, set the prompt
+local user_and_host="%{$fg_bold[$usercolor]%}%n@%m%{$reset_color%}"
+local the_date="%{$fg_bold[blue]%}%D{%H:%M:%S}%{$reset_color%}"
+local the_path="%{$fg_bold[white]%}%$PR_PWDLEN<...<%~%<<%{$reset_color%}"
+local last_command_status="%(?..$fg_bold[red][%?] )%{$reset_color%}"
+local start_of_input="%{$fg_bold[white]%}$%{$reset_color%}"
+PROMPT='$user_and_host $the_date $the_path %{$fg[white]%}${(e)PR_FILLBAR}%{$reset_color%}
+$last_command_status$start_of_input '
+
+# Highlight input
+# Currently disabled, because ZSH puts path separators in bold in the completion menu
+zle_highlight[(r)default:*]="default:fg=white"
+
+# Git prompt, displayed at right (RPROMPT)
+# See: https://github.com/olivierverdier/zsh-git-prompt
+source ~/.zsh/git-prompt/zshrc.sh
+RPROMPT='%b$(prompt_git_info)'

@@ -57,6 +57,7 @@ setopt local_traps
 #
 # ENV
 #
+autoload colors; colors;
 export LSCOLORS=Gxfxcxdxbxegedabagacad
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
 export EDITOR=/usr/bin/vim

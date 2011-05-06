@@ -15,9 +15,21 @@ My config files, heavily commented for the most part (Zsh).
 
 === ZSH
 
-Heavily commented ZSH configuration : config, completion, key bindings...
+Heavily commented ZSH configuration : config, completion, prompt, key bindings...
 
-See the files under the "zsh" directory.
+==== Prompt
+
+The prompt is simple and effective. There is:
+- A separator line between each command
+- The path is truncated if too long for the terminal width
+- The return code of the last executed command is displayed
+- The Git status is displayed at the right of the screen (thanks to https://github.com/olivierverdier/zsh-git-prompt)
+
+Exemple
+
+  tom@tom 06:42:21 ~/.dotfiles/zsh --------
+  $                               (master…)
+
 
 ==== Completions
 
@@ -53,5 +65,7 @@ A mostly-complete gitignore.
 - http://stackoverflow.com/questions/171563/whats-in-your-zshrc
 - Ubuntu: /etc/zsh/newuser.zshrc.recommended
 - http://zsh.sourceforge.net/Doc/Release/index-frame.html
+- Git prompt: https://github.com/olivierverdier/zsh-git-prompt
+- ZSH Prompt horizontal line: http://aperiodic.net/phil/prompt/
 - many others...
 
