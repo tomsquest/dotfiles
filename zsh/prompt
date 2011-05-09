@@ -5,7 +5,8 @@ promptinit
 setopt prompt_subst
 
 # Load the colors
-source ~/.zsh/colors
+autoload -U colors;
+colors;
 
 #
 # Custom prompt
