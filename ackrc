@@ -1,7 +1,8 @@
 --type-set=haml=.haml
 --type-set=sass=.sass,.scss
+--type-set=slim=.slim
 
---type-add=html=.html.erb,.haml
+--type-add=html=.html.erb,.haml,.slim
 --type-add=css=.sass,.scss,.less
 
 --smart-case
