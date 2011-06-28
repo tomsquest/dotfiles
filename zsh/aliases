@@ -38,6 +38,7 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 
 # Rails
+alias rake="bundle exec rake" # Should 'always' run rake in the context of bundler
 alias c='echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi'
 alias s='echo Launching Rails server...; if [ -f script/server ]; then script/server; else script/rails server; fi'
 alias g='rails generate'
