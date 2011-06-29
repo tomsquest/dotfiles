@@ -1,5 +1,9 @@
+#
+# A pretty good list of ignored files, 
+# based on https://github.com/github/gitignore
+#
+
 # Tmp dir and Tmp files
-tmp/
 .*.swp
 *~
 
@@ -10,12 +14,76 @@ tmp/
 *.sqlite3
 *.sqlite
 
-# OS generated files
-.DS_Store?
-Thumbs.db
-
 # SVN
-.svn
+.svn/
 
 # Ruby
+*.gem
+*.rbc
+.bundle
+.config
+coverage
+InstalledFiles
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+
+# Rails
+*.rbc
+*.sassc
 .sass-cache
+capybara-*.html
+.rspec
+/.bundle
+/vendor/bundle
+/log/*
+/tmp/*
+/db/*.sqlite3
+/public/system/*
+/coverage/
+/spec/tmp/*
+**.orig
+config/*.yml
+rerun.txt
+pickle-email-*.html
+
+# Java
+*.class
+
+# Maven
+target/
+
+# Eclipse
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# VIM
+.*.sw[a-z]
+*.un~
+Session.vim
+
+# OSX
+.DS_Store
+Icon?
+# Thumbnails
+._*
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
