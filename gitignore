@@ -17,3 +17,5 @@ Thumbs.db
 # SVN
 .svn
 
+# Ruby
+.sass-cache
