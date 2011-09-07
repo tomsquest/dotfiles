@@ -2,67 +2,66 @@
 # -*- coding: UTF-8 -*-
 
 # change those symbols to whatever you prefer
-symbols = {'ahead of': '↑', 'behind': '↓', 'staged':'♦', 'changed':'‣', 'untracked':'…', 'clean':'⚡', 'unmerged':'≠', 'sha1':':'}
+symbols = {'ahead of': '↑', 'behind': '↓', 'prehash':':'}
 
 from subprocess import Popen, PIPE
 
-output,error = Popen(['git','status'], stdout=PIPE, stderr=PIPE).communicate()
+gitsym = Popen(['git', 'symbolic-ref', 'HEAD'], stdout=PIPE, stderr=PIPE)
+branch, error = gitsym.communicate()
 
-if error:
+if error.find('fatal: Not a git repository') != -1:
 	import sys
 	sys.exit(0)
-lines = output.splitlines()
 
-import re
-behead_re = re.compile(r"^# Your branch is (ahead of|behind) '(.*)' by (\d+) commit")
-diverge_re = re.compile(r"^# and have (\d+) and (\d+) different")
+branch = branch.strip()[11:]
 
-status = ''
-staged = re.compile(r'^# Changes to be committed:$', re.MULTILINE)
-changed = re.compile(r'^# Changed but not updated:$', re.MULTILINE)
-untracked = re.compile(r'^# Untracked files:$', re.MULTILINE)
-unmerged = re.compile(r'^# Unmerged paths:$', re.MULTILINE)
 
-def execute(*command):
-	out, err = Popen(stdout=PIPE, stderr=PIPE, *command).communicate()
-	if not err:
-		nb = len(out.splitlines())
-	else:
-		nb = '?'
-	return nb
-
-if staged.search(output):
-	nb = execute(['git','diff','--staged','--name-only','--diff-filter=ACDMRT'])
-	status += '%s%s' % (symbols['staged'], nb)
-if unmerged.search(output):
-	nb = execute(['git','diff', '--staged','--name-only', '--diff-filter=U'])
-	status += '%s%s' % (symbols['unmerged'], nb)
-if changed.search(output):
-	nb = execute(['git','diff','--name-only', '--diff-filter=ACDMRT'])
-	status += '%s%s' % (symbols['changed'], nb)
-if untracked.search(output):
-## 		nb = len(Popen(['git','ls-files','--others','--exclude-standard'],stdout=PIPE).communicate()[0].splitlines())
-## 		status += "%s" % (symbols['untracked']*(nb//3 + 1), )
-	status += symbols['untracked']
-if status == '':
-	status = symbols['clean']
+changed_files = [namestat[0] for namestat in Popen(['git','diff','--name-status'], stdout=PIPE).communicate()[0].splitlines()]
+staged_files = [namestat[0] for namestat in Popen(['git','diff', '--staged','--name-status'], stdout=PIPE).communicate()[0].splitlines()]
+nb_changed = len(changed_files) - changed_files.count('U')
+nb_U = staged_files.count('U')
+nb_staged = len(staged_files) - nb_U
+staged = str(nb_staged)
+conflicts = str(nb_U)
+changed = str(nb_changed)
+nb_untracked = len(Popen(['git','ls-files','--others','--exclude-standard'],stdout=PIPE).communicate()[0].splitlines())
+untracked = str(nb_untracked)
+if not nb_changed and not nb_staged and not nb_U and not nb_untracked:
+	clean = '1'
+else:
+	clean = '0'
 
 remote = ''
 
-bline = lines[0]
-if bline.find('Not currently on any branch') != -1:
-	branch = symbols['sha1']+ Popen(['git','rev-parse','--short','HEAD'], stdout=PIPE).communicate()[0][:-1]
+if not branch: # not on any branch
+	branch = symbols['prehash']+ Popen(['git','rev-parse','--short','HEAD'], stdout=PIPE).communicate()[0][:-1]
 else:
-	branch = bline.split(' ')[3]
-	bstatusline = lines[1]
-	match = behead_re.match(bstatusline)
-	if match:
-		remote = symbols[match.groups()[0]]
-		remote += match.groups()[2]
-	elif lines[2:]:
-		div_match = diverge_re.match(lines[2])
-	 	if div_match:
-			remote = "{behind}{1}{ahead of}{0}".format(*div_match.groups(), **symbols)
+	remote_name = Popen(['git','config','branch.%s.remote' % branch], stdout=PIPE).communicate()[0].strip()
+	if remote_name:
+		merge_name = Popen(['git','config','branch.%s.merge' % branch], stdout=PIPE).communicate()[0].strip()
+		if remote_name == '.': # local
+			remote_ref = merge_name
+		else:
+			remote_ref = 'refs/remotes/%s/%s' % (remote_name, merge_name[11:])
+		revgit = Popen(['git', 'rev-list', '--left-right', '%s...HEAD' % remote_ref],stdout=PIPE, stderr=PIPE)
+		revlist = revgit.communicate()[0]
+		if revgit.poll(): # fallback to local
+			revlist = Popen(['git', 'rev-list', '--left-right', '%s...HEAD' % merge_name],stdout=PIPE, stderr=PIPE).communicate()[0]
+		behead = revlist.splitlines()
+		ahead = len([x for x in behead if x[0]=='>'])
+		behind = len(behead) - ahead
+		if behind:
+			remote += '%s%s' % (symbols['behind'], behind)
+		if ahead:
+			remote += '%s%s' % (symbols['ahead of'], ahead)
 
-print '\n'.join([branch,remote,status])
+out = '\n'.join([
+	branch,
+	remote,
+	staged,
+	conflicts,
+	changed,
+	untracked,
+	clean])
+print out
 
