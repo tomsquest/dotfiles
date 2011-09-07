@@ -54,7 +54,7 @@ $last_command_status$start_of_input '
 
 # Highlight input
 # Currently disabled, because ZSH puts path separators in bold in the completion menu
-zle_highlight[(r)default:*]="default:fg=white"
+#zle_highlight[(r)default:*]="default:fg=white"            
 
 # Git prompt, displayed at right (RPROMPT)
 # See: https://github.com/olivierverdier/zsh-git-prompt
