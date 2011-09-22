@@ -38,7 +38,7 @@ bindkey -M menuselect '^M' .accept-line
 bindkey '^[[Z' reverse-menu-complete
 
 # alt-u : chdir to the parent directory
-bindkey -s '\eu' '^Ucd ..; ls^M'
+bindkey -s '\eu' '^Ucd ..; ll^M'
 
 # alt-s : insert sudo at the start of the line
 insert_sudo () { zle beginning-of-line; zle -U "sudo " }
