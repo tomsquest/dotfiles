@@ -1,0 +1,11 @@
+# Display current path in title bar
+# Called by the precmd function
+# See section 3.6 of http://www.faqs.org/faqs/unix-faq/shell/zsh/
+
+[[ -t 1 ]] || return
+case $TERM in
+  sun-cmd) print -Pn "\e]l%~\e\\"
+    ;;
+  *xterm*|rxvt|(dt|k|E)term) print -Pn "\e]2;%~\a"
+    ;;
+esac
