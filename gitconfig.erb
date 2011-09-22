@@ -2,17 +2,17 @@
 	name = <%= print("Your Name: "); STDOUT.flush; STDIN.gets.chomp %>
 	email = <%= print("Your Email: "); STDOUT.flush; STDIN.gets.chomp %>
 [alias]
-    co = checkout
-    ci = commit
-    st = status
-    br = branch
+  co = checkout
+  ci = commit
+  st = status
+  br = branch
+  addm = !git-ls-files -m -z | xargs -0 git-add && git status                     # add modified files
+  addu = !git-ls-files -o --exclude-standard -z | xargs -0 git-add && git status  # add new files
+  rmm  = !git ls-files -d -z | xargs -0 git-rm && git status                      # remove deleted file
 [color]
-	diff = auto
-	status = auto
-	branch = auto
+  ui = true
 [core]
 	excludesfile = <%= ENV['HOME'] %>/.gitignore
-	editor = mate -w
 	autocrlf = input
 [apply]
 	whitespace = nowarn
