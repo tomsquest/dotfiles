@@ -1,4 +1,23 @@
 #compdef rvm
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for rvm (https://rvm.beginrescueend.com/).
+#
+#  Source: https://github.com/wayneeseguin/rvm/blob/master/scripts/zsh/Completion/_rvm
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Bruno Michel (https://github.com/nono)
+#
+# ------------------------------------------------------------------------------
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
+# ------------------------------------------------------------------------------
+
 
 local curcontext="$curcontext" state line cmds ret=1
 

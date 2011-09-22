@@ -1,4 +1,23 @@
 #compdef gem gem1.9
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for gem (http://rubygems.org).
+#
+#  Source: https://gist.github.com/164465
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Alex Vollmer (https://github.com/alexvollmer)
+#
+# ------------------------------------------------------------------------------
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
+# ------------------------------------------------------------------------------
+
 
 gem_general_flags=("(-h --help)"{-h,--help}"[Get help on this command]"
   "(-V --verbose)"{-V,--verbose}"[Set the verbose level of output]"
@@ -29,12 +48,9 @@ _gem() {
       "install[Install a gem into the local repository]" \
       "list[Display gems whose name starts with STRING]" \
       "lock[Generate a lockdown list of gems]" \
-      "migrate[Migrate a gem you own from Rubyforge to Gemcutter]" \
       "mirror[Mirror a gem repository]" \
       "outdated[Display all gems that need updates]" \
-      "owner[Manage gem owners on Gemcutter]" \
       "pristine[Restores installed gems to pristine condition from files located in the gem cache]" \
-      "push[Push a gem up to Gemcutter]" \
       "query[Query gem information in local or remote repositories]" \
       "rdoc[Generates RDoc for pre-installed gems]" \
       "search[Display all gems whose name contains STRING]" \
@@ -42,7 +58,6 @@ _gem() {
       "sources[Manage the sources and cache file RubyGems uses to search for gems]" \
       "specification[Display gem specification (in yaml)]" \
       "stale[List gems along with access times]" \
-      "tumble[Enable or disable Gemcutter as your primary gem source]" \
       "uninstall[Uninstall gems from the local repository]" \
       "unpack[Unpack an installed gem to the current directory]" \
       "update[Update the named gems (or all installed gems) in the local repository]" \
@@ -78,9 +93,7 @@ __gem_help_arguments() {
     "lock"
     "mirror"
     "outdated"
-    "owner"
     "pristine"
-    "push"
     "query"
     "rdoc"
     "search"
@@ -88,7 +101,6 @@ __gem_help_arguments() {
     "sources"
     "specification"
     "stale"
-    "tumble"
     "uninstall"
     "unpack"
     "update"
@@ -282,25 +294,11 @@ _gem_outdated() {
     $gem_general_flags && ret=0
 }
 
-_gem_owner() {
-  _arguments \
-    "(-a --add)"{-a,--add}"[Add an owner]" \
-    "(-r --remove)"{-r,--remove}"[Remove an owner]" \
-    $gem_general_flags && ret=0
-}
-
 _gem_pristine() {
   _arguments \
     ":gem name:__all_gems_all" \
     "--all[Restore all installed gems to pristine condition]" \
     "(-v --version)"{-v,--version}"[Specify version of gem to restore to pristine condition]" \
-    $gem_general_flags && ret=0
-}
-
-_gem_push() {
-  _arguments \
-    *:file:_files -f \
-    "(-p --http-proxy)"{-p,--http-proxy}"[Use HTTP proxy for remote operations]" \
     $gem_general_flags && ret=0
 }
 
@@ -395,11 +393,6 @@ _gem_stale() {
     $gem_general_flags && ret=0
 }
 
-_gem_tumble() {
-  _arguments \
-    $gem_general_flags && ret=0
-}
-
 _gem_uninstall() {
   _arguments \
     "*:gemname:__all_gems" \
@@ -459,10 +452,3 @@ _gem_which() {
     "(-g --no-gems-first)"{-g,--no-gems-first}"[search gems before non-gems]" \
     $gem_general_flags && ret=0
 }
-
-_gem_migrate() {
-  _arguments \
-    "*:gemname:__all_gems" \
-    $gem_general_flags && ret=0
-}
-

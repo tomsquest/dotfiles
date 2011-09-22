@@ -33,11 +33,11 @@ Exemple
 
 ==== Completions
 
+Some completions from https://github.com/zsh-users/zsh-completions :
 - Bundler
-- Capistrano
 - Gem
-- Rake
 - Rvm
+- ...
 
 
 ==== Functions
@@ -55,7 +55,7 @@ ACK is a powerfull replacement for grep, written for developpers (http://bettert
 
 === GIT
 
-A mostly-complete gitignore.
+An efficient .gitignore based on https://github.com/github/gitignore
 
 
 == Sources
