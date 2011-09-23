@@ -5,8 +5,19 @@ My config files, heavily commented for the most part (Zsh).
 
 == Installation
 
+1) Clone the repo
+
   git clone git@github.com:tomsquest/dotfiles.git ~/.dotfiles
+
+2) Update the dependencies
+Update code from the other Git repos like zsh-git-prompt, Vim vundle...)
+
   cd ~/.dotfiles
+  git submodule init
+  git submodule update
+
+3) Install 
+
   rake install
 
 

@@ -1,11 +1,33 @@
 " Sources :
 "   http://www.derekwyatt.org/vim/the-vimrc-file/
 
+" Forget being compatible with good ol' vi
+set nocompatible
 
 " Set filetype stuff to on
 filetype on
 filetype plugin on
 filetype indent on
+
+"
+" Vundle configuration
+"
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+Bundle 'xoria256.vim'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-rails'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+" Command-T requires an additionnal installation step :
+" From ~/.vim/bundle/command-t, run: rvm use 1.8.7 && bundle install && rake make
+Bundle 'git://git.wincent.com/command-t.git'
 
 " Tabstops are 4 spaces
 set tabstop=2
@@ -84,6 +106,14 @@ set hlsearch
 " Incrementally match the search
 set incsearch
 
+" Display line number
+set nu
+
+" Apparence
+set background=dark
+set t_Co=256
+colorscheme xoria256
+
 " Initial path seeding
 set path=
 set path+=~/Development/**
@@ -96,4 +126,10 @@ nmap <silent> ^ :setl hls<CR>:let @/="<C-r><C-w>"<CR>
 
 " Jump to the last position when reopening a file
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" Edit vimrc file(mnemonic for the key sequence is 'e'dit 'v'imrc)
+nmap <silent> ,ev :e $MYVIMRC<cr>
+
+" Source vimrc file (mnemonic for the key sequence is 's'ource 'v'imrc)
+nmap <silent> ,sv :so $MYVIMRC<cr>
 
