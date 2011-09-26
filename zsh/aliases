@@ -6,11 +6,9 @@ alias du='du -h'
 alias h='history -iD'
 
 # ls
-alias ls='ls --color=auto --human-readable --classify --group-directories-first'
-alias l='ls -C'
-alias ll='ls -l'
-alias la='ls --almost-all'
-alias lla='ls -l --almost-all'
+alias ls='ls                                  --classify --group-directories-first --color=auto'
+alias ll='ls -l              --human-readable --classify --group-directories-first --color=auto'
+alias la='ls -l --almost-all --human-readable --classify --group-directories-first --color=auto'
 
 # More verbose fileutils
 alias cp='nocorrect cp -iv'
