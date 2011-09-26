@@ -60,7 +60,7 @@ setopt local_traps
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/gvim
-export GREP_OPTIONS='--color=auto'
+export GREP_OPTIONS='--color=auto --exclude-dir=.git'
 # displays Grep matches in inverse video, very easy to see
 export GREP_COLOR=7
 export LESS='--ignore-case --raw-control-chars'
