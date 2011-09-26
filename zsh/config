@@ -68,3 +68,14 @@ export PAGER=less
 # List of directories we can cd to from anywhere
 export CDPATH=.:~/Development/
 
+
+#
+# Hooks
+#
+autoload add-zsh-hook
+
+# Force refresh the terminal title before each command.
+update_terminal_title() {
+  print -Pn "\e]0;%~\a"
+}
+add-zsh-hook precmd update_terminal_title

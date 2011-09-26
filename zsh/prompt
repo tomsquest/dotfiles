@@ -39,9 +39,6 @@ function precmd {
   else
   	PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..-.)}"
   fi
-
-  # Set the current directory on load
-  chpwd
 }
 
 # Change user/host color if root
