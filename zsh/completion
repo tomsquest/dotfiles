@@ -24,13 +24,16 @@ zstyle ':completion:*' use-compctl false
 zstyle ':completion:*' verbose true
 
 # Better presentation of completions for Maven (mvn command)
-# See functions/_rvm
+# See functions/_mvn
 zstyle ':completion:*:*:mvn:*:matches' group 'yes'
 zstyle ':completion:*:*:mvn:*:options' description 'yes'
 zstyle ':completion:*:*:mvn:*:options' auto-description '%d'
 zstyle ':completion:*:*:mvn:*:descriptions' format $'\e[1m -- %d --\e[22m'
 zstyle ':completion:*:*:mvn:*:messages' format $'\e[1m -- %d --\e[22m'
 zstyle ':completion:*:*:mvn:*:warnings' format $'\e[1m -- No matches found --\e[22m'
+
+# cd will never select the parent directory (e.g.: cd ../<TAB>)
+zstyle ':completion:*:cd:*' ignore-parents parent pwd
 
 # Case insensitive completion
 zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
