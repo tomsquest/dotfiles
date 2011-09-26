@@ -13,8 +13,9 @@ alias la='ls --almost-all'
 alias lla='ls -l --almost-all'
 
 # More verbose fileutils
-alias cp='cp -iv'
-alias rm='rm -iv'
+alias cp='nocorrect cp -iv'
+alias rm='nocorrect rm -iv'
+alias mv='nocorrect mv -iv'
 alias rmdir='rmdir -v'
 alias chmod='chmod -v'
 alias chown='chown -v'
