@@ -7,6 +7,7 @@ alias h='history -iD'
 
 # ls
 alias ls='ls                                  --classify --group-directories-first --color=auto'
+alias  l='ls -l              --human-readable --classify --group-directories-first --color=auto'
 alias ll='ls -l              --human-readable --classify --group-directories-first --color=auto'
 alias la='ls -l --almost-all --human-readable --classify --group-directories-first --color=auto'
 
