@@ -10,11 +10,10 @@ My config files, heavily commented for the most part (Zsh).
   git clone git@github.com:tomsquest/dotfiles.git ~/.dotfiles
 
 2) Update the dependencies
-Update code from the other Git repos like zsh-git-prompt, Vim vundle...)
+Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
 
   cd ~/.dotfiles
-  git submodule init
-  git submodule update
+  git submodule update --init
 
 3) Install 
 
