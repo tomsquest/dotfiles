@@ -29,6 +29,9 @@ Bundle 'FuzzyFinder'
 " From ~/.vim/bundle/command-t, run: rvm use 1.8.7 && bundle install && rake make
 Bundle 'git://git.wincent.com/command-t.git'
 
+" Display extra whitespace
+set list listchars=tab:»·,trail:·
+
 " Tabstops are 4 spaces
 set tabstop=2
 set shiftwidth=2
