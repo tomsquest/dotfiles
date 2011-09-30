@@ -136,3 +136,8 @@ nmap <silent> ,ev :e $MYVIMRC<cr>
 " Source vimrc file (mnemonic for the key sequence is 's'ource 'v'imrc)
 nmap <silent> ,sv :so $MYVIMRC<cr>
 
+" Disable arrow keys
+nnoremap <Left> :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+nnoremap <Up> :echoe "Use k"<CR>
+nnoremap <Down> :echoe "Use j"<CR>
