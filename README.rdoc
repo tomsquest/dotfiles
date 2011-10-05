@@ -15,9 +15,14 @@ Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
   cd ~/.dotfiles
   git submodule update --init
 
-3) Install 
+3) Install
 
   rake install
+
+4) Install vim dependencies
+Install vim plugins using Vundle
+
+  vim -u ~/.vim/bundles.vim +BundleInstall +q
 
 
 == Features
@@ -67,6 +72,11 @@ ACK is a powerfull replacement for grep, written for developpers (http://bettert
 
 An efficient .gitignore based on https://github.com/github/gitignore
 
+
+=== VIM
+
+Vim has a pretty good configuration.
+Plugins, syntax, colorschemes are managed by Vundle (https://github.com/gmarik/vundle)
 
 == Sources
 
