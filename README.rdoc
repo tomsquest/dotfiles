@@ -84,8 +84,6 @@ Plugins, syntax, colorschemes are managed by Vundle (https://github.com/gmarik/v
 - https://github.com/nono/dotfiles
 - http://stackoverflow.com/questions/171563/whats-in-your-zshrc
 - Ubuntu: /etc/zsh/newuser.zshrc.recommended
-- http://zsh.sourceforge.net/Doc/Release/index-frame.html
 - Git prompt: https://github.com/olivierverdier/zsh-git-prompt
 - ZSH Prompt horizontal line: http://aperiodic.net/phil/prompt/
-- many others...
 
