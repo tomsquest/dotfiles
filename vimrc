@@ -102,6 +102,9 @@ set background=dark
 set t_Co=256
 colorscheme xoria256
 
+" Highlight current line
+set cursorline
+
 " Initial path seeding
 set path=
 set path+=~/Development/**
