@@ -1,6 +1,7 @@
 alias grep='grep --color=auto'
 alias ack='ack-grep'
 alias du='du -h'
+alias df='df -h'
 
 # History with timestamps and elapsed time
 alias h='history -iD'
