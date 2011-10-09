@@ -79,9 +79,6 @@ set wildmenu
 " When completing by tag, show the whole tag, not just the function name
 set showfulltag
 
-" Set the textwidth to be 120 chars
-set textwidth=120
-
 " Turn tabs into spaces
 set expandtab
 
