@@ -83,6 +83,10 @@ set showfulltag
 set wrap
 let &showbreak = '↳ '
 
+" Indent lines
+set autoindent
+set smartindent
+
 " Turn tabs into spaces
 set expandtab
 
