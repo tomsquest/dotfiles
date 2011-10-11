@@ -120,9 +120,6 @@ nmap <silent> ,w :set invwrap<CR>:set wrap?<CR>
 " Highlight all instances of the current word under the cursor
 nmap <silent> ^ :setl hls<CR>:let @/="<C-r><C-w>"<CR>
 
-" Jump to the last position when reopening a file
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
 " Edit vimrc file(mnemonic for the key sequence is 'e'dit 'v'imrc)
 nmap <silent> ,ev :e $MYVIMRC<cr>
 
@@ -134,3 +131,11 @@ nnoremap <Left> :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
+
+" Jump to the last position when reopening a file
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" Show warning on focus when file has been modified by an external program
+set updatetime=500
+au BufWinEnter * checktime
+
