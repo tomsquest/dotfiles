@@ -17,8 +17,8 @@ source ~/.vim/bundles.vim
 " Display extra whitespace
 set list listchars=tab:»·,trail:·
 
-" Tabstops are 2 spaces
-set tabstop=2
+" (Soft) Tabstops are 2 spaces
+set softtabstop=2
 set shiftwidth=2
 
 " set the search scan to wrap lines
