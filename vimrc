@@ -17,7 +17,7 @@ source ~/.vim/bundles.vim
 " Display extra whitespace
 set list listchars=tab:»·,trail:·
 
-" Tabstops are 4 spaces
+" Tabstops are 2 spaces
 set tabstop=2
 set shiftwidth=2
 
@@ -29,17 +29,11 @@ set wrapscan
 set ignorecase
 set smartcase
 
-" set the forward slash to be the slash of note. Backslashes suck
-set shellslash
-
 " Make command line two lines high
 set ch=2
 
-" set visual bell -- i hate that damned beeping
+" set visual bell
 set vb
-
-" Allow backspacing over indent, eol, and the start of an insert
-set backspace=2
 
 " Make sure that unsaved buffers that are to be put in the background are
 " allowed to go in there (ie. the "must save first" error doesn't come up)
@@ -52,9 +46,6 @@ set cpoptions=ces$
 " tell VIM to always put a status line in, even if there is only one window
 set laststatus=2
 
-" Don't update the display while executing macros
-set lazyredraw
-
 " Show the current command in the lower right corner
 set showcmd
 
@@ -63,12 +54,6 @@ set showmode
 
 " Switch on syntax highlighting.
 syntax on
-
-" Syntax coloring lines that are too long just slows down the world
-set synmaxcol=2048
-
-" Hide the mouse pointer while typing
-set mousehide
 
 " Keep some stuff in the history
 set history=100
@@ -90,9 +75,6 @@ set smartindent
 " Turn tabs into spaces
 set expandtab
 
-" Add ignorance of whitespace to diff
-set diffopt+=iwhite
-
 " Enable search highlighting
 set hlsearch
 
@@ -110,24 +92,23 @@ colorscheme xoria256
 " Highlight current line
 set cursorline
 
-" Initial path seeding
-set path=
-set path+=~/Development/**
-
 " Map leader
 let mapleader = ","
 
 " set text wrapping toggles
-nmap <silent> ,w :set invwrap<CR>:set wrap?<CR>
+nmap <silent> <Leader>w :set invwrap<CR>:set wrap?<CR>
 
 " Highlight all instances of the current word under the cursor
 nmap <silent> ^ :setl hls<CR>:let @/="<C-r><C-w>"<CR>
 
+" Hide search highlighting
+map <Leader>l :set nohls <CR>
+
 " Edit vimrc file(mnemonic for the key sequence is 'e'dit 'v'imrc)
-nmap <silent> ,ev :e $MYVIMRC<cr>
+nmap <silent> <Leader>ev :e $MYVIMRC<cr>
 
 " Source vimrc file (mnemonic for the key sequence is 's'ource 'v'imrc)
-nmap <silent> ,sv :so $MYVIMRC<cr>
+nmap <silent> <Leader>sv :so $MYVIMRC<cr>
 
 " Disable arrow keys
 nnoremap <Left> :echoe "Use h"<CR>
