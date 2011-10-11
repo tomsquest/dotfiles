@@ -31,13 +31,13 @@ function precmd {
   PR_PWDLEN=""
 
   # Compute the path length and the horizontal bar
-	local promptsize=${#${(%):-%n@%m-hh-mm-ss-}}
-	local pwdsize=${#${(%):-%~}}
-    
+  local promptsize=${#${(%):-%n@%m-hh-mm-ss-}}
+  local pwdsize=${#${(%):-%~}}
+
   if [[ "$promptsize + $pwdsize" -gt $TERMWIDTH ]]; then
-	  ((PR_PWDLEN=$TERMWIDTH - $promptsize))
+    ((PR_PWDLEN=$TERMWIDTH - $promptsize))
   else
-  	PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..-.)}"
+    PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..-.)}"
   fi
 }
 
@@ -47,7 +47,7 @@ if [ $UID -eq 0 ]; then usercolor="red"; else usercolor="green"; fi
 # Finally, set the prompt
 local user_and_host="%{$fg_bold[$usercolor]%}%n@%m%{$reset_color%}"
 local the_date="%{$fg_bold[blue]%}%D{%H:%M:%S}%{$reset_color%}"
-local last_command_status="%(?..$fg_bold[red][%?] )%{$reset_color%}"
+local last_command_status="%(?..%{$fg_bold[red]%}[%?]%{$reset_color%} )"
 local start_of_input="%{$fg_bold[white]%}$%{$reset_color%}"
 PROMPT='$user_and_host $the_date %{$fg_bold[white]%}%$PR_PWDLEN<...<%~%<<%{$reset_color%} %{$fg[white]%}${(e)PR_FILLBAR}%{$reset_color%}
 $last_command_status$start_of_input '
