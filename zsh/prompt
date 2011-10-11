@@ -8,18 +8,13 @@ setopt prompt_subst
 autoload -U colors;
 colors;
 
-#
-# Custom prompt
-#
-# %n : user
-# %m : host
-# %~ : path
-# Doc: http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Prompt-Expansion
-
-
 # Create a separation bar after the path
 # see: http://aperiodic.net/phil/prompt/
 function precmd {
+  # Compute the lengths of the strings
+  local exitcodesize=${#${(%):-%(?..[%?] )}}
+  local promptsize=${#${(%):-%n@%m-hh-mm-ss-}}
+  local pwdsize=${#${(%):-%~}}
 
   # Global width
   local TERMWIDTH
@@ -31,14 +26,12 @@ function precmd {
   PR_PWDLEN=""
 
   # Compute the path length and the horizontal bar
-  local promptsize=${#${(%):-%n@%m-hh-mm-ss-}}
-  local pwdsize=${#${(%):-%~}}
-
-  if [[ "$promptsize + $pwdsize" -gt $TERMWIDTH ]]; then
-    ((PR_PWDLEN=$TERMWIDTH - $promptsize))
+  if [[ "$promptsize + $pwdsize + $exitcodesize" -gt $TERMWIDTH ]]; then
+    ((PR_PWDLEN=$TERMWIDTH - $promptsize - $exitcodesize))
   else
-    PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..-.)}"
+    PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $exitcodesize)))..-.)}"
   fi
+
 }
 
 # Change user/host color if root
@@ -47,14 +40,10 @@ if [ $UID -eq 0 ]; then usercolor="red"; else usercolor="green"; fi
 # Finally, set the prompt
 local user_and_host="%{$fg_bold[$usercolor]%}%n@%m%{$reset_color%}"
 local the_date="%{$fg_bold[blue]%}%D{%H:%M:%S}%{$reset_color%}"
-local last_command_status="%(?..%{$fg_bold[red]%}[%?]%{$reset_color%} )"
+local last_command_status="%(?..%{$fg_bold[red]%}[%?] %{$reset_color%})"
 local start_of_input="%{$fg_bold[white]%}$%{$reset_color%}"
-PROMPT='$user_and_host $the_date %{$fg_bold[white]%}%$PR_PWDLEN<...<%~%<<%{$reset_color%} %{$fg[white]%}${(e)PR_FILLBAR}%{$reset_color%}
-$last_command_status$start_of_input '
-
-# Highlight input
-# Currently disabled, because ZSH puts path separators in bold in the completion menu
-#zle_highlight[(r)default:*]="default:fg=white"            
+PROMPT='$user_and_host $the_date $last_command_status%{$fg_bold[white]%}%$PR_PWDLEN<...<%~%<<%{$reset_color%} %{$fg[white]%}${(e)PR_FILLBAR}%{$reset_color%}
+$start_of_input '
 
 # Git prompt, displayed at right (RPROMPT)
 # See: https://github.com/olivierverdier/zsh-git-prompt

@@ -38,12 +38,12 @@ The prompt is simple and effective. There is:
 - A separator line between each command
 - The path is truncated if too long for the terminal width
 - The return code of the last executed command is displayed
-- The Git status is displayed at the right of the screen (thanks to https://github.com/olivierverdier/zsh-git-prompt)
+- The Git status is displayed at the right of the screen (using Olivier Verdier's Git prompt)
 
 Exemple
 
-  tom@tom 06:42:21 ~/.dotfiles/zsh --------
-  $                               (master…)
+  tom@laptop 06:42:21 ~/.dotfiles -------------------
+  $                                    (master|●1✚1…)
 
 
 ==== Completions
