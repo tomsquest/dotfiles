@@ -114,6 +114,9 @@ set cursorline
 set path=
 set path+=~/Development/**
 
+" Map leader
+let mapleader = ","
+
 " set text wrapping toggles
 nmap <silent> ,w :set invwrap<CR>:set wrap?<CR>
 
