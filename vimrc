@@ -102,13 +102,19 @@ nmap <silent> <Leader>w :set invwrap<CR>:set wrap?<CR>
 nmap <silent> ^ :setl hls<CR>:let @/="<C-r><C-w>"<CR>
 
 " Hide search highlighting
-map <Leader>l :set nohls <CR>
+map <Leader>l :set nohls<CR>
 
 " Edit vimrc file(mnemonic for the key sequence is 'e'dit 'v'imrc)
-nmap <silent> <Leader>ev :e $MYVIMRC<cr>
+nmap <silent> <Leader>ev :e $MYVIMRC<CR>
 
 " Source vimrc file (mnemonic for the key sequence is 's'ource 'v'imrc)
-nmap <silent> <Leader>sv :so $MYVIMRC<cr>
+nmap <silent> <Leader>sv :so $MYVIMRC<CR>
+
+" Ctrl-s for saving.
+" Needs in the shell: stty -ixon -ixoff
+nmap <C-s> :update<CR>
+vmap <C-s> <C-c>:update<CR>
+imap <C-s> <C-o>:update<CR>
 
 " Disable arrow keys
 nnoremap <Left> :echoe "Use h"<CR>
