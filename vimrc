@@ -129,3 +129,15 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 set updatetime=500
 au BufWinEnter * checktime
 
+"
+" Plugin configuration
+"
+
+" Obvious-Mode
+" Set gui colors, which are not enabled by default
+let g:obviousModeInsertHi = 'term=reverse ctermbg=52 guibg=darkred'
+let g:obviousModeCmdwinHi = 'term=reverse ctermbg=22 guibg=darkblue'
+let g:obviousModeModifiedCurrentHi = 'term=reverse ctermbg=30 guibg=darkcyan'
+let g:obviousModeModifiedNonCurrentHi = 'term=reverse ctermbg=30 guibg=darkcyan'
+let g:obviousModeModifiedVertSplitHi = 'term=reverse ctermfg=22 ctermbg=30 guifg=darkblue guibg=darkcyan'
+
