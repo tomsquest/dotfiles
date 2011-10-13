@@ -101,8 +101,8 @@ nmap <silent> <Leader>w :set invwrap<CR>:set wrap?<CR>
 " Highlight all instances of the current word under the cursor
 nmap <silent> ^ :setl hls<CR>:let @/="<C-r><C-w>"<CR>
 
-" Hide search highlighting
-map <Leader>l :set nohls<CR>
+" Show/Hide search highlighting
+map <Leader>l :setl hlsearch!<CR>
 
 " Edit vimrc file(mnemonic for the key sequence is 'e'dit 'v'imrc)
 nmap <silent> <Leader>ev :e $MYVIMRC<CR>
