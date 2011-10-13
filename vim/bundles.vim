@@ -11,43 +11,55 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 
-"
-" Custom bundles
-"
 
-" Colorsheme
+"
+" Colorshemes
+"
 Bundle 'xoria256.vim'
 
-" Git integration into Vim
-Bundle 'tpope/vim-fugitive'
+
+"
+" Plugins
+"
+
+" File explorer
+Bundle 'scrooloose/nerdtree'
+
+" Utilities for common commans, adding or moving lines, encoding/decoding...
+Bundle 'tpope/vim-unimpaired'
 
 " Utilities for Rails development
 Bundle 'tpope/vim-rails'
 
 " Automatically insert 'end' for ruby methods
-Bundle 'tpope/vim-endwise'
-
-" Markdown syntax
-Bundle 'tpope/vim-markdown'
-
-" Haml syntax
-Bundle 'tpope/vim-haml'
+"Bundle 'tpope/vim-endwise'
 
 " Quoting/parenthesizing made simple
-Bundle 'tpope/vim-surround'
+"Bundle 'tpope/vim-surround'
 
 " Opening files and buffers with a minimal number of keystrokes
 "
 " Command-T requires an additionnal installation step :
 " From ~/.vim/bundle/command-t, run: rvm use 1.8.7 && bundle install && rake make
-Bundle 'git://git.wincent.com/command-t.git'
-
-" File explorer
-Bundle 'scrooloose/nerdtree'
+"Bundle 'git://git.wincent.com/command-t.git'
 
 " Simpler way to use some motions in vim.
-Bundle 'Lokaltog/vim-easymotion'
+"Bundle 'Lokaltog/vim-easymotion'
 
 " Clearly indicate visually whether Vim is in insert mode via the StatusLine highlight group
-Bundle 'Obvious-Mode'
+Bundle 'bsl/obviousmode'
+
+
+"
+" Syntax
+"
+
+" Markdown
+Bundle 'tpope/vim-markdown'
+
+" Haml
+Bundle 'tpope/vim-haml'
+
+" Slim
+Bundle 'bbommarito/vim-slim'
 
