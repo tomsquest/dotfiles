@@ -95,8 +95,13 @@ set cursorline
 " Map leader
 let mapleader = ","
 
+"
+" Mappings
+"
+
+
 " set text wrapping toggles
-nmap <silent> <Leader>w :set invwrap<CR>:set wrap?<CR>
+nmap <silent> <Leader>w :setl invwrap<CR>:setl wrap?<CR>
 
 " Highlight all instances of the current word under the cursor
 nmap <silent> ^ :setl hls<CR>:let @/="<C-r><C-w>"<CR>
@@ -104,7 +109,7 @@ nmap <silent> ^ :setl hls<CR>:let @/="<C-r><C-w>"<CR>
 " Show/Hide search highlighting
 map <Leader>l :setl hlsearch!<CR>
 
-" Edit vimrc file(mnemonic for the key sequence is 'e'dit 'v'imrc)
+" Edit vimrc file (mnemonic for the key sequence is 'e'dit 'v'imrc)
 nmap <silent> <Leader>ev :e $MYVIMRC<CR>
 
 " Source vimrc file (mnemonic for the key sequence is 's'ource 'v'imrc)
@@ -121,6 +126,10 @@ nnoremap <Left> :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
+
+"
+" Autoexec commands
+"
 
 " Jump to the last position when reopening a file
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
