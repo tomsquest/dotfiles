@@ -99,7 +99,6 @@ let mapleader = ","
 " Mappings
 "
 
-
 " set text wrapping toggles
 nmap <silent> <Leader>w :setl invwrap<CR>:setl wrap?<CR>
 
@@ -120,6 +119,14 @@ nmap <silent> <Leader>sv :so $MYVIMRC<CR>
 nmap <C-s> :update<CR>
 vmap <C-s> <C-c>:update<CR>
 imap <C-s> <C-o>:update<CR>
+
+" Using vim-impaired, enable moving lines
+" - Bubble single lines
+nmap <C-Up> [e
+nmap <C-Down> ]e
+" - Bubble multiple lines
+vmap <C-Up> [egv
+vmap <C-Down> ]egv
 
 " Disable arrow keys
 nnoremap <Left> :echoe "Use h"<CR>
