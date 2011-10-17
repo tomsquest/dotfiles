@@ -95,6 +95,9 @@ colorscheme xoria256
 " Highlight current line
 set cursorline
 
+" Enable the mouse
+set mouse=a
+
 " Map leader
 let mapleader = ","
 
