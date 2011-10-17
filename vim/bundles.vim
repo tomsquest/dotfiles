@@ -57,7 +57,7 @@ Bundle 'bsl/obviousmode'
 " Markdown
 Bundle 'tpope/vim-markdown'
 
-" Haml
+" Haml, Sass/Scss
 Bundle 'tpope/vim-haml'
 
 " Slim
