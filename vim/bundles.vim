@@ -63,3 +63,5 @@ Bundle 'tpope/vim-haml'
 " Slim
 Bundle 'bbommarito/vim-slim'
 
+" Coffeescript
+Bundle 'kchmck/vim-coffee-script'
