@@ -84,6 +84,9 @@ set incsearch
 " Display line number
 set nu
 
+" Lines above/below cursor when scrolling
+set scrolloff=5
+
 " Apparence
 set background=dark
 set t_Co=256
