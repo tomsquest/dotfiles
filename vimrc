@@ -87,6 +87,12 @@ set nu
 " Lines above/below cursor when scrolling
 set scrolloff=5
 
+" Minimal columns displayed when scrolling horizontally
+set sidescrolloff=5
+
+" Enable scrolling horizontaly column by column
+set sidescroll=1
+
 " Apparence
 set background=dark
 set t_Co=256
