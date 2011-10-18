@@ -31,6 +31,12 @@ Bundle 'tpope/vim-unimpaired'
 " Utilities for Rails development
 Bundle 'tpope/vim-rails'
 
+" Utilies for Bundler
+Bundle 'tpope/vim-bundler'
+
+" Utilies for Rake projets
+Bundle 'tpope/vim-rake'
+
 " Automatically insert 'end' for ruby methods
 "Bundle 'tpope/vim-endwise'
 
