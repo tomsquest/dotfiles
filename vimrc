@@ -114,6 +114,10 @@ let mapleader = ","
 " `a will jump to the line and column marked with ma
 nnoremap ' `
 
+" By default, 0<C-e> and <C-y> scroll the viewport a single line. Speed this up:
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
+
 " set text wrapping toggles
 nmap <silent> <Leader>w :setl invwrap<CR>:setl wrap?<CR>
 
