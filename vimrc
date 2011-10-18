@@ -98,6 +98,9 @@ set cursorline
 " Enable the mouse
 set mouse=a
 
+" Isolate swap and backup files to a single directory
+set backupdir=~/.vim/.backupdir,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim/.backupdir,~/.tmp,~/tmp,/var/tmp,/tmp
 
 "
 " Mappings
