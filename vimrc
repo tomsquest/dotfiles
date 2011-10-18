@@ -159,6 +159,7 @@ nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
 
+
 "
 " Autoexec commands
 "
@@ -172,6 +173,22 @@ au BufWinEnter * checktime
 
 " Enhance % for matching if/end/tags in some language (html, jsp...)
 runtime macros/matchit.vim
+
+
+"
+" GVim configuration
+"
+if has('gui_running')
+  "set guifont=Monospace\ Bold\ 9
+  set guifont=Bitstream\ Vera\ Sans\ Mono\ 10
+
+  " Turn off toolbar and menu
+  set guioptions-=T
+  set guioptions-=m
+
+  " Window size
+  set lines=65 columns=130
+end
 
 
 "
