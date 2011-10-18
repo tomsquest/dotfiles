@@ -157,6 +157,10 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 set updatetime=500
 au BufWinEnter * checktime
 
+" Enhance % for matching if/end/tags in some language (html, jsp...)
+runtime macros/matchit.vim
+
+
 "
 " Plugin configuration
 "
