@@ -98,12 +98,18 @@ set cursorline
 " Enable the mouse
 set mouse=a
 
-" Map leader
-let mapleader = ","
 
 "
 " Mappings
 "
+
+" Map leader
+let mapleader = ","
+
+" Remap ' as ` because ` remenbers line AND column for marks
+" 'a will jump to the line in the current file marked with ma
+" `a will jump to the line and column marked with ma
+nnoremap ' `
 
 " set text wrapping toggles
 nmap <silent> <Leader>w :setl invwrap<CR>:setl wrap?<CR>
