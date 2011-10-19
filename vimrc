@@ -162,6 +162,7 @@ nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
 
 
+
 "
 " Autoexec commands
 "
@@ -189,12 +190,14 @@ if has('gui_running')
   set guioptions-=m
 
   " Window size
-  set lines=65 columns=130
+  set lines=67 columns=180
 end
 
 
 "
-" Plugin configuration
+" NERDTree configuration
 "
 
+" Show/hide NERDTree
+map <F1> :NERDTreeToggle<CR>
 
