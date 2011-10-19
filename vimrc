@@ -4,6 +4,9 @@
 " Forget being compatible with good ol' vi
 set nocompatible
 
+" Default encoding
+set encoding=utf-8
+
 " Set filetype stuff to on
 filetype on
 filetype plugin on
