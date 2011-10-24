@@ -1,6 +1,4 @@
-
-<!-- saved from url=(0060)https://raw.github.com/zsh-users/zsh-completions/master/_ack -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><div style="position: fixed; top: 0px; left: 0px; height: 0px; width: 0px; z-index: 9999999; "><div style="position: fixed; top: 100%; height: 0px; "><div style="position: relative; "></div></div></div><pre style="word-wrap: break-word; white-space: pre-wrap;">#compdef ack ack-grep
+#compdef ack ack-grep
 # ------------------------------------------------------------------------------
 # Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
 # All rights reserved.
@@ -36,7 +34,7 @@
 # Authors
 # -------
 #
-#  * Julien Nicoulaud &lt;julien.nicoulaud@gmail.com&gt;
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
 #
 # ------------------------------------------------------------------------------
 # -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
@@ -48,12 +46,12 @@ _ack() {
   local curcontext="$curcontext" state line cmds update_policy ret=1
 
   zstyle -s ":completion:${curcontext}:" cache-policy update_policy
-  [[ -z "$update_policy" ]] &amp;&amp; zstyle ":completion:${curcontext}:" cache-policy _ack_types_caching_policy
+  [[ -z "$update_policy" ]] && zstyle ":completion:${curcontext}:" cache-policy _ack_types_caching_policy
 
   unset _ack_raw_types
-  if ( [[ ${+_ack_raw_types} -eq 0 ]] || _cache_invalid "ack-grep" ) &amp;&amp; ! _retrieve_cache "ack-grep"; then
+  if ( [[ ${+_ack_raw_types} -eq 0 ]] || _cache_invalid "ack-grep" ) && ! _retrieve_cache "ack-grep"; then
     _ack_raw_types=(${(S)${(f)${${"$(_call_program types $words[1] --help=types)"}#*--\[no\]}}#*no\]})
-    [[ $#_ack_raw_types -gt 0 ]] &amp;&amp; _store_cache "ack-grep" _ack_raw_types
+    [[ $#_ack_raw_types -gt 0 ]] && _store_cache "ack-grep" _ack_raw_types
   fi
 
   _arguments -C \
@@ -67,9 +65,9 @@ _ack() {
     '(-c --count)'{-c,--count}'[suppress normal output; instead print a count of matching lines for each input file]' \
     '(--nocolor)--color[highlight the matching text]' \
     '(--color --color-filename --color-match --color-lineno)--nocolor[supress the color]' \
-    '(--nocolor --color)--color-filename[sets the color to be used for filenames]:color:-&gt;colors' \
-    '(--nocolor --color)--color-match[sets the color to be used for matches]:color:-&gt;colors' \
-    '(--nocolor --color)--color-lineno[sets the color to be used for line numbers]:color:-&gt;colors' \
+    '(--nocolor --color)--color-filename[sets the color to be used for filenames]:color:->colors' \
+    '(--nocolor --color)--color-match[sets the color to be used for matches]:color:->colors' \
+    '(--nocolor --color)--color-lineno[sets the color to be used for line numbers]:color:->colors' \
     '--column[show the column number of the first match]' \
     '(--noenv)--env[enable environment processing]' \
     '(--env)--noenv[disable all environment processing, no .ackrc is read and all environment variables are ignored]' \
@@ -104,21 +102,21 @@ _ack() {
     '--sort-files[sorts the found files lexically]' \
     '--show-types[outputs the filetypes that ack associates with each file]' \
     '--thpppt[display the all-important Bill The Cat logo]' \
-    '*--type[specify the types of files to include or exclude from a search]:type:-&gt;types' \
-    '*--type-add[files with the given extensions are recognized as being of the given type]:type-def:-&gt;type-defs' \
-    '*--type-set[files with the given extensions are recognized as being of the given type]:type-def:-&gt;type-defs' \
+    '*--type[specify the types of files to include or exclude from a search]:type:->types' \
+    '*--type-add[files with the given extensions are recognized as being of the given type]:type-def:->type-defs' \
+    '*--type-set[files with the given extensions are recognized as being of the given type]:type-def:->type-defs' \
     '(-u --unrestricted -a --all)'{-u,--unrestricted}'[all files and directories (including blib/, core.*, ...) are searched, nothing is skipped]' \
     '(-v --invert-match)'{-v,--invert-match}'[invert match: select non-matching lines]' \
     '(-w --word-regexp)'{-w,--word-regexp}'[force the given pattern to match only whole words]' \
     '-1[stops after reporting first match of any kind]' \
     {'--','--no'}${_ack_raw_types/ ##/\[}']' \
-    '1: :-&gt;patterns' \
+    '1: :->patterns' \
     '*: :_files' \
-  &amp;&amp; ret=0
+  && ret=0
 
   case $state in
     patterns)
-      _message -e patterns 'pattern' &amp;&amp; ret=0
+      _message -e patterns 'pattern' && ret=0
     ;;
     colors)
       local colors; colors=(
@@ -140,14 +138,14 @@ _ack() {
         'reverse'
         'concealed'
       )
-      _describe -t 'colors' 'color' colors &amp;&amp; ret=0
+      _describe -t 'colors' 'color' colors && ret=0
     ;;
     type-defs)
       if compset -P '*='; then
         local extensions; extensions=(*.*(:e))
-        _values -s ',' 'file extension' '.'$extensions &amp;&amp; ret=0
+        _values -s ',' 'file extension' '.'$extensions && ret=0
       else
-        _message -e type-name 'type name' &amp;&amp; ret=0
+        _message -e type-name 'type name' && ret=0
       fi
     ;;
     types)
@@ -162,15 +160,14 @@ _ack() {
 _ack_types_caching_policy() {
 
   # Rebuild if ackrc more recent than cache.
-  [[ -f $HOME/.ackrc &amp;&amp; $$HOME/.ackrc -nt "$1" ]] &amp;&amp; return 0
+  [[ -f $HOME/.ackrc && $$HOME/.ackrc -nt "$1" ]] && return 0
 
   # Rebuild if cache is older than one week.  
   local -a oldp
   oldp=( "$1"(Nmw+1) )
-  (( $#oldp )) &amp;&amp; return 0
+  (( $#oldp )) && return 0
 
   return 1
 }
 
 _ack "$@"
-</pre></body></html>
