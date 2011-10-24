@@ -2,3 +2,6 @@
 	path = vim/bundle/vundle
   url = http://github.com/gmarik/vundle.git
   ignore = untracked
+[submodule "zsh/git-prompt"]
+	path = zsh/git-prompt
+	url = https://github.com/olivierverdier/zsh-git-prompt.git
