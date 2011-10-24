@@ -33,13 +33,11 @@ setopt complete_in_word
 # When completing from the middle of a word, move the cursor to the end of the word
 setopt always_to_end
 # Completion correction : 'sl' instead of 'ls'
-setopt correctall
+#setopt correctall
 # If you type foo, and it isn't a command, and it is a directory in your cdpath, go there
 setopt autocd
 # Make cd push the old directory onto the directory stack.
 setopt auto_pushd
-# Autoselect the first completion entry
-setopt menu_complete
 # Allow comments even in interactive shells
 setopt interactive_comments
 # Report the status of background jobs immediately, rather than waiting until just before printing a prompt
