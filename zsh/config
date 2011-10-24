@@ -8,11 +8,11 @@ SAVEHIST=10000
 setopt share_history
 # Append history, instead of replace, when a terminal session exits
 setopt appendhistory
-# Add comamnds as they are typed, don't wait until shell exit
+# Add commands as they are typed, don't wait until shell exit
 setopt inc_append_history
-# Ignore in history commands with a space before
+# Ignore commands with a space before
 setopt hist_ignore_space
-# Remove the old entry in history and append the new one
+# Remove the old entry and append the new one
 setopt hist_ignore_all_dups
 # When searching history don't display results already cycled through twice
 setopt hist_find_no_dups
