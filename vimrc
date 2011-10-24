@@ -164,7 +164,9 @@ nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
 
-
+" Indent/unindent visual mode selection
+vmap <tab> >gv
+vmap <S-tab> <gv
 
 "
 " Autoexec commands
