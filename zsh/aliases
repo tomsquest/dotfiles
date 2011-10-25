@@ -52,4 +52,4 @@ alias seed='rake db:seed'
 alias st='git status'
 
 # ZSH
-alias szrc="source ~/.zshrc"
+alias szshrc="source ~/.zshrc"
