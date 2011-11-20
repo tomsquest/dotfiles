@@ -65,7 +65,7 @@ export LESS='--ignore-case --raw-control-chars'
 export PAGER=less
 # List of directories we can cd to from anywhere
 export CDPATH=.:~:~/Development/
-
+export JAVA_HOME=/usr/lib/jvm/java-6-sun
 
 #
 # Hooks
