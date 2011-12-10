@@ -123,7 +123,7 @@ let mapleader = ","
 " `a will jump to the line and column marked with ma
 nnoremap ' `
 
-" By default, 0<C-e> and <C-y> scroll the viewport a single line. Speed this up:
+" By default, <C-e> and <C-y> scroll the viewport a single line. Speed this up:
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 vnoremap <C-e> 3<C-e>
@@ -167,6 +167,12 @@ nnoremap <Down> :echoe "Use j"<CR>
 " Indent/unindent visual mode selection
 vmap <tab> >gv
 vmap <S-tab> <gv
+
+" Easy navigation between windows
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
 
 "
 " Autoexec commands
