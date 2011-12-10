@@ -31,6 +31,7 @@ target/
 .settings
 .project
 .metadata
+.springBeans
 
 # OS generated files
 .DS_Store
