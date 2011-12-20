@@ -1,0 +1,6 @@
+local exitstatus="$?"
+if [[ $exitstatus = "0" ]]; then
+  notify-send -i "terminal" "Success" "Last command exited successfully"
+else
+  notify-send -i "error" "Error" "Last script exited with status $exitstatus"
+fi
