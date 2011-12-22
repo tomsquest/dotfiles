@@ -52,6 +52,7 @@ alias seed='rake db:seed'
 alias st='git status'
 
 # Maven
+alias mct='mvn clean test'
 alias mpt='mvn package -DskipTests'
 alias mcpt='mvn clean package -DskipTests'
 alias mit='mvn install -DskipTests'
