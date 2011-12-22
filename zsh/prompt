@@ -29,7 +29,7 @@ function precmd {
   if [[ "$promptsize + $pwdsize + $exitcodesize" -gt $TERMWIDTH ]]; then
     ((PR_PWDLEN=$TERMWIDTH - $promptsize - $exitcodesize))
   else
-    PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $exitcodesize)))..-.)}"
+    PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $exitcodesize)))..—.)}"
   fi
 
 }
