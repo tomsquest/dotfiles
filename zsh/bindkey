@@ -1,4 +1,5 @@
-# Keybindings offered:
+# Standard and additional keybindings:
+#   ctrl + u : clear line
 #   ctrl + w : delete word backward
 #   alt  + d : delete word
 #   ctrl + a : move to beginning of line
