@@ -44,7 +44,7 @@ Bundle 'tpope/vim-rake'
 "
 " Command-T requires an additionnal installation step :
 " From ~/.vim/bundle/command-t, run: rvm use 1.8.7 && bundle install && rake make
-"Bundle 'git://git.wincent.com/command-t.git'
+Bundle 'git://git.wincent.com/command-t.git'
 
 " Simpler way to use some motions in vim.
 "Bundle 'Lokaltog/vim-easymotion'
