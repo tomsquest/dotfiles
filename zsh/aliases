@@ -58,7 +58,7 @@ alias mcpt='mvn clean package -DskipTests'
 alias mit='mvn install -DskipTests'
 alias mcit='mvn clean install -DskipTests'
 alias mdt='mvn dependency:tree'
-alias mjt='mvn jetty:run'
+alias mjr='mvn jetty:run'
 
 # ZSH
 alias szshrc="source ~/.zshrc"
