@@ -8,3 +8,4 @@
 --smart-case
 --sort-files
 
+--pager=less --ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT
