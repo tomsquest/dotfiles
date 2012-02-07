@@ -29,7 +29,7 @@ alias -g G='| grep -in'
 # Add an 'alert' alias for long running commands.  Use like so: sleep 10; alert
 #alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$([ $? = 0 ] && echo terminal || echo error)"'
 
-# Beep alias
+# Beep
 alias beep='beep -f 5000 -r 2'
 
 # ..
@@ -37,27 +37,26 @@ alias '..'='cd ..'
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
+alias -g ......='../../../../..'
+alias -g .......='../../../../../..'
 
 # Rails
-alias rake='if [ -e ./Gemfile.lock ]; then bundle exec rake "$@"; else /usr/bin/env rake "$@"; fi'
-alias c='echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi'
-alias s='echo Launching Rails server...; if [ -f script/server ]; then script/server; else script/rails server; fi'
-alias g='rails generate'
-alias annot='if which annotate > /dev/null; then echo Annotating models...; annotate; fi'
+alias rc='echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi'
+alias rs='echo Launching Rails server...; if [ -f script/server ]; then script/server; else script/rails server; fi'
 alias rdm='echo db:migrate...; rake db:migrate && annot'
 alias rdr='echo db:migrate:redo...; rake db:migrate:redo && annot'
-alias seed='rake db:seed'
+alias rseed='rake db:seed'
 
 # Git
-alias st='git status'
+alias g='git'
+alias gs='git status'
 
 # Maven
-alias mct='mvn clean test'
+alias m='mvn'
 alias mpt='mvn package -DskipTests'
 alias mcpt='mvn clean package -DskipTests'
 alias mit='mvn install -DskipTests'
 alias mcit='mvn clean install -DskipTests'
-alias mdt='mvn dependency:tree'
 alias mjr='mvn jetty:run'
 
 # ZSH
