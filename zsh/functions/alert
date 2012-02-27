@@ -1,6 +1,8 @@
 local exitstatus="$?"
 if [[ $exitstatus = "0" ]]; then
-  notify-send -i "terminal" "Success" "Last command exited successfully"
+  /usr/bin/notify-send -i "terminal" "Success" "Last command exited successfully"
+  /usr/bin/beep -l 10 -f 5000 -r 1
 else
-  notify-send -i "error" "Error" "Last script exited with status $exitstatus"
+  /usr/bin/notify-send -i "error" "Error" "Last script exited with status $exitstatus"
+  /usr/bin/beep -l 100 -f 10 -r 1
 fi
