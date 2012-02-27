@@ -29,9 +29,6 @@ alias -g G='| grep -in'
 # Add an 'alert' alias for long running commands.  Use like so: sleep 10; alert
 #alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$([ $? = 0 ] && echo terminal || echo error)"'
 
-# Beep
-alias beep='beep -f 5000 -r 2'
-
 # ..
 alias '..'='cd ..'
 alias -g ...='../..'
