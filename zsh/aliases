@@ -53,10 +53,10 @@ alias gs='git status'
 
 # Maven
 alias m='mvn'
-alias mpt='mvn package -DskipTests'
-alias mcpt='mvn clean package -DskipTests'
-alias mit='mvn install -DskipTests'
-alias mcit='mvn clean install -DskipTests'
+alias mpt='mvn package -DskipTests ; alert'
+alias mcpt='mvn clean package -DskipTests ; alert'
+alias mit='mvn install -DskipTests ; alert'
+alias mcit='mvn clean install -DskipTests ; alert'
 alias mjr='mvn jetty:run'
 
 # ZSH
