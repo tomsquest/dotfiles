@@ -1,6 +1,5 @@
-fpath=(~/.zsh/functions $fpath)
+fpath=(~/.zsh/completions $fpath)
 autoload -U compinit
-autoload -U ~/.zsh/functions/*(:t)
 zmodload -i zsh/complist
 compinit
 
