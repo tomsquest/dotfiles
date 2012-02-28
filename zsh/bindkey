@@ -6,6 +6,7 @@
 #   ctrl + e : move to end of line (e for end)
 #   ctrl + f : move to next word (f for forward)
 #   ctrl + b : move to previous word (b for backward)
+#   ctrl + d : delete char at current position (d for delete)
 
 # Emacs style bindings (for Home/End keys...)
 bindkey -e
