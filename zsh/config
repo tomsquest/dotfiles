@@ -56,8 +56,8 @@ setopt local_traps
 # ENV
 #
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
-export EDITOR=/usr/bin/vim
-export VISUAL=/usr/bin/gvim
+export EDITOR='/usr/bin/vim'
+export VISUAL='/usr/bin/vim'
 export GREP_OPTIONS='--color=auto --exclude-dir=.git'
 # displays Grep matches in inverse video, very easy to see
 export GREP_COLOR=7
@@ -68,10 +68,16 @@ export JAVA_HOME=/usr/lib/jvm/java-6-sun
 #
 # Hooks
 #
-autoload add-zsh-hook
 
 # Force refresh the terminal title before each command.
+autoload add-zsh-hook
 update_terminal_title() {
   print -Pn "\e]0;%~\a"
 }
 add-zsh-hook precmd update_terminal_title
+
+# Edit command line by pressing Ctrl+x Ctrl+e
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '\C-x\C-e' edit-command-line
+
