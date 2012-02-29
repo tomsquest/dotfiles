@@ -1,6 +1,6 @@
 function alert() {
-  local exitstatus="$?"
-  local lastcmd=$(tail -n1 ~/.histfile | cut -d ";" -f 2)
+  exitstatus="$?"
+  lastcmd=$(tail -n1 ~/.histfile | cut -d ";" -f 2-)
   if [[ $exitstatus = "0" ]]; then
     /usr/bin/notify-send -i "terminal" "Success" "$lastcmd"
     /usr/bin/beep -l 100 -f 500 -n -l 50 -f 1000
