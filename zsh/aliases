@@ -54,7 +54,7 @@ alias mpt='mvn package -DskipTests ; alert'
 alias mcpt='mvn clean package -DskipTests ; alert'
 alias mit='mvn install -DskipTests ; alert'
 alias mcit='mvn clean install -DskipTests ; alert'
-alias mi='mvn clean integration-test -Pintegration-tests ; alert'
+alias mi='mvn clean install -Pintegration-tests ; alert'
 alias mjr='mvn jetty:run'
 
 # ZSH
