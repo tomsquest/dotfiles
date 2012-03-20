@@ -17,12 +17,10 @@
   editor = gvim -f
 [apply]
   whitespace = nowarn
-[format]
-  pretty = %C(yellow)%h%Creset %s %C(red)(%an, %cr)%Creset
 [github]
   user = <%= print("GitHub Username: "); STDOUT.flush; STDIN.gets.chomp %>
   token = <%= print("GitHub API Token: "); STDOUT.flush; STDIN.gets.chomp %>
 [merge]
   tool = kdiff3
 [push]
-	default = tracking
+  default = tracking
