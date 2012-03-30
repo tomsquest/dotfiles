@@ -54,17 +54,10 @@ Bundle 'bsl/obviousmode'
 
 
 "
-" Syntax
+" Syntaxes
 "
-
-" Markdown
 Bundle 'tpope/vim-markdown'
-
-" Haml, Sass/Scss
 Bundle 'tpope/vim-haml'
-
-" Slim
 Bundle 'bbommarito/vim-slim'
-
-" Coffeescript
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'juvenn/mustache.vim'
