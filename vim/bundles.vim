@@ -52,6 +52,8 @@ Bundle 'git://git.wincent.com/command-t.git'
 " Clearly indicate visually whether Vim is in insert mode via the StatusLine highlight group
 Bundle 'bsl/obviousmode'
 
+" Change inside surroundings with <leader>ci
+Bundle 'briandoll/change-inside-surroundings.vim'
 
 "
 " Syntaxes
