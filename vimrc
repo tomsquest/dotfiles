@@ -67,8 +67,10 @@ set wildmenu
 " When completing by tag, show the whole tag, not just the function name
 set showfulltag
 
-" Wrap line and show wraps
-set wrap
+" don't initially wrap
+set nowrap
+
+" When wrap is on, show breaks with symbol
 let &showbreak = '↳ '
 
 " Indent lines
