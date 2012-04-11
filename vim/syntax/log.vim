@@ -7,6 +7,8 @@ endif
 
 syn match logError ".* FATAL .*"
 syn match logError "^FATAL: .*"
+syn match logError ".* SEVERE .*"
+syn match logError "^SEVERE: .*"
 syn match logError ".* ERROR .*"
 syn match logError "^ERROR: .*"
 syn match logWarn ".* WARN .*"
@@ -19,7 +21,7 @@ syn match logInfo "^INFO: .*"
 syn match logError "^java.*Exception.*"
 syn match logError "^java.*Error.*"
 
-" Highlight colors for log levels.
+
 hi logError ctermfg=Red guifg=Red
 hi logWarn ctermfg=Yellow guifg=Yellow
 hi logInfo ctermfg=Green guifg=Green
