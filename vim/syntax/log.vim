@@ -5,26 +5,25 @@ if exists("b:current_syntax")
   finish
 endif
 
-syn match fatal ".* FATAL .*"
-syn match fatal "^FATAL: .*"
-syn match error ".* ERROR .*"
-syn match error "^ERROR: .*"
-syn match warn ".* WARN .*"
-syn match warn "^WARN: .*"
-syn match info ".* INFO .*"
-syn match info "^INFO: .*"
-syn match debug ".* DEBUG .*"
-syn match debug "^DEBUG: .*"
+syn match logError ".* FATAL .*"
+syn match logError "^FATAL: .*"
+syn match logError ".* ERROR .*"
+syn match logError "^ERROR: .*"
+syn match logWarn ".* WARN .*"
+syn match logWarn "^WARN: .*"
+syn match logInfo ".* INFO .*"
+syn match logInfo "^INFO: .*"
+"syn match logDebug ".* DEBUG .*"
+"syn match logDebug "^DEBUG: .*"
 
-syn match error "^java.*Exception.*"
-syn match error "^java.*Error.*"
+syn match logError "^java.*Exception.*"
+syn match logError "^java.*Error.*"
 
 " Highlight colors for log levels.
-hi fatal ctermfg=Red guifg=Red
-hi error ctermfg=Red guifg=Red
-hi warn ctermfg=Yellow guifg=Yellow
-hi info ctermfg=Green guifg=Green
-hi debug ctermfg=Gray guifg=Gray
+hi logError ctermfg=Red guifg=Red
+hi logWarn ctermfg=Yellow guifg=Yellow
+hi logInfo ctermfg=Green guifg=Green
+"hi logDebug ctermfg=Gray guifg=Gray
 
 let b:current_syntax = "log"
 
