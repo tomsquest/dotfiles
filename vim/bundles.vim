@@ -55,6 +55,8 @@ Bundle 'bsl/obviousmode'
 " Change inside surroundings with <leader>ci
 Bundle 'briandoll/change-inside-surroundings.vim'
 
+" Display a list of buffers on top of the screen
+Bundle 'fholgado/minibufexpl.vim'
 "
 " Syntaxes
 "
