@@ -7,8 +7,6 @@ endif
 
 syn match logError ".* FATAL .*"
 syn match logError "^FATAL: .*"
-syn match logError ".* SEVERE .*"
-syn match logError "^SEVERE: .*"
 syn match logError ".* ERROR .*"
 syn match logError "^ERROR: .*"
 syn match logWarn ".* WARN .*"
