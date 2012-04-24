@@ -65,6 +65,11 @@ export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT'
 export PAGER=less
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
 
+# Allows to kill backward word path by path using ctrl+w
+# With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
+# Default is: *?_-.[]~=/&;!#$%^(){}<>
+export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+
 #
 # Hooks
 #
