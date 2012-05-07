@@ -1,3 +1,4 @@
+alias szshrc="source ~/.zshrc"
 alias grep='grep --color=auto'
 alias ack='ack-grep'
 alias du='du -h'
@@ -23,12 +24,9 @@ alias chown='chown -v'
 
 # ZSH global aliases for piping
 # Example : cat myfile.txt G pattern
+alias -g G='| grep -in'
 alias -g T='| tail'
 alias -g L='| less'
-alias -g G='| grep -in'
-
-# Add an 'alert' alias for long running commands.  Use like so: sleep 10; alert
-#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$([ $? = 0 ] && echo terminal || echo error)"'
 
 # ..
 alias '..'='cd ..'
@@ -41,23 +39,20 @@ alias -g .......='../../../../../..'
 # Rails
 alias rc='echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi'
 alias rs='echo Launching Rails server...; if [ -f script/server ]; then script/server; else script/rails server; fi'
-alias rdm='echo db:migrate...; rake db:migrate && annot'
-alias rdr='echo db:migrate:redo...; rake db:migrate:redo && annot'
-alias rseed='rake db:seed'
+alias rdm='alert printAndRun rake db:migrate && annotate'
+alias rdr='alert printAndRun rake db:migrate:redo && annotate'
+alias rseed='alert printAndRun rake db:seed'
 
 # Git
-alias g='git'
+alias  g='git'
 alias gs='git status'
 
 # Maven
-alias m='mvn'
-alias mpt='mvn package -DskipTests ; alert'
-alias mcpt='mvn clean package -DskipTests ; alert'
-alias mit='mvn install -DskipTests ; alert'
-alias mcit='mvn clean install -DskipTests ; alert'
-alias mi='mvn clean install -Pintegration-tests ; alert'
-alias mjr='mvn jetty:run'
-
-# ZSH
-alias szshrc="source ~/.zshrc"
+alias    m='mvn'
+alias  mpt='alert printAndRun mvn package -DskipTests'
+alias mcpt='alert printandrun mvn clean package -DskipTests'
+alias  mit='alert printandrun mvn install -DskipTests'
+alias mcit='alert printandrun mvn clean install -DskipTests'
+alias   mi='alert printandrun mvn clean install -Pintegration-tests'
+alias  mjr='mvn jetty:run'
 
