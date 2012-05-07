@@ -5,7 +5,7 @@ function alert() {
   if [[ $1 == "printAndRun" ]]; then
     cmd_as_array=("${(s/ /)cmd}")
     # Remove first argument
-    cmd=$last_command_array[2,-1]
+    cmd=$cmd_as_array[2,-1]
   fi
 
   # Execution
