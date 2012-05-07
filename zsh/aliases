@@ -50,9 +50,9 @@ alias gs='git status'
 # Maven
 alias    m='mvn'
 alias  mpt='alert printAndRun mvn package -DskipTests'
-alias mcpt='alert printandrun mvn clean package -DskipTests'
-alias  mit='alert printandrun mvn install -DskipTests'
-alias mcit='alert printandrun mvn clean install -DskipTests'
-alias   mi='alert printandrun mvn clean install -Pintegration-tests'
+alias mcpt='alert printAndRun mvn clean package -DskipTests'
+alias  mit='alert printAndRun mvn install -DskipTests'
+alias mcit='alert printAndRun mvn clean install -DskipTests'
+alias   mi='alert printAndRun mvn clean install -Pintegration-tests'
 alias  mjr='mvn jetty:run'
 
