@@ -217,3 +217,16 @@ end
 " Show/hide NERDTree
 map <F1> :NERDTreeToggle<CR>
 
+"
+" CtrlP
+"
+
+" Opens buffer list
+map <Leader>b :CtrlPBuffer<CR>
+" Some more ignored dirs
+let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$\|target$\|\.settings$'
+" Sort match on top
+let g:ctrlp_match_window_reversed = 1
+" Increase windows height
+let g:ctrlp_max_height = 20
+
