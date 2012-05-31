@@ -9,7 +9,7 @@ function alert() {
   fi
 
   # Execution
-  $@
+  eval "$@"
   exitstatus="$?"
 
   # Notification
