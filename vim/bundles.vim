@@ -44,7 +44,7 @@ Bundle 'tpope/vim-rake'
 "Bundle 'Lokaltog/vim-easymotion'
 
 " Clearly indicate visually whether Vim is in insert mode via the StatusLine highlight group
-Bundle 'bsl/obviousmode'
+"Bundle 'bsl/obviousmode'
 
 " Change inside surroundings with <leader>ci
 Bundle 'briandoll/change-inside-surroundings.vim'
@@ -54,6 +54,10 @@ Bundle 'fholgado/minibufexpl.vim'
 
 " Fuzzy file, buffer, mru and tag finder
 Bundle 'kien/ctrlp.vim'
+
+" KIck-ass status bar
+Bundle 'Lokaltog/vim-powerline'
+
 
 "
 " Syntaxes
