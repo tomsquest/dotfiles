@@ -71,7 +71,7 @@ export JAVA_HOME=/usr/lib/jvm/java-6-sun
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
 #
-# Hooks
+# ZSH Modules config
 #
 
 # Force refresh the terminal title before each command.
@@ -86,3 +86,6 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
 
+# Awesome MV
+# Example: zmv '(**/)file.xml' '$1anotherName.xml'
+autoload zmv
