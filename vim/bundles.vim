@@ -17,13 +17,18 @@ Bundle 'gmarik/vundle'
 "
 Bundle 'xoria256.vim'
 
-
 "
 " Plugins
 "
 
 " File explorer
 Bundle 'scrooloose/nerdtree'
+
+" Comment
+Bundle 'tomtom/tcomment_vim'
+
+" Ruby support
+Bundle 'vim-ruby/vim-ruby'
 
 " Utilities for common commans, adding or moving lines, encoding/decoding...
 Bundle 'tpope/vim-unimpaired'
@@ -55,7 +60,7 @@ Bundle 'fholgado/minibufexpl.vim'
 " Fuzzy file, buffer, mru and tag finder
 Bundle 'kien/ctrlp.vim'
 
-" KIck-ass status bar
+" Status bar
 Bundle 'Lokaltog/vim-powerline'
 
 
