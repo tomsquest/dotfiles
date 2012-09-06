@@ -225,8 +225,6 @@ map <F1> :NERDTreeToggle<CR>
 map <Leader>b :CtrlPBuffer<CR>
 " Some more ignored dirs
 let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$\|\.class$\|\.settings$'
-" Sort match on top
-"let g:ctrlp_match_window_reversed = 1
 " Increase windows height
 let g:ctrlp_max_height = 20
 
