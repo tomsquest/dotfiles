@@ -25,6 +25,14 @@ insert_sudo () { zle beginning-of-line; zle -U "sudo " }
 zle -N insert-sudo insert_sudo
 bindkey '^[s' insert-sudo
 
+# alt-x : insert last command result
+zmodload -i zsh/parameter
+insert-last-command-output() {
+  LBUFFER+="$(eval $history[$((HISTCMD-1))])"
+}
+zle -N insert-last-command-output
+bindkey '^[x' insert-last-command-output
+
 # ctrl+b/f or ctrl+left/right : move word by word (backward/forward)
 bindkey '^b' backward-word
 bindkey '^f' forward-word
