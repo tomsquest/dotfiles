@@ -1,6 +1,7 @@
 --type-set=haml=.haml
 --type-set=sass=.sass,.scss
 --type-set=slim=.slim
+--type-set=properties=.properties
 
 --type-add=html=.html.erb,.haml,.slim
 --type-add=css=.sass,.scss,.less
