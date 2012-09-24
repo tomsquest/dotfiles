@@ -89,3 +89,7 @@ bindkey '\C-x\C-e' edit-command-line
 # Awesome MV
 # Example: zmv '(**/)file.xml' '$1anotherName.xml'
 autoload zmv
+
+# Load ruma Z
+# See: https://github.com/rupa/z
+source ~/.zsh/rupa-z/z.sh
