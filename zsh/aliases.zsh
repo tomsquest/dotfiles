@@ -4,6 +4,7 @@ alias ack='ack-grep'
 alias du='du -h'
 alias df='df -h'
 alias mu='multitail -cS apache -cS log4j -n 1000 --no-repeat -b 2 --mark-interval 2'
+alias f='find -iname'
 
 # History with timestamps and elapsed time
 alias h='history -iD'
