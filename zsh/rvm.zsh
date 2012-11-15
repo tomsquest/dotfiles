@@ -5,3 +5,5 @@
 # Required when opening a new tab, RVM should be "reloaded"
 __rvm_project_rvmrc
 
+# Add RVM to PATH for scripting
+PATH=$PATH:$HOME/.rvm/bin
