@@ -64,6 +64,7 @@ export GREP_COLOR=7
 export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT'
 export PAGER=less
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
+export TERM=xterm-256color
 
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
