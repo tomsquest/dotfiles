@@ -112,6 +112,9 @@ set clipboard=unnamedplus
 set backupdir=~/.vim/.backupdir,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim/.backupdir,~/.tmp,~/tmp,/var/tmp,/tmp
 
+" Yes, we have a fast terminal
+set ttyfast
+
 "
 " Mappings
 "
