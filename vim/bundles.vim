@@ -16,6 +16,7 @@ Bundle 'gmarik/vundle'
 " Colorshemes
 "
 Bundle 'xoria256.vim'
+Bundle 'tomasr/molokai'
 
 "
 " Plugins
@@ -63,6 +64,8 @@ Bundle 'kien/ctrlp.vim'
 " Status bar
 Bundle 'Lokaltog/vim-powerline'
 
+" Mark quickfix & location list items with signs 
+Bundle 'tomtom/quickfixsigns_vim'
 
 "
 " Syntaxes
@@ -72,3 +75,5 @@ Bundle 'tpope/vim-haml'
 Bundle 'bbommarito/vim-slim'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'juvenn/mustache.vim'
+Bundle 'othree/html5.vim'
+Bundle 'sunaku/vim-ruby-minitest'
