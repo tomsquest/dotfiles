@@ -67,6 +67,8 @@ Bundle 'Lokaltog/vim-powerline'
 " Mark quickfix & location list items with signs 
 Bundle 'tomtom/quickfixsigns_vim'
 
+" Ack-grep: usage: :Ack foobar
+Bundle 'mileszs/ack.vim'
 "
 " Syntaxes
 "
