@@ -32,7 +32,7 @@ set wrapscan
 set ignorecase
 set smartcase
 
-" Make command line two lines high
+" Command line heigh
 set ch=2
 
 " set visual bell
@@ -41,10 +41,6 @@ set vb
 " Make sure that unsaved buffers that are to be put in the background are
 " allowed to go in there (ie. the "must save first" error doesn't come up)
 set hidden
-
-" Make the 'cw' and like commands put a $ at the end instead of just deleting
-" the text and replacing it
-set cpoptions=ces$
 
 " tell VIM to always put a status line in, even if there is only one window
 set laststatus=2
@@ -101,7 +97,7 @@ set sidescroll=1
 " Apparence
 set background=dark
 set t_Co=256
-colorscheme xoria256
+colorscheme molokai
 
 " Highlight current line
 set cursorline
@@ -187,7 +183,7 @@ map <C-l> <C-w>l
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 " Show warning on focus when file has been modified by an external program
-set updatetime=500
+set updatetime=100
 au BufWinEnter * checktime
 
 " Enhance % for matching if/end/tags in some language (html, jsp...)
@@ -226,5 +222,5 @@ map <Leader>b :CtrlPBuffer<CR>
 " Some more ignored dirs
 let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$\|\.class$\|\.settings$'
 " Increase windows height
-let g:ctrlp_max_height = 20
+let g:ctrlp_max_height = 30
 
