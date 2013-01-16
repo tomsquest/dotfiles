@@ -74,7 +74,6 @@ Bundle 'mileszs/ack.vim'
 "
 Bundle 'tpope/vim-markdown'
 Bundle 'tpope/vim-haml'
-Bundle 'bbommarito/vim-slim'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'juvenn/mustache.vim'
 Bundle 'othree/html5.vim'
