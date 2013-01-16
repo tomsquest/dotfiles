@@ -1,6 +1,3 @@
-" Sources :
-"   http://www.derekwyatt.org/vim/the-vimrc-file/
-
 " Forget being compatible with good ol' vi
 set nocompatible
 
@@ -20,11 +17,11 @@ source ~/.vim/bundles.vim
 " Display extra whitespace
 set list listchars=tab:»·,trail:·
 
-" (Soft) Tabstops are 2 spaces
+" Tabs are shown as 2 spaces
 set softtabstop=2
 set shiftwidth=2
 
-" set the search scan to wrap lines
+" When 'Search next' reach the end of the file, it wraps around the beginning
 set wrapscan
 
 " set the search scan so that it ignores case when the search is all lower
@@ -32,7 +29,7 @@ set wrapscan
 set ignorecase
 set smartcase
 
-" Command line heigh
+" Command line height
 set ch=2
 
 " set visual bell
@@ -83,7 +80,7 @@ set hlsearch
 set incsearch
 
 " Display line number
-set nu
+set number
 
 " Lines above/below cursor when scrolling
 set scrolloff=5
@@ -91,7 +88,7 @@ set scrolloff=5
 " Minimal columns displayed when scrolling horizontally
 set sidescrolloff=5
 
-" Enable scrolling horizontaly column by column
+" Enable scrolling horizontally column by column
 set sidescroll=1
 
 " Apparence
@@ -115,6 +112,10 @@ set directory=~/.vim/.backupdir,~/.tmp,~/tmp,/var/tmp,/tmp
 " Yes, we have a fast terminal
 set ttyfast
 
+" Move the cursor to the matching pair of (){}[]
+set showmatch
+
+
 "
 " Mappings
 "
@@ -122,7 +123,7 @@ set ttyfast
 " Map leader
 let mapleader = ","
 
-" Remap ' as ` because ` remenbers line AND column for marks
+" Remap ' as ` because ` remembers line AND column for marks
 " 'a will jump to the line in the current file marked with ma
 " `a will jump to the line and column marked with ma
 nnoremap ' `
@@ -162,11 +163,6 @@ nmap <C-Down> ]e
 vmap <C-Up> [egv
 vmap <C-Down> ]egv
 
-" Disable arrow keys
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
 
 " Indent/unindent visual mode selection
 vmap <tab> >gv
@@ -205,7 +201,7 @@ if has('gui_running')
   set guioptions-=m
 
   " Window size
-  set lines=67 columns=180
+  set lines=50 columns=120
 end
 
 
