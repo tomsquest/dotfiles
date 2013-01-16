@@ -115,6 +115,10 @@ set ttyfast
 " Move the cursor to the matching pair of (){}[]
 set showmatch
 
+" Indent to the nearest tabstop when using > and <
+set shiftround
+
+
 
 "
 " Mappings
