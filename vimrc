@@ -118,7 +118,8 @@ set showmatch
 " Indent to the nearest tabstop when using > and <
 set shiftround
 
-
+" Update title with the current file name
+set title
 
 "
 " Mappings
