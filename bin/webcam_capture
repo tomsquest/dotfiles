@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mplayer -vo png:outdir=/home/tom/Pictures/_webcam_captures -frames 1 tv://
