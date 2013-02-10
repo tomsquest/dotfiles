@@ -1,38 +1,19 @@
-#
-# A pretty good list of ignored files, 
-# based on https://github.com/github/gitignore
-#
-
-# Tmp dir and Tmp files
 *.swp
 *~
-
-
-# Databases
-*.sqlite3
-*.sqlite
-
-# SVN
 .svn/
-
-# Rails
 .sass-cache
 /log/*
 /tmp/*
-
-# Java
+*.sqlite3
+*.sqlite
 *.class
-
-# Maven
 target/
-
-# Eclipse
 .classpath
 .settings
 .project
 .metadata
 .springBeans
-
-# OS generated files
+.idea
+*.iml
 .DS_Store
 Thumbs.db
