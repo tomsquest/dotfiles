@@ -101,9 +101,10 @@ set cursorline
 
 " Enable the mouse
 set mouse=a
+set ttymouse=xterm2
 
 " Merge selection and system clipboard
-set clipboard=unnamedplus
+set clipboard=unnamedplus,unnamed,autoselect,exclude:cons\|linux
 
 " Isolate swap and backup files to a single directory
 set backupdir=~/.vim/.backupdir,~/.tmp,~/tmp,/var/tmp,/tmp
