@@ -78,7 +78,7 @@ export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 # Force refresh the terminal title before each command.
 autoload add-zsh-hook
 update_terminal_title() {
-  print -Pn "\e]0;%~\a"
+  print -Pn "\e]0;%~ - Terminal\a"
 }
 add-zsh-hook precmd update_terminal_title
 
