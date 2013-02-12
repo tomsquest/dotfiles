@@ -1,3 +1,6 @@
 #!/bin/sh
 
-mplayer -vo png:outdir=/home/tom/Pictures/_webcam_captures -frames 1 tv://
+pics_path=/home/tom/Pictures/_webcam_captures
+
+mplayer -vo png:outdir=$pics_path -frames 1 tv://
+mv $pics_path/00000001.png $pics_path/$(date +%Y.%m.%d-%H:%M).png
