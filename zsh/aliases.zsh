@@ -31,7 +31,7 @@ alias -g G='| grep -in'
 alias -g T='| tail'
 alias -g L='| less'
 
-# ..
+# Parent directories
 alias '..'='cd ..'
 alias -g ...='../..'
 alias -g ....='../../..'
@@ -39,16 +39,11 @@ alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias -g .......='../../../../../..'
 
-# Rails
-alias rc='echo Opening Rails console...; if [ -f script/console ]; then script/console; else script/rails console; fi'
-alias rs='echo Launching Rails server...; if [ -f script/server ]; then script/server; else script/rails server; fi'
-alias rdm='alert printAndRun rake db:migrate && annotate'
-alias rdr='alert printAndRun rake db:migrate:redo && annotate'
-alias rseed='alert printAndRun rake db:seed'
-
 # Git
 alias  g='git'
 alias gs='git status'
+alias gp='git pull --rebase'
+alias gl='git log --oneline'
 
 # Maven
 alias    m='mvn'
@@ -57,5 +52,5 @@ alias mcpt='alert printAndRun mvn clean package -DskipTests'
 alias  mit='alert printAndRun mvn install -DskipTests'
 alias mcit='alert printAndRun mvn clean install -DskipTests'
 alias   mi='alert printAndRun mvn clean install -Pintegration-tests'
-alias  mjr='mvn jetty:run'
+alias   mj='printAndRun mvn jetty:run'
 
