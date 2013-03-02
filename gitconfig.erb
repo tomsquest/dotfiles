@@ -1,26 +1,23 @@
 [user]
   name = <%= print("Your Name: "); STDOUT.flush; STDIN.gets.chomp %>
   email = <%= print("Your Email: "); STDOUT.flush; STDIN.gets.chomp %>
+[core]
+  excludesfile = <%= ENV['HOME'] %>/.gitignore
+  autocrlf = input
+  editor = gvim -f
 [alias]
   co = checkout
   ci = commit
   st = status
   br = branch
-  l = log --decorate
+  l = log --decorate --graph
   addm = !git-ls-files -m -z | xargs -0 git-add && git status                     # add modified files
   addu = !git-ls-files -o --exclude-standard -z | xargs -0 git-add && git status  # add new files
   rmm  = !git ls-files -d -z | xargs -0 git-rm && git status                      # remove deleted file
 [color]
   ui = true
-[core]
-  excludesfile = <%= ENV['HOME'] %>/.gitignore
-  autocrlf = input
-  editor = gvim -f
 [apply]
   whitespace = nowarn
-[github]
-  user = <%= print("GitHub Username: "); STDOUT.flush; STDIN.gets.chomp %>
-  token = <%= print("GitHub API Token: "); STDOUT.flush; STDIN.gets.chomp %>
 [merge]
   tool = kdiff3
 [push]
