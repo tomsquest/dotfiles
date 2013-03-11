@@ -210,11 +210,18 @@ end
 
 
 "
-" NERDTree configuration
+" File explorer config
 "
 
-" Show/hide NERDTree
-map <F1> :NERDTreeToggle<CR>
+" Show/hide
+"map <F1> :Vex<CR>
+"
+" Use tree-mode as default view
+let g:netrw_liststyle=3
+" Open file in previous buffer
+let g:netrw_browse_split=4
+" preview window shown in a vertically split
+let g:netrw_preview=1
 
 "
 " CtrlP

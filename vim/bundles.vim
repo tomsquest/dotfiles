@@ -22,9 +22,6 @@ Bundle 'tomasr/molokai'
 " Plugins
 "
 
-" File explorer
-Bundle 'scrooloose/nerdtree'
-
 " Comment
 Bundle 'tomtom/tcomment_vim'
 
