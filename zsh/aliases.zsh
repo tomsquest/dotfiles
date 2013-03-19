@@ -19,7 +19,7 @@ alias la='ls -l --almost-all --human-readable --classify --group-directories-fir
 
 # More verbose fileutils
 alias cp='nocorrect cp -iv'
-alias rm='nocorrect rm -iv'
+alias rm='nocorrect rm -Iv' # -i to prompt for every file
 alias mv='nocorrect mv -iv'
 alias rmdir='rmdir -v'
 alias chmod='chmod -v'
