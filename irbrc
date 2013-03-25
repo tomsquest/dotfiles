@@ -1,7 +1,12 @@
-#!/usr/bin/ruby
+# ruby 1.8.7 compatible
+require 'rubygems'
+require 'irb/completion'
 
-require 'rubygems' unless defined? Gem
+# configure irb
+IRB.conf[:PROMPT_MODE]  = :SIMPLE
+IRB.conf[:EVAL_HISTORY] = 1000
+IRB.conf[:SAVE_HISTORY] = 1000
 
-# IrbTools : https://github.com/janlelis/irbtools
+# IrbTools: package of many useful gems
+# See: https://github.com/janlelis/irbtools
 require 'irbtools'
-
