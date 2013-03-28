@@ -1,12 +1,14 @@
 alias szshrc='source ~/.zshrc'
-alias grep='grep --color=auto --line-number --ignore-case'
+alias grep='grep --color=auto'
 alias ack='ack-grep'
 alias du='du -h'
 alias df='df -h'
-alias mu='multitail -cS apache -cS log4j -n 1000 --no-repeat -b 2 --mark-interval 2'
 alias f='find -iname'
 alias v='vim'
 alias install='sudo apt-get install'
+
+# Multitail with basic java colorization
+alias mu='multitail -cS apache -cS log4j -n 1000 --no-repeat -b 2 --mark-interval 2'
 
 # History with timestamps and elapsed time
 alias h='history -iD'
