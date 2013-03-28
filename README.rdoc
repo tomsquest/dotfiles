@@ -1,6 +1,6 @@
 = My Dot Files
 
-My config files, heavily commented for the most part (Zsh).
+My config files, heavily commented.
 
 
 == Installation
@@ -16,8 +16,9 @@ Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
   git submodule update --init
 
 3) Install
+The install script will create all the symlinks into $HOME
 
-  rake install
+  ./install.sh
 
 4) Install vim dependencies
 Install vim plugins using Vundle
