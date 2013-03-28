@@ -10,17 +10,20 @@ My config files, heavily commented.
   git clone https://tomsquest@github.com/tomsquest/dotfiles.git ~/.dotfiles
 
 2) Update the dependencies
+
 Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
 
   cd ~/.dotfiles
   git submodule update --init
 
 3) Install
+
 The install script will create all the symlinks into $HOME
 
   ./install.sh
 
 4) Install vim dependencies
+
 Install vim plugins using Vundle
 
   vim -u ~/.vim/bundles.vim +BundleInstall +q
