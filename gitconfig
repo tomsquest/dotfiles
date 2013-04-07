@@ -13,7 +13,7 @@
 [color]
   ui = true
 [core]
-  excludesfile = /home/tqueste/.gitignore
+  excludesfile = ~/.gitignore
   autocrlf = input
   editor = gvim -f
 [push]
