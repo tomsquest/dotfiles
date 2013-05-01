@@ -13,7 +13,7 @@ function link_if_missing() {
   fi
 }
 
-link_if_missing $PWD/bin        $HOME/.bin
+link_if_missing $PWD/bin        $HOME/bin
 link_if_missing $PWD/vim        $HOME/.vim
 link_if_missing $PWD/zsh        $HOME/.zsh
 link_if_missing $PWD/ackrc      $HOME/.ackrc

@@ -55,7 +55,7 @@ setopt local_traps
 #
 # ENV
 #
-export PATH=~/.bin:/usr/local/sbin:/usr/local/bin:$PATH
+export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
 export EDITOR='/usr/bin/vim'
 export VISUAL='/usr/bin/vim'
 export GREP_OPTIONS='--color=auto --exclude-dir=.git'
