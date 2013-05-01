@@ -2,11 +2,12 @@
   name = Thomas Queste
   email = tqueste@gmail.com
 [alias]
+  p  = pull --rebase
   co = checkout
   ci = commit
   st = status
   br = branch
-  l = log --decorate
+  l = log --oneline --decorate --graph -20
   addm = !git-ls-files -m -z | xargs -0 git-add && git status                     # add modified files
   addu = !git-ls-files -o --exclude-standard -z | xargs -0 git-add && git status  # add new files
   rmm  = !git ls-files -d -z | xargs -0 git-rm && git status                      # remove deleted file
@@ -19,4 +20,4 @@
 [push]
   default = tracking
 [pull]
-	rebase = true
+  rebase = true
