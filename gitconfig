@@ -18,3 +18,5 @@
   editor = gvim -f
 [push]
   default = tracking
+[pull]
+	rebase = true
