@@ -7,7 +7,7 @@
   ci = commit
   st = status
   br = branch
-  l = log --oneline --decorate --graph -20
+  l = log --oneline --decorate --graph --all --date-order
   addm = !git-ls-files -m -z | xargs -0 git-add && git status                     # add modified files
   addu = !git-ls-files -o --exclude-standard -z | xargs -0 git-add && git status  # add new files
   rmm  = !git ls-files -d -z | xargs -0 git-rm && git status                      # remove deleted file
