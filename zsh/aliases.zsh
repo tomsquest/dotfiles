@@ -45,6 +45,7 @@ alias -g .......='../../../../../..'
 alias  g='git'
 alias gs='git status'
 alias gl='git l'
+alias gaa='git add -A'
 
 # Maven
 alias    m='mvn'
