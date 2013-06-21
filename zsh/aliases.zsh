@@ -1,5 +1,4 @@
 alias szshrc='source ~/.zshrc'
-alias grep='grep --color=auto'
 alias ack='ack-grep'
 alias du='du -h'
 alias df='df -h'

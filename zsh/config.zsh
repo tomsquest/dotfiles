@@ -58,9 +58,7 @@ setopt local_traps
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
 export EDITOR='/usr/bin/vim'
 export VISUAL='/usr/bin/vim'
-export GREP_OPTIONS='--color=auto --exclude-dir=.git'
-# displays Grep matches in inverse video, very easy to see
-export GREP_COLOR=7
+export GREP_OPTIONS='--color=auto'
 export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --no-init --quit-if-one-screen --hilite-unread'
 export PAGER=less
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
