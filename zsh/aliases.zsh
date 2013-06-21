@@ -20,9 +20,9 @@ alias ll='ls -l              --human-readable --classify --group-directories-fir
 alias la='ls -l --almost-all --human-readable --classify --group-directories-first --color=auto'
 
 # More verbose fileutils
-alias cp='nocorrect cp -iv'
-alias rm='nocorrect rm -Iv' # -i to prompt for every file
+alias cp='nocorrect cp -iv' # -i to prompt for every file
 alias mv='nocorrect mv -iv'
+alias rm='nocorrect rm -Iv' # -I to prompt when more than 3 files
 alias rmdir='rmdir -v'
 alias chmod='chmod -v'
 alias chown='chown -v'
@@ -44,13 +44,14 @@ alias -g .......='../../../../../..'
 # Git
 alias  g='git'
 alias gs='git status'
+alias gl='git l'
 
 # Maven
 alias    m='mvn'
-alias  mpt='alert printAndRun mvn package -DskipTests'
-alias mcpt='alert printAndRun mvn clean package -DskipTests'
-alias  mit='alert printAndRun mvn install -DskipTests'
+alias   mc='alert printAndRun mvn clean'
+alias   mt='alert printAndRun mvn test'
+alias  mct='alert printAndRun mvn clean test'
+alias  mci='alert printAndRun mvn clean install'
 alias mcit='alert printAndRun mvn clean install -DskipTests'
-alias   mi='alert printAndRun mvn clean install -Pintegration-tests'
 alias   mj='printAndRun mvn jetty:run'
 
