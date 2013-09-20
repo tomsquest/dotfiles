@@ -54,4 +54,6 @@ alias  mct='alert printAndRun mvn clean test'
 alias  mci='alert printAndRun mvn clean install'
 alias mcit='alert printAndRun mvn clean install -DskipTests'
 alias   mj='printAndRun mvn jetty:run'
+# Override the mvn command with the colorized one.
+alias mvn="mvn-in-colors"
 
