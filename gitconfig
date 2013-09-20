@@ -2,7 +2,7 @@
   name = Thomas Queste
   email = tqueste@gmail.com
 [alias]
-  p  = pull --rebase
+  p  = pull
   co = checkout
   ci = commit
   st = status
