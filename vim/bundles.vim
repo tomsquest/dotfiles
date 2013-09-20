@@ -53,7 +53,7 @@ Bundle 'tpope/vim-rake'
 Bundle 'briandoll/change-inside-surroundings.vim'
 
 " Display a list of buffers on top of the screen
-Bundle 'fholgado/minibufexpl.vim'
+"Bundle 'fholgado/minibufexpl.vim'
 
 " Fuzzy file, buffer, mru and tag finder
 Bundle 'kien/ctrlp.vim'
