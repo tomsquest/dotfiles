@@ -18,10 +18,10 @@ mvn-in-colors() {
 
   # Filter mvn output using sed
   (command mvn $@ ; echo $? > $tmp_file) | sed \
-    -e "s/\(.*------\+$\|.*\[INFO\] Scanning for projects.*\|.*\[INFO\] Building.*\|^Running .*\|^ T E S T S$\|^Results.*\)/${color_white}\1${color_reset}/g" \
-    -e "s/\(.*\[INFO\] BUILD SUCCESS\|^Tests run:.*Failures: 0.*Errors: 0.*Skipped: 0.*\)/${color_green}\1${color_reset}/g" \
-    -e "s/\(.*WARN.*\|^NOTE: Maven is executing in offline mode\.\|^Tests run:.*Failures: 0.*Errors: 0.*Skipped: [^0].*\)/${color_yellow}\1${color_reset}/g" \
-    -e "s/\(.*FAILURE.*\|.*ERROR.*\|^Tests in error:.*\|^Tests run:.*Failures: [^0].*\|^Tests run:.*Errors: 1.*\)/${color_red}\1${color_reset}/g"
+    -e "s/\(.*-\{55\}\+$\|.*\[INFO\] Scanning for projects.*\|.*\[INFO\] Building.*\|^Running .*\|^ T E S T S$\|^Results.*\)/${color_white}\1${color_reset}/g" \
+    -e "s/\(.*\[INFO\] BUILD SUCCESS$\|^Tests run:.*Failures: 0.*Errors: 0.*Skipped: 0.*\)/${color_green}\1${color_reset}/g" \
+    -e "s/\(.*\[WARNING].*\|^NOTE: Maven is executing in offline mode\.\|^Tests run:.*Failures: 0, Errors: 0, Skipped: [^0].*\)/${color_yellow}\1${color_reset}/g" \
+    -e "s/\(.*\[INFO\] BUILD FAILURE\|.* <<< FAILURE!$\|.* <<< ERROR!$\|^Tests in error:.*\|^Tests run:.*Failures: [^0].*\|^Tests run:.*Errors: [^0].*\)/${color_red}\1${color_reset}/g"
 
   # Make sure formatting is reset
   echo -ne ${color_reset}
