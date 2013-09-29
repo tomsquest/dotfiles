@@ -44,6 +44,21 @@ bindkey '^[[1;5C' forward-word
 bindkey '^[[5~' history-search-backward
 bindkey '^[[6~' history-search-forward
 
+# Ctrl+space : print Git/Svn status or list files with ls
+vcs-status() {
+  \print; zle accept-line;
+  if [ -d .git ]; then
+    git status --short
+  elif [ -d .svn ]; then
+    svn status
+  else
+    l # use the "l" alias for ls
+  fi
+  zle accept-line
+}
+zle -N vcs-status
+bindkey '^ ' vcs-status
+
 # Disable the capslock key and map it to escape
 xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 
