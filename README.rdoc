@@ -26,7 +26,7 @@ The install script will create all the symlinks into $HOME
 
 Install vim plugins using Vundle
 
-  vim -u ~/.vim/bundles.vim +BundleInstall +q
+  vim +BundleInstall +qall
 
 
 == Features
@@ -44,9 +44,9 @@ The prompt is simple and effective. There is:
 - The return code of the last executed command is displayed
 - The Git status is displayed at the right of the screen (using Olivier Verdier's Git prompt)
 
-Exemple
+Example:
 
-  tom@laptop 06:42:21 ~/.dotfiles -------------------
+  06:42:21 ~/.dotfiles ------------------------------
   $                                    (master|●1✚1…)
 
 
@@ -81,6 +81,16 @@ An efficient .gitignore based on https://github.com/github/gitignore
 
 Vim has a pretty good configuration.
 Plugins, syntax, colorschemes are managed by Vundle (https://github.com/gmarik/vundle)
+
+
+=== Rupa's Z
+
+[Rupa's Z](https://github.com/rupa/z) allows you to jump into previous directories.
+
+Usage:
+
+  $ z dot     # will jump to ~/.dotfiles from anywhere
+
 
 == Sources
 
