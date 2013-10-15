@@ -61,8 +61,10 @@ export VISUAL='/usr/bin/vim'
 export GREP_OPTIONS='--color=auto'
 export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --no-init --quit-if-one-screen --hilite-unread'
 export PAGER=less
-export JAVA_HOME=/usr/lib/jvm/java-6-sun
 export TERM=xterm-256color
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export MVN_HOME=$HOME/Apps/maven/current
+export PATH=$PATH:$MVN_HOME/bin
 
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
