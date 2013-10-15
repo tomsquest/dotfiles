@@ -1,98 +1,78 @@
-= My Dot Files
+# My Dot Files
 
 My config files, heavily commented.
 
 
-== Installation
+## Installation
 
-1) Clone the repo
+``` bash
+# Clone the repo
+$ git clone https://tomsquest@github.com/tomsquest/dotfiles.git ~/.dotfiles && cd ~/.dotfilescd ~/.dotfiles
 
-  git clone https://tomsquest@github.com/tomsquest/dotfiles.git ~/.dotfiles
+# Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
+$ git submodule update --init
 
-2) Update the dependencies
+# Create the symlinks in $HOME
+$ ./install.sh
 
-Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
+# Install vim plugins using Vundle
+$ vim +BundleInstall +qall
+```
 
-  cd ~/.dotfiles
-  git submodule update --init
+## Features
 
-3) Install
-
-The install script will create all the symlinks into $HOME
-
-  ./install.sh
-
-4) Install vim dependencies
-
-Install vim plugins using Vundle
-
-  vim +BundleInstall +qall
-
-
-== Features
-
-
-=== ZSH
+### ZSH
 
 Heavily commented ZSH configuration : config, completion, prompt, key bindings...
 
-==== Prompt
+#### Prompt
 
-The prompt is simple and effective. There is:
-- A separator line between each command
-- The path is truncated if too long for the terminal width
-- The return code of the last executed command is displayed
+``` bash
+06:42:21 ~/.dotfiles ------------------------------
+$                                    (master|●1✚1…)
+```
+
+- The path is truncated if it is too long for the terminal width
+- The return code of the last executed command is displayed in red to highligh a previous error
 - The Git status is displayed at the right of the screen (using Olivier Verdier's Git prompt)
 
-Example:
+#### Completions
 
-  06:42:21 ~/.dotfiles ------------------------------
-  $                                    (master|●1✚1…)
+Some completions taken from https://github.com/zsh-users/zsh-completions : Bundler, Gem, Rvm
 
-
-==== Completions
-
-Some completions from https://github.com/zsh-users/zsh-completions :
-- Bundler
-- Gem
-- Rvm
-- ...
-
-
-==== Functions
+#### Functions
 
 - o : use xdg-open to open the file with the appropriate program and ask for sudo if root privileges needed
 - mcd : mkdir + cd to it
 - last_modified : used in Rake and Capistrano completion to update the task caches
 
-
-=== ACK-GREP
+### ACK-GREP
 
 Ruby/Haml/Sass configuration for Ack-grep (aliased 'ack').
 ACK is a powerfull replacement for grep, written for developpers (http://betterthangrep.com/)
 
+### GIT
 
-=== GIT
+* .gitignore based on https://github.com/github/gitignore
+* .gitconfig with some interesting aliases
 
-An efficient .gitignore based on https://github.com/github/gitignore
-
-
-=== VIM
+### VIM
 
 Vim has a pretty good configuration.
+
 Plugins, syntax, colorschemes are managed by Vundle (https://github.com/gmarik/vundle)
 
-
-=== Rupa's Z
+### Rupa's Z
 
 [Rupa's Z](https://github.com/rupa/z) allows you to jump into previous directories.
 
 Usage:
 
-  $ z dot     # will jump to ~/.dotfiles from anywhere
+``` bash
+$ z dot     # will jump to ~/.dotfiles from anywhere
+```
 
-
-== Sources
+## Sources
 
 - https://github.com/ryanb/dotfiles
 - https://github.com/nono/dotfiles
@@ -100,4 +80,3 @@ Usage:
 - Ubuntu: /etc/zsh/newuser.zshrc.recommended
 - Git prompt: https://github.com/olivierverdier/zsh-git-prompt
 - ZSH Prompt horizontal line: http://aperiodic.net/phil/prompt/
-
