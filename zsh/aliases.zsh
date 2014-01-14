@@ -33,6 +33,7 @@ alias -g T='| tail'
 alias -g L='| less'
 
 # Parent directories
+alias cd..='cd ..'
 alias '..'='cd ..'
 alias -g ...='../..'
 alias -g ....='../../..'
