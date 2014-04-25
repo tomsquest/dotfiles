@@ -6,4 +6,4 @@
 __rvm_project_rvmrc
 
 # Add RVM to PATH for scripting
-PATH=$PATH:$HOME/.rvm/bin
+export PATH=$PATH:$HOME/.rvm/bin
