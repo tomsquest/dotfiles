@@ -13,3 +13,4 @@ if [ -f ~/.zshrc.local ]; then
 fi
 
 source ~/.zsh/rvm.zsh
+source ~/.zsh/nvm.zsh
