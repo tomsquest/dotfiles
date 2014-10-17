@@ -91,7 +91,7 @@ bindkey '\C-x\C-e' edit-command-line
 # Example: zmv '(**/)file.xml' '$1anotherName.xml'
 autoload zmv
 
-# Load ruma Z: quickly jump to recent directory with the z command
+# Load rupa Z: quickly jump to recent directory with the z command
 # Example: z foo
 # See: https://github.com/rupa/z
 source ~/.zsh/rupa-z/z.sh
