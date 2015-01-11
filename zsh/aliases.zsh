@@ -42,19 +42,25 @@ alias -g ......='../../../../..'
 alias -g .......='../../../../../..'
 
 # Git
-alias  g='git'
-alias gs='git status'
-alias gl='git l'
+alias   g='git'
+alias  gs='git status'
+alias  gl='git l'
+alias  gp='git pull'
 alias gaa='git add -A'
 
 # Maven
+MAVEN_SKIP_TESTS='-Dmaven.test.skip=true' # or -DskipTests
 alias    m='mvn'
-alias   mc='alert printAndRun mvn clean'
-alias   mt='alert printAndRun mvn test'
-alias  mct='alert printAndRun mvn clean test'
-alias  mci='alert printAndRun mvn clean install'
-alias mcit='alert printAndRun mvn clean install -DskipTests'
+alias   mc='alert printAndRun mvn-in-colors clean'
+alias   mt='alert printAndRun mvn-in-colors test'
+alias  mct='alert printAndRun mvn-in-colors clean test'
+alias  mcp='alert printAndRun mvn-in-colors clean package'
+alias mcpt='alert printAndRun mvn-in-colors clean package $MAVEN_SKIP_TESTS'
+alias  mpt='alert printAndRun mvn-in-colors package $MAVEN_SKIP_TESTS'
+alias  mci='alert printAndRun mvn-in-colors clean install'
+alias mcit='alert printAndRun mvn-in-colors clean install $MAVEN_SKIP_TESTS'
 alias   mj='printAndRun mvn jetty:run'
+alias  mdt="mvn dependency:tree"
 # Override the mvn command with the colorized one.
 alias mvn="mvn-in-colors"
 
