@@ -33,3 +33,5 @@
 # pull will do a rebase instead of a merge
 [pull]
   rebase = true
+[help]
+	autocorrect = 1
