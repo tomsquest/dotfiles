@@ -1,0 +1,76 @@
+#!/bin/sh
+
+# https://github.com/mikelward/scripts/blob/master/he
+
+# he - print brief help about a single option or command
+# Mikel Ward <mikel@mikelward.com>
+
+# Example Usage:
+# he bash continue
+# he rsync -v
+
+scriptname=he
+
+usage()
+{
+    cat <<EOF 1>&2
+Usage: $scriptname <command> [<option|section>]
+Example:
+    $scriptname bash getopts (shows documentation for bash getopts)
+    $scriptname ssh -v       (shows documentation for ssh -v flag)
+    $scriptname select       (shows SYNOPSIS for select(2))
+    $scriptname 'open(2)'    (shows SYNOPSIS for open(2))
+EOF
+}
+
+if test $# -lt 1; then
+    usage
+    exit 2
+fi
+
+manpage="$1"
+# show the SYNOPSIS section if no section or option was given
+option="${2:-SYNOPSIS}"
+
+# handle manpage(number)
+case $manpage in *\(*\))
+    page=${manpage%\(*\)}
+    section=${manpage#$page}
+    section=${section#\(}
+    section=${section%\)}
+    manpage=$page
+    ;;
+esac
+
+man ${section:+-s $section} "$manpage" | perl -n -e '
+BEGIN {
+    $option = "'$option'";
+    $inside = 0;
+}
+if (!$inside) {
+    if (/^(\s*)\Q$option\E\b/p) {
+        # start of this option
+        $start = $1;
+        $inside = 1;
+        $blank = 0;
+        print;
+    }
+}
+else {
+    if (/^$/) {
+        $blank = 1;
+        print;
+    }
+    elsif (/^\Q$start\E\S/ and $blank) {
+        # start of next option;
+        exit;
+    }
+    elsif (/^\S/) {
+        # start of next section
+        exit;
+    }
+    else {
+        print;
+    }
+}
+'
