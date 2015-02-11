@@ -1,6 +1,6 @@
 [user]
-  name = Thomas Queste
-  email = tom@tomsquest.com
+	name = Thomas Queste
+	email = thomas.queste@argus-presse.fr
 
 [alias]
   p  = pull
@@ -33,5 +33,12 @@
 # pull will do a rebase instead of a merge
 [pull]
   rebase = true
+
 [help]
 	autocorrect = 1
+
+[url "https://"]
+  insteadOf = git://
+
+[tag]
+	sort = version:refname
