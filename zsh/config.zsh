@@ -62,7 +62,7 @@ export GREP_OPTIONS='--color=auto'
 export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --no-init --quit-if-one-screen --hilite-unread'
 export PAGER=less
 export TERM=xterm-256color
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 export MVN_HOME=$HOME/Apps/maven/current
 export PATH=$PATH:$MVN_HOME/bin
 
