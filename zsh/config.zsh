@@ -55,7 +55,6 @@ setopt local_traps
 #
 # ENV
 #
-export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
 export EDITOR='/usr/bin/vim'
 export VISUAL='/usr/bin/vim'
 export GREP_OPTIONS='--color=auto'
@@ -63,8 +62,8 @@ export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --no-init --quit-if
 export PAGER=less
 export TERM=xterm-256color
 export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-export MVN_HOME=$HOME/Apps/maven/current
-export PATH=$PATH:$MVN_HOME/bin
+export M2_HOME=$HOME/Apps/maven/current
+export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$M2_HOME/bin
 
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
