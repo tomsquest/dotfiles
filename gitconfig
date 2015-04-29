@@ -1,44 +1,44 @@
 [user]
 	name = Thomas Queste
-	email = thomas.queste@argus-presse.fr
+	email = tom@tomsquest.com
 
 [alias]
-  p  = pull
-  co = checkout
-  ci = commit
-  st = status
-  br = branch
-  l = log --graph --abbrev-commit --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-  addm = !git-ls-files -m -z | xargs -0 git-add && git status                     # add modified files
-  addu = !git-ls-files -o --exclude-standard -z | xargs -0 git-add && git status  # add new files
-  rmm  = !git ls-files -d -z | xargs -0 git-rm && git status                      # remove deleted file
-  diffw = diff --word-diff
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	l  = log --graph --abbrev-commit --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	p  = pull
+	addu = !git-ls-files -o --exclude-standard -z | xargs -0 git-add && git status # add new files
+	addm = !git-ls-files -m -z | xargs -0 git-add && git status                    # add modified files
+	rmm  = !git ls-files -d -z | xargs -0 git-rm && git status                      # remove deleted file
+	diffw = diff --word-diff
 
 [color]
-  ui = true
+	ui = true
 
 # diff with meaningful prefix
 [diff]
-  mnemonicprefix = true
+	mnemonicprefix = true
 
 [core]
-  excludesfile = ~/.gitignore
-  autocrlf = input
-  editor = gvim -f
+	excludesfile = ~/.gitignore
+	autocrlf = input
+	editor = gvim -f
 
 # push only the current branch to its upstream branch
 [push]
-  default = upstream
+	default = upstream
 
 # pull will do a rebase instead of a merge
 [pull]
-  rebase = true
+	rebase = true
 
 [help]
 	autocorrect = 1
 
-[url "https://"]
-  insteadOf = git://
-
 [tag]
 	sort = version:refname
+
+[credential]
+	helper = cache
