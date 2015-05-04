@@ -48,5 +48,4 @@ $start_of_input '
 
 # Git prompt, displayed at right (RPROMPT)
 # See: https://github.com/olivierverdier/zsh-git-prompt
-source ~/.zsh/git-prompt/zshrc.sh
 RPROMPT='$(git_super_status)'

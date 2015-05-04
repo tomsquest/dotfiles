@@ -50,7 +50,8 @@ setopt nohup
 setopt local_options
 # Allow functions to have local traps
 setopt local_traps
-
+# Required for alias completion: m c<TAB>
+setopt complete_aliases
 
 #
 # ENV

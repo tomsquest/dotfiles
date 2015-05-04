@@ -1,7 +1,4 @@
-fpath=(~/.zsh/completions $fpath)
-autoload -U compinit
 zmodload -i zsh/complist
-compinit
 
 # Enable completion caching, use rehash to clear
 zstyle ':completion:*' use-cache on
@@ -14,19 +11,14 @@ zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character 
 zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
 
 # Completion menu
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' completer _expand _complete _correct _approximate
-zstyle ':completion:*' format 'Completing: %d'
-zstyle ':completion:*' group-name ''
+# ‘select=num’, menu selection will only be started if there are at least num matches.
 zstyle ':completion:*' menu select=2
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose true
 
 # cd will never select the parent directory (e.g.: cd ../<TAB>)
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 
 # Case insensitive completion
-zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 # Fallback to built in ls colors
 eval "$(dircolors -b)"
@@ -42,6 +34,3 @@ zstyle ':completion:*:rm:*' ignore-line yes
 
 # Completion for sudo when the command is not in the current path
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
-
-# Package auto-suggestion on "command not found"
-[[ -f /etc/zsh_command_not_found ]] && . /etc/zsh_command_not_found
