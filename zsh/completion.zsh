@@ -14,6 +14,18 @@ zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %
 # ‘select=num’, menu selection will only be started if there are at least num matches.
 zstyle ':completion:*' menu select=2
 
+# format all messages not formatted in bold prefixed with ----
+zstyle ':completion:*' format '%B---- %d%b'
+
+# format descriptions (notice the vt100 escapes)
+zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+
+# Normal messages
+zstyle ':completion:*:messages' format '%B---- %d%b'
+
+# Error messages
+zstyle ':completion:*:warnings' format "%B$fg[red]%}---- no match for: $fg[white]%d%b"
+
 # cd will never select the parent directory (e.g.: cd ../<TAB>)
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 
@@ -26,8 +38,12 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 
 # Kill completion
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+zstyle ':completion:*:processes' command 'ps -au $USER'
+zstyle ':completion:*:processes-names' command 'ps -u $USER -o comm='
+zstyle ':completion:*:processes' list-colors '=(#b)( #[0-9]#)[^[/0-9a-zA-Z]#(*)=34=37;1=30;1'
+zstyle ':completion:*:*:killall:*:processes-names' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:(killall|pkill|kill):*' menu yes select
+zstyle ':completion:*:(killall|pkill|kill):*' force-list always
 
 # Avoid twice the same element on rm
 zstyle ':completion:*:rm:*' ignore-line yes
