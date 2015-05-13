@@ -21,11 +21,6 @@ bindkey '^[[Z' reverse-menu-complete
 # alt-u : chdir to the parent directory
 bindkey -s '\eu' '^Ucd ..; ll^M'
 
-# alt-s : insert sudo at the start of the line
-insert_sudo () { zle beginning-of-line; zle -U "sudo " }
-zle -N insert-sudo insert_sudo
-bindkey '^[s' insert-sudo
-
 # alt-x : insert last command result
 zmodload -i zsh/parameter
 insert-last-command-output() {
