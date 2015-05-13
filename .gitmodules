@@ -4,3 +4,6 @@
 [submodule "zsh/rupa-z"]
 	path = zsh/rupa-z
 	url = https://github.com/rupa/z.git
+[submodule "zsh/zgen"]
+	path = zsh/zgen
+	url = https://github.com/tarjoilija/zgen.git
