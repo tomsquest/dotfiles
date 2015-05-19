@@ -4,21 +4,34 @@ zmodload -i zsh/complist
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
 
-# Make the list prompt friendly
+# The name of the tag for the matches will be used as the name of the group
+zstyle ':completion:*' group-name ''
+
+# Menu friendly
 zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
 
-# Make the selection prompt friendly when there are a lot of choices
+# Zhen there are a lot of choices
 zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
 
 # Completion menu
 # ‘select=num’, menu selection will only be started if there are at least num matches.
-zstyle ':completion:*' menu select=2
+zstyle ':completion:*' menu select=2 _complete _ignored _approximate
+zstyle ':completion:*::::' completer _expand _complete _ignored _approximate
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
 
-# format all messages not formatted in bold prefixed with ----
+# Colors
+eval "$(dircolors -b)"
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*:original' list-colors "=*=$color[red];$color[bold]"
+zstyle ':completion:*:parameters' list-colors "=[^a-zA-Z]*=$color[red]"
+zstyle ':completion:*:aliases' list-colors "=*=$color[green]"
+
+# All messages not formatted in bold prefixed with ----
 zstyle ':completion:*' format '%B---- %d%b'
 
 # format descriptions (notice the vt100 escapes)
-zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+zstyle ':completion:*:descriptions' format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
 
 # Normal messages
 zstyle ':completion:*:messages' format '%B---- %d%b'
@@ -31,11 +44,6 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd
 
 # Case insensitive completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-
-# Fallback to built in ls colors
-eval "$(dircolors -b)"
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' list-colors ''
 
 # Kill completion
 zstyle ':completion:*:processes' command 'ps -au $USER'
