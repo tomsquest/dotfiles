@@ -32,10 +32,6 @@ bindkey '^f' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
 
-# Page-up/down : complete current command line using history
-bindkey '^[[5~' history-search-backward
-bindkey '^[[6~' history-search-forward
-
 # Ctrl+space : print Git/Svn status or list files with ls
 vcs-status() {
   \print; zle accept-line;
