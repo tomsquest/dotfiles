@@ -12,7 +12,7 @@
 # Emacs style bindings (for Home/End keys...)
 bindkey -e
 
-# Used to make the return key leave menu selection and accepting the match currently selected
+# In menu completion, the Return key will accept the current selected match
 bindkey -M menuselect '^M' .accept-line
 
 # shift-tab : go backward in menu (invert of tab)
