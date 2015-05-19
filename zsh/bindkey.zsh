@@ -18,9 +18,6 @@ bindkey -M menuselect '^M' .accept-line
 # shift-tab : go backward in menu (invert of tab)
 bindkey '^[[Z' reverse-menu-complete
 
-# alt-u : chdir to the parent directory
-bindkey -s '\eu' '^Ucd ..; ll^M'
-
 # alt-x : insert last command result
 zmodload -i zsh/parameter
 insert-last-command-output() {
