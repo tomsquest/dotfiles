@@ -43,6 +43,7 @@ alias -g .......='../../../../../..'
 
 # Git
 alias   g='git'
+compdef g=git
 alias  gs='git status'
 alias  gl='git l'
 alias  gp='git pull'
