@@ -4,74 +4,77 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
 " let Vundle manage Vundle
-Bundle 'gmarik/vundle'
-
-
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
 
 "
 " Colorshemes
 "
-Bundle 'xoria256.vim'
-Bundle 'tomasr/molokai'
+Plugin 'xoria256.vim'
+Plugin 'tomasr/molokai'
 
 "
 " Plugins
 "
 
 " Comment
-Bundle 'tomtom/tcomment_vim'
+Plugin 'tomtom/tcomment_vim'
 
 " Ruby support
-Bundle 'vim-ruby/vim-ruby'
+Plugin 'vim-ruby/vim-ruby'
 
 " Utilities for common commans, adding or moving lines, encoding/decoding...
-Bundle 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-unimpaired'
 
 " Utilities for Rails development
-Bundle 'tpope/vim-rails'
+Plugin 'tpope/vim-rails'
 
 " Utilies for Rake projets
-Bundle 'tpope/vim-rake'
+Plugin 'tpope/vim-rake'
 
 " Automatically insert 'end' for ruby methods
-"Bundle 'tpope/vim-endwise'
+"Plugin 'tpope/vim-endwise'
 
 " Quoting/parenthesizing made simple
-"Bundle 'tpope/vim-surround'
+"Plugin 'tpope/vim-surround'
 
 " Simpler way to use some motions in vim.
-"Bundle 'Lokaltog/vim-easymotion'
+"Plugin 'Lokaltog/vim-easymotion'
 
 " Clearly indicate visually whether Vim is in insert mode via the StatusLine highlight group
-"Bundle 'bsl/obviousmode'
+"Plugin 'bsl/obviousmode'
 
 " Change inside surroundings with <leader>ci
-Bundle 'briandoll/change-inside-surroundings.vim'
+Plugin 'briandoll/change-inside-surroundings.vim'
 
 " Display a list of buffers on top of the screen
-"Bundle 'fholgado/minibufexpl.vim'
+"Plugin 'fholgado/minibufexpl.vim'
 
 " Fuzzy file, buffer, mru and tag finder
-Bundle 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 
 " Status bar
-Bundle 'Lokaltog/vim-powerline'
+Plugin 'Lokaltog/vim-powerline'
 
 " Mark quickfix & location list items with signs 
-Bundle 'tomtom/quickfixsigns_vim'
+Plugin 'tomtom/quickfixsigns_vim'
 
 " Ack-grep: usage: :Ack foobar
-Bundle 'mileszs/ack.vim'
+Plugin 'mileszs/ack.vim'
+
 "
 " Syntaxes
 "
-Bundle 'tpope/vim-markdown'
-Bundle 'tpope/vim-haml'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'juvenn/mustache.vim'
-Bundle 'othree/html5.vim'
-Bundle 'sunaku/vim-ruby-minitest'
+Plugin 'tpope/vim-markdown'
+Plugin 'tpope/vim-haml'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'juvenn/mustache.vim'
+Plugin 'othree/html5.vim'
+Plugin 'sunaku/vim-ruby-minitest'
+
+
+" All of your Plugins must be added before the following line
+call vundle#end()
+filetype plugin indent on

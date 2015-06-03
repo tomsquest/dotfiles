@@ -16,7 +16,7 @@ $ git submodule update --init
 $ ./install.sh
 
 # Install vim plugins using Vundle
-$ vim +BundleInstall +qall
+$ vim +PluginInstall +qall
 ```
 
 ## Features
