@@ -230,7 +230,7 @@ let g:netrw_preview=1
 " Opens buffer list
 map <Leader>b :CtrlPBuffer<CR>
 " Some more ignored dirs
-let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$\|\.class$\|\.settings$'
+let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$\|\target$\|\.class$\|\.settings$'
 " Increase windows height
 let g:ctrlp_max_height = 30
 
