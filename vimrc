@@ -94,7 +94,7 @@ set sidescroll=1
 " Apparence
 set background=dark
 set t_Co=256
-colorscheme molokai
+colorscheme Tomorrow-Night
 
 " Highlight current line
 set cursorline

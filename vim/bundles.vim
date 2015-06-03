@@ -12,9 +12,7 @@ Plugin 'gmarik/Vundle.vim'
 "
 " Colorshemes
 "
-Plugin 'xoria256.vim'
-Plugin 'tomasr/molokai'
-
+Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim'}
 "
 " Plugins
 "
