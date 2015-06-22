@@ -1,13 +1,14 @@
 # Standard and additional keybindings:
-#   ctrl + u : clear line
-#   ctrl + w : delete word backward
-#   alt  + d : delete word
-#   ctrl + a : move to beginning of line
-#   ctrl + e : move to end of line (e for end)
-#   ctrl + f : move to next word (f for forward)
-#   ctrl + b : move to previous word (b for backward)
-#   ctrl + d : delete char at current position (d for delete)
-#   ctrl + k : delete from character to end of line
+#   ctrl + u     : clear line
+#   ctrl + w     : delete word backward
+#   alt  + d     : delete word
+#   ctrl + a     : move to beginning of line
+#   ctrl + e     : move to end of line (e for end)
+#   alt/ctrl + f : move to next word (f for forward)
+#   alt/ctrl + b : move to previous word (b for backward)
+#   ctrl + d     : delete char at current position (d for delete)
+#   ctrl + k     : delete from character to end of line
+#   alt  + .     : cycle through previous args
 
 # Emacs style bindings (for Home/End keys...)
 bindkey -e
