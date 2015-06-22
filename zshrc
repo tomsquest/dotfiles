@@ -7,12 +7,13 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/httpie
   zgen oh-my-zsh plugins/command-not-found
   zgen load zsh-users/zsh-syntax-highlighting
-  zgen oh-my-zsh plugins/history-substring-search
+  zgen oh-my-zsh plugins/history-substring-search # MUST be after zsh-syntax-highlighting
   zgen load zsh-users/zsh-completions src
   zgen load olivierverdier/zsh-git-prompt
   zgen load chrissicool/zsh-256color
   zgen load johnhamelink/rvm-zsh
   zgen load johnhamelink/env-zsh
+  zgen load theunraveler/zsh-fancy_ctrl_z
   zgen load tomsquest/nvm-init.zsh
 
   zgen save
