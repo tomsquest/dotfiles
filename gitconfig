@@ -17,7 +17,6 @@
 [color]
 	ui = true
 
-# diff with meaningful prefix
 [diff]
 	mnemonicprefix = true
 
@@ -26,9 +25,8 @@
 	autocrlf = input
 	editor = gvim -f
 
-# push only the current branch to its upstream branch
 [push]
-	default = upstream
+	default = simple
 
 # pull will do a rebase instead of a merge
 [pull]
