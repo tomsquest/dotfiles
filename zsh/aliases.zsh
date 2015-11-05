@@ -17,6 +17,11 @@ alias  l='ls -l              --human-readable --classify --group-directories-fir
 alias ll='ls -l              --human-readable --classify --group-directories-first --color=auto'
 alias la='ls -l --almost-all --human-readable --classify --group-directories-first --color=auto'
 
+# grep
+alias  grep='grep --color=auto'
+alias egrep='grep --color=auto'
+alias zgrep='grep --color=auto'
+
 # More verbose fileutils
 alias cp='nocorrect cp -iv' # -i to prompt for every file
 alias mv='nocorrect mv -iv'

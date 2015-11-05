@@ -58,7 +58,6 @@ setopt complete_aliases
 #
 export EDITOR='/usr/bin/vim'
 export VISUAL='/usr/bin/vim'
-export GREP_OPTIONS='--color=auto'
 export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --no-init --quit-if-one-screen --hilite-unread'
 export PAGER=less
 export TERM=xterm-256color
