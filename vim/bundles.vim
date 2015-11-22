@@ -13,6 +13,7 @@ Plugin 'gmarik/Vundle.vim'
 " Colorshemes
 "
 Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim'}
+
 "
 " Plugins
 "
@@ -20,10 +21,7 @@ Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim'}
 " Comment
 Plugin 'tomtom/tcomment_vim'
 
-" Ruby support
-Plugin 'vim-ruby/vim-ruby'
-
-" Utilities for common commans, adding or moving lines, encoding/decoding...
+" Utilities for common commands, adding or moving lines, encoding/decoding...
 Plugin 'tpope/vim-unimpaired'
 
 " Utilities for Rails development
@@ -62,16 +60,11 @@ Plugin 'tomtom/quickfixsigns_vim'
 " Ack-grep: usage: :Ack foobar
 Plugin 'mileszs/ack.vim'
 
-"
-" Syntaxes
-"
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-haml'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'juvenn/mustache.vim'
-Plugin 'othree/html5.vim'
+" Syntax and i_CTRL-X_CTRL-U completion for MiniTest
 Plugin 'sunaku/vim-ruby-minitest'
 
+" Language pack
+Plugin 'sheerun/vim-polyglot'
 
 " All of your Plugins must be added before the following line
 call vundle#end()
