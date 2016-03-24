@@ -7,3 +7,6 @@
 [submodule "zsh/zgen"]
 	path = zsh/zgen
 	url = https://github.com/tarjoilija/zgen.git
+[submodule "bash/bash-sensible"]
+	path = bash/bash-sensible
+	url = https://github.com/mrzool/bash-sensible

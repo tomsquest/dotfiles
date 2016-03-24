@@ -13,9 +13,11 @@ function link_if_missing() {
   fi
 }
 
+link_if_missing $PWD/bash       $HOME/.bash
 link_if_missing $PWD/bin        $HOME/bin
 link_if_missing $PWD/vim        $HOME/.vim
 link_if_missing $PWD/zsh        $HOME/.zsh
+link_if_missing $PWD/bashrc     $HOME/.bashrc
 link_if_missing $PWD/ackrc      $HOME/.ackrc
 link_if_missing $PWD/gitconfig  $HOME/.gitconfig
 link_if_missing $PWD/gitignore  $HOME/.gitignore
