@@ -3,11 +3,12 @@ source "${HOME}/.zsh/zgen/zgen.zsh"
 if ! zgen saved; then
   echo "Creating a zgen save"
 
+  zgen load zsh-users/zsh-syntax-highlighting
+  zgen oh-my-zsh plugins/history-substring-search # MUST be after zsh-syntax-highlighting
   zgen oh-my-zsh plugins/sudo
   zgen oh-my-zsh plugins/httpie
   zgen oh-my-zsh plugins/command-not-found
-  zgen load zsh-users/zsh-syntax-highlighting
-  zgen oh-my-zsh plugins/history-substring-search # MUST be after zsh-syntax-highlighting
+  zgen oh-my-zsh plugins/gpg-agent
   zgen load zsh-users/zsh-completions src
   zgen load olivierverdier/zsh-git-prompt
   zgen load chrissicool/zsh-256color

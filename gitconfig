@@ -1,6 +1,7 @@
 [user]
 	name = Thomas Queste
 	email = tom@tomsquest.com
+	signingkey = 0x46ABEB7FF623F5EB
 
 [alias]
 	co = checkout
@@ -40,3 +41,5 @@
 
 [credential]
 	helper = cache
+[commit]
+	gpgsign = true
