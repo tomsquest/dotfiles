@@ -1,7 +1,5 @@
 #!/bin/bash
 
-if (( $(synclient | grep -i touchpadoff | cut -d "=" -f 2 | tr -d "[:blank:]") )); then
-    synclient touchpadoff=0
-else
-    synclient touchpadoff=1
-fi
+current_status=$(synclient | grep -i touchpadoff | cut -d "=" -f 2 | tr -d "[:blank:]")
+toggled_status=$((1-$current_status))
+synclient touchpadoff="$toggled_status"
