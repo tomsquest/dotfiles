@@ -327,6 +327,11 @@
         <command>wmctrl -a jetbrains-idea -x</command>
       </action>
     </keybind>
+    <keybind key="W-F4">
+      <action name="Execute">
+        <command>wmctrl -a Chromium -x</command>
+      </action>
+    </keybind>
     <!-- Enable/disable monitors -->
     <keybind key="W-A-F1">
       <action name="Execute">
