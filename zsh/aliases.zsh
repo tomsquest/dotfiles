@@ -72,3 +72,7 @@ alias mcit='alert printAndRun mvn-in-colors clean install $MAVEN_SKIP_TESTS'
 alias  mdt='mvn dependency:tree'
 alias  msb='printAndRun mvn spring-boot:run'
 
+# NPM
+alias  ns='printAndRun npm start'
+alias  nt='printAndRun npm test'
+alias ntw='printAndRun npm run test-watch'
