@@ -9,8 +9,6 @@
 \set HISTFILE ~/.psql_history- :DBNAME
 \set HISTSIZE 20000
 
--- Huge history file -- ctrl-r is useful
+-- Better null printing
 \pset null '[NULL]'
 
--- Don't exit with ctrl-d unless you press it 5 times
-\set IGNOREEOF 5
