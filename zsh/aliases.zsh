@@ -69,6 +69,6 @@ alias mcpt='alert printAndRun mvn-in-colors clean package $MAVEN_SKIP_TESTS'
 alias  mpt='alert printAndRun mvn-in-colors package $MAVEN_SKIP_TESTS'
 alias  mci='alert printAndRun mvn-in-colors clean install'
 alias mcit='alert printAndRun mvn-in-colors clean install $MAVEN_SKIP_TESTS'
-alias   mj='printAndRun mvn jetty:run'
-alias  mdt="mvn dependency:tree"
+alias  mdt='mvn dependency:tree'
+alias  msb='printAndRun mvn spring-boot:run'
 
