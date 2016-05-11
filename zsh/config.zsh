@@ -58,7 +58,7 @@ setopt complete_aliases
 #
 export EDITOR='/usr/bin/vim'
 export VISUAL='/usr/bin/vim'
-export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --no-init --quit-if-one-screen --hilite-unread'
+export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --no-init --quit-if-one-screen --hilite-unread --tabs=4'
 export PAGER=less
 export TERM=xterm-256color
 export JAVA_HOME=/usr/lib/jvm/java-8-oracle
