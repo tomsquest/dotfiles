@@ -196,11 +196,11 @@
         </finalactions>
       </action>
     </keybind>
+
     <!-- Move windows between monitor -->
     <keybind key="W-S-Left">
       <action name="MoveResizeTo">
         <monitor>next</monitor>
-        <height>100%</height>
       </action>
     </keybind>
     <keybind key="W-S-Right">
@@ -208,16 +208,24 @@
         <monitor>prev</monitor>
       </action>
     </keybind>
-    <!-- Window tiling 50% left/right -->
+
+    <!-- Maximize windows -->
+    <keybind key="W-S-Up">
+      <action name="ToggleMaximize"/>
+    </keybind>
+    <keybind key="W-S-Down">
+      <action name="ToggleMaximize"/>
+    </keybind>
+
+    <!-- Window tiling 50% left/right/up/down -->
     <!-- 50% Left -->
     <keybind key="W-Left">
       <action name="UnmaximizeFull"/>
       <action name="MaximizeVert"/>
       <action name="MoveResizeTo">
         <width>50%</width>
-      </action>
-      <action name="MoveToEdge">
-        <direction>west</direction>
+        <x>0</x>
+        <y>0</y>
       </action>
     </keybind>
     <!-- 50% Right -->
@@ -226,17 +234,33 @@
       <action name="MaximizeVert"/>
       <action name="MoveResizeTo">
         <width>50%</width>
-      </action>
-      <action name="MoveToEdge">
-        <direction>east</direction>
+        <x>-0</x>
+        <y>0</y>
       </action>
     </keybind>
+    <!-- 50% Up -->
     <keybind key="W-Up">
-      <action name="ToggleMaximize"/>
+      <action name="UnmaximizeFull"/>
+      <action name="MaximizeHoriz"/>
+      <action name="MoveResizeTo">
+        <width>100%</width>
+        <height>50%</height>
+        <x>-0</x>
+        <y>0</y>
+      </action>
     </keybind>
+    <!-- 50% Down -->
     <keybind key="W-Down">
-      <action name="ToggleMaximize"/>
+      <action name="UnmaximizeFull"/>
+      <action name="MaximizeHoriz"/>
+      <action name="MoveResizeTo">
+        <width>100%</width>
+        <height>50%</height>
+        <x>0</x>
+        <y>-0</y>
+      </action>
     </keybind>
+
     <keybind key="A-F4">
       <action name="Close"/>
     </keybind>
@@ -811,12 +835,6 @@
     </application>
     <application role="browser">
       <decor>false</decor>
-    </application>
-    <application name="sun-awt-X11-XFramePeer">
-      <position force="yes">
-        <x>center</x>
-        <y>center</y>
-      </position>
     </application>
   </applications>
 </openbox_config>
