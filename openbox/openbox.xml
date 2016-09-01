@@ -241,9 +241,8 @@
     <!-- 50% Up -->
     <keybind key="W-Up">
       <action name="UnmaximizeFull"/>
-      <action name="MaximizeHoriz"/>
+      <action name="MaximizeHorz"/>
       <action name="MoveResizeTo">
-        <width>100%</width>
         <height>50%</height>
         <x>-0</x>
         <y>0</y>
@@ -252,9 +251,8 @@
     <!-- 50% Down -->
     <keybind key="W-Down">
       <action name="UnmaximizeFull"/>
-      <action name="MaximizeHoriz"/>
+      <action name="MaximizeHorz"/>
       <action name="MoveResizeTo">
-        <width>100%</width>
         <height>50%</height>
         <x>0</x>
         <y>-0</y>
