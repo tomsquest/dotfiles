@@ -23,7 +23,7 @@
         # pull will do a rebase instead of a merge
 	rebase = true
 [help]
-	autocorrect = true
+	autocorrect = 1
 [tag]
 	sort = version:refname
 [credential]
