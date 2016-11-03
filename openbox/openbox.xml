@@ -57,7 +57,7 @@
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
       <name>Ubuntu Medium</name>
-      <size>10</size>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -66,7 +66,7 @@
     </font>
     <font place="InactiveWindow">
       <name>Ubuntu Medium</name>
-      <size>10</size>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -75,7 +75,7 @@
     </font>
     <font place="MenuHeader">
       <name>Ubuntu</name>
-      <size>10</size>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -84,7 +84,7 @@
     </font>
     <font place="MenuItem">
       <name>Ubuntu</name>
-      <size>10</size>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -93,7 +93,7 @@
     </font>
     <font place="ActiveOnScreenDisplay">
       <name>Ubuntu Medium</name>
-      <size>10</size>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -102,7 +102,7 @@
     </font>
     <font place="InactiveOnScreenDisplay">
       <name>Ubuntu Medium</name>
-      <size>10</size>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -196,7 +196,6 @@
         </finalactions>
       </action>
     </keybind>
-
     <!-- Move windows between monitor -->
     <keybind key="W-S-Left">
       <action name="MoveResizeTo">
@@ -208,7 +207,6 @@
         <monitor>prev</monitor>
       </action>
     </keybind>
-
     <!-- Maximize windows -->
     <keybind key="W-S-Up">
       <action name="ToggleMaximize"/>
@@ -216,7 +214,6 @@
     <keybind key="W-S-Down">
       <action name="ToggleMaximize"/>
     </keybind>
-
     <!-- Window tiling 50% left/right/up/down -->
     <!-- 50% Left -->
     <keybind key="W-Left">
@@ -258,7 +255,6 @@
         <y>-0</y>
       </action>
     </keybind>
-
     <keybind key="A-F4">
       <action name="Close"/>
     </keybind>
