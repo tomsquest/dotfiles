@@ -61,9 +61,18 @@ export VISUAL='/usr/bin/vim'
 export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --no-init --quit-if-one-screen --hilite-unread --tabs=4'
 export PAGER=less
 export TERM=xterm-256color
+# Java
 export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export PATH="$PATH:$JAVA_HOME/bin"
+# Maven
 export M2_HOME=$HOME/Apps/maven/current
-export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$M2_HOME/bin
+export PATH="$PATH:$M2_HOME/bin"
+# Go
+export GOROOT="$HOME/Apps/go/current"
+export GOPATH="$HOME/Dev/go"
+export PATH="$PATH:$GOROOT/bin:$PATH:$GOPATH/bin"
+# Python
+export PATH="$PATH:/home/tom/Apps/miniconda3/bin"
 
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
