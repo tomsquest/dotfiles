@@ -1,12 +1,9 @@
---type-set=haml=.haml
---type-set=sass=.sass,.scss
---type-set=slim=.slim
---type-set=properties=.properties
+--type-add=html:ext:html.erb,haml,slim
+--type-add=css:ext:sass,scss,less
 
---type-add=html=.html.erb,.haml,.slim
---type-add=css=.sass,.scss,.less
+--type-set=slim:ext:slim
+--type-set=haml:ext:haml
 
 --smart-case
 --sort-files
-
---pager=less --ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT
+--pager=less
