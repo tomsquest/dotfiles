@@ -77,11 +77,14 @@ export LESS_TERMCAP_ZO=$(tput ssupm)
 export LESS_TERMCAP_ZW=$(tput rsupm)
 export TERM=xterm-256color
 # Java
-export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 export PATH="$PATH:$JAVA_HOME/bin"
 # Maven
-export M2_HOME=$HOME/Apps/maven/current
+export M2_HOME="$HOME/Apps/maven/current"
 export PATH="$PATH:$M2_HOME/bin"
+# Scala
+export SCALA_HOME="$HOME/Apps/scala/current"
+export PATH="$PATH:$SCALA_HOME/bin"
 # Go
 export GOROOT="$HOME/Apps/go/current"
 export GOPATH="$HOME/Dev/go"
