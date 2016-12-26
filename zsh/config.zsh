@@ -77,7 +77,7 @@ export LESS_TERMCAP_ZO=$(tput ssupm)
 export LESS_TERMCAP_ZW=$(tput rsupm)
 export TERM=xterm-256color
 # Java
-export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 export PATH="$PATH:$JAVA_HOME/bin"
 # Maven
 export M2_HOME="$HOME/Apps/maven/current"
