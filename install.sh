@@ -9,7 +9,7 @@ function link_if_missing() {
   if ! [ -L $DEST ]; then
     ln -ivs $SRC $DEST
   else
-    echo "Skipping, link already exists: $SRC"
+    echo "Skipping, link already exists: $DEST"
   fi
 }
 
