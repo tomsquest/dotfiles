@@ -28,7 +28,8 @@ link_if_missing $PWD/rvmrc                  $HOME/.rvmrc
 link_if_missing $PWD/tmux.conf              $HOME/.tmux.conf
 link_if_missing $PWD/vimrc                  $HOME/.vimrc
 link_if_missing $PWD/zshrc                  $HOME/.zshrc
-link_if_missing $PWD/openbox/openbox.xml    $HOME/.config/openbox/lubuntu-rc.xml
+link_if_missing $PWD/terminator.conf        $HOME/.config/terminator/config
+link_if_missing $PWD/openbox.xml            $HOME/.config/openbox/lubuntu-rc.xml
 
 for file in $PWD/desktop-shortcuts/*
 do
