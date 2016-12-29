@@ -52,8 +52,6 @@ setopt local_options
 setopt local_traps
 # Required for alias completion: m c<TAB>
 setopt complete_aliases
-# Disable flow control (ctrl+s, ctrl+q) to enable saving with ctrl+s in Vim
-setopt noflowcontrol
 
 #
 # ENV
