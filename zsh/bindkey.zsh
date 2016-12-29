@@ -49,5 +49,5 @@ zle -N vcs-status
 bindkey '^ ' vcs-status
 
 # Disable the capslock key and map it to escape
-xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
-
+#xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+setxkbmap -option caps:escape
