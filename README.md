@@ -9,14 +9,8 @@ My config files, heavily commented.
 # Clone the repo
 $ git clone https://tomsquest@github.com/tomsquest/dotfiles.git ~/.dotfiles && cd ~/.dotfilescd ~/.dotfiles
 
-# Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
-$ git submodule update --init
-
 # Create the symlinks in $HOME
 $ ./install.sh
-
-# Install vim plugins using Vundle
-$ vim +PluginInstall +qall
 ```
 
 ## Features

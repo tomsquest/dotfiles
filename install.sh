@@ -2,6 +2,10 @@
 
 set +e
 
+# Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
+git submodule update --init
+
+# Create the symlinks in $HOME
 function link_if_missing() {
   SRC=$1
   DEST=$2
@@ -30,8 +34,10 @@ link_if_missing $PWD/vimrc                  $HOME/.vimrc
 link_if_missing $PWD/zshrc                  $HOME/.zshrc
 link_if_missing $PWD/terminator.conf        $HOME/.config/terminator/config
 link_if_missing $PWD/openbox.xml            $HOME/.config/openbox/lubuntu-rc.xml
-
 for file in $PWD/desktop-shortcuts/*
 do
   link_if_missing $file $HOME/.local/share/applications/$(basename $file)
 done
+
+# Install vim plugins using Vundle
+vim +PluginInstall +qall
