@@ -9,7 +9,7 @@ import time
 
 # see com.intellij.idea.SocketLock for the server side of this interface
 
-RUN_PATH = u'/home/tom/Apps/idea/163.9166.29/bin/idea.sh'
+RUN_PATH = u'/home/tom/Apps/idea/current/bin/idea.sh'
 CONFIG_PATH = u'/home/tom/.IntelliJIdea2016.3/config'
 SYSTEM_PATH = u'/home/tom/.IntelliJIdea2016.3/system'
 
