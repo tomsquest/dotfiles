@@ -3,6 +3,7 @@ source "${HOME}/.zsh/zgen/zgen.zsh"
 if ! zgen saved; then
   echo "Creating a zgen save"
 
+  zgen load zsh-users/zsh-autosuggestions
   zgen load zsh-users/zsh-syntax-highlighting
   zgen oh-my-zsh plugins/history-substring-search # MUST be after zsh-syntax-highlighting
   zgen oh-my-zsh plugins/sudo
