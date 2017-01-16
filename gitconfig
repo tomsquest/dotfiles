@@ -13,6 +13,7 @@
 	ui = auto
 [diff]
 	mnemonicprefix = true
+	indentHeuristic = true
 [core]
 	excludesfile = ~/.gitignore
 	autocrlf = input
@@ -32,3 +33,9 @@
         #gpgsign = true
 [rerere]
 	enabled = true
+[commit]
+	verbose = true
+[submodule]
+	fetchJobs = 4
+[rebase]
+	autostash = true
