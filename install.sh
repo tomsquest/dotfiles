@@ -3,7 +3,7 @@
 set +e
 
 # Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
-git submodule update --init
+git submodule update --remote --init
 
 # Create the symlinks in $HOME
 function link_if_missing() {
