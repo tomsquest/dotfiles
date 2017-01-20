@@ -33,20 +33,8 @@ bindkey '^f' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
 
-# Ctrl+space : print Git/Svn status or list files with ls
-vcs-status() {
-  \print; zle accept-line;
-  if [ -d .git ]; then
-    git status --short
-  elif [ -d .svn ]; then
-    svn status
-  else
-    l # use the "l" alias for ls
-  fi
-  zle accept-line
-}
-zle -N vcs-status
-bindkey '^ ' vcs-status
+# Ctrl+space: print Git status
+bindkey -s '^ ' 'git status --short^M'
 
 # Accept and execute the current suggestion (using zsh-autosuggestions)
 # Find the key with: showkey -a
