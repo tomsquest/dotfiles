@@ -1,14 +1,19 @@
+#
+# Kill and launch in debug: 
+#   imwheel -k -q; imwheel --debug -d
+
 "^chromium-browser$"
-None, Thumb1, Control_L|W
+None, Thumb2, Control_L|W
 
 "^Firefox$"
-None, Thumb1, Control_L|W
+None, Thumb2, Control_L|W
 
-"^Eclipse$"
-None, Thumb1, Control_L|W
+# Intellij Idea
+"^FocusProxy$"
+None, Thumb2, Control_L|F4
 
+# Defaults
 ".*"
+None, Thumb2, Control_L|W
 None, Thumb1, Alt_L|F4
-# As Thumb1 can be overridden, let Thumb2 always close the focused window
-None, Thumb2, Alt_L|F4
 
