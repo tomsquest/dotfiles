@@ -3,8 +3,8 @@ alias du='du -h'
 alias df='df -h'
 alias f='find -iname'
 alias v='vim'
-alias install='sudo apt-get install'
 alias meteo='curl http://wttr.in/Arras'
+alias up="sudo apt update && sudo apt -V --yes upgrade"
 
 # Multitail with basic java colorization
 alias mu='multitail -cS apache -cS log4j -n 1000 --no-repeat -b 2 --mark-interval 2'
