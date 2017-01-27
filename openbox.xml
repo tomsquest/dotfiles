@@ -827,6 +827,9 @@
     <application class="jetbrains-idea" type="normal">
       <decor>false</decor>
     </application>
+    <application title="Thunderbird">
+      <decor>false</decor>
+    </application>
     <application role="browser">
       <decor>false</decor>
     </application>
