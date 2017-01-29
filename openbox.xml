@@ -827,7 +827,7 @@
     <application class="jetbrains-idea" type="normal">
       <decor>false</decor>
     </application>
-    <application title="Thunderbird">
+    <application title="Mozilla Thunderbird">
       <decor>false</decor>
     </application>
     <application role="browser">
