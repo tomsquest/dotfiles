@@ -75,4 +75,4 @@ alias  msb='printAndRun mvn spring-boot:run'
 # NPM
 alias  ns='printAndRun npm start'
 alias  nt='printAndRun npm test'
-alias ntw='printAndRun npm run test-watch'
+alias ntw='printAndRun npm run test:watch'
