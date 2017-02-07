@@ -827,6 +827,9 @@
     <application class="jetbrains-idea" type="normal">
       <decor>false</decor>
     </application>
+    <application class="jetbrains-gogland" type="normal">
+      <decor>false</decor>
+    </application>
     <application title="Mozilla Thunderbird">
       <decor>false</decor>
     </application>

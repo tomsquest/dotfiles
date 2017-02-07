@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Gogland
+Icon=/home/tom/Apps/gogland/current/bin/gogland.png
+Exec="/home/tom/Apps/gogland/current/bin/gogland.sh" %f
+Categories=Development;IDE;
+Terminal=false
+StartupWMClass=jetbrains-gogland
