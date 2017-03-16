@@ -76,6 +76,8 @@ export LESS_TERMCAP_ZV=$(tput rsubm)
 export LESS_TERMCAP_ZO=$(tput ssupm)
 export LESS_TERMCAP_ZW=$(tput rsupm)
 export TERM=xterm-256color
+# Print dates in ISO format (in `ls -l` for example)
+export TIME_STYLE=long-iso
 # SSH ash-pass. Require pkg ssh-askpass
 export SSH_ASKPASS=/usr/bin/ssh-askpass
 # Java
