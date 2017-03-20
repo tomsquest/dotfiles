@@ -91,8 +91,7 @@ export SCALA_HOME="$HOME/Apps/scala/current"
 export PATH="$PATH:$SCALA_HOME/bin"
 # Go
 export GOROOT="$HOME/Apps/go/current"
-export GOPATH="$HOME/Dev/go"
-export PATH="$PATH:$GOROOT/bin:$PATH:$GOPATH/bin"
+export PATH="$PATH:$GOROOT/bin:$PATH:$HOME/go/bin"
 # Python
 export PATH="$PATH:/home/tom/Apps/miniconda3/bin"
 
