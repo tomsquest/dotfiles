@@ -332,12 +332,12 @@
     <!-- Focus special apps -->
     <keybind key="W-F1">
       <action name="Execute">
-        <command>wmctrl -a Firefox -x</command>
+        <command>wmctrl -a 'mozilla firefox'</command>
       </action>
     </keybind>
     <keybind key="W-F2">
       <action name="Execute">
-        <command>wmctrl -a Terminator -x</command>
+        <command>wmctrl -a terminator -x</command>
       </action>
     </keybind>
     <keybind key="W-F3">
@@ -347,7 +347,7 @@
     </keybind>
     <keybind key="W-F4">
       <action name="Execute">
-        <command>wmctrl -a Chromium -x</command>
+        <command>wmctrl -a 'firefox developer'</command>
       </action>
     </keybind>
     <!-- Enable/disable monitors -->
