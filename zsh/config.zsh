@@ -88,7 +88,9 @@ export M2_HOME="$HOME/Apps/maven/current"
 export PATH="$PATH:$M2_HOME/bin"
 # Scala
 export SCALA_HOME="$HOME/Apps/scala/current"
-export PATH="$PATH:$SCALA_HOME/bin"
+export SBT_HOME="$HOME/Apps/sbt/current"
+export PATH="$PATH:$SCALA_HOME/bin:$SBT_HOME/bin"
+export PLAY_EDITOR="http://localhost:63342/api/file/?file=%s&line=%s"
 # Go
 export GOROOT="$HOME/Apps/go/current"
 export PATH="$PATH:$GOROOT/bin:$PATH:$HOME/go/bin"
