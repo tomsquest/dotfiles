@@ -63,11 +63,11 @@ else {
     }
     elsif (/^\Q$start\E\S/ and $blank) {
         # start of next option;
-        exit;
+        $inside = 0;
     }
     elsif (/^\S/) {
         # start of next section
-        exit;
+        $inside = 0;
     }
     else {
         print;
