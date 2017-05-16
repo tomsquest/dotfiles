@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+DIR="${1-$(pwd)}"
+
+function pull {
+  dir="$1"
+  if [ -d .git ]; then
+    if git config remote.origin.url > /dev/null; then
+      echo "$(tput bold)Pulling in $d$(tput sgr0)"
+      git pull
+    fi
+  fi
+}
+
+# Require to handle a empty $DIR
+shopt -s nullglob
+
+(
+  cd "$DIR"
+  for d in */ ; do
+  (
+    cd "$d"
+    pull $d
+  )
+  done
+)
