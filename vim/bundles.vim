@@ -36,6 +36,9 @@ Plugin 'tomtom/quickfixsigns_vim'
 " Language pack
 Plugin 'sheerun/vim-polyglot'
 
+" Comment
+Plugin 'scrooloose/nerdcommenter'
+
 " All of your Plugins must be added before the following line
 call vundle#end()
 filetype plugin indent on
