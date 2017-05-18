@@ -45,5 +45,8 @@ bindkey '^J' autosuggest-execute
 #xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 setxkbmap -option caps:escape
 
+# Remap the Mail key to Insert
+xmodmap -e 'keycode 163=Insert'
+
 # Disable flow control (ctrl+s, ctrl+q) to enable saving with ctrl+s in Vim
 stty -ixon -ixoff
