@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -eu
+
+TYPEMATRIX=$(xinput list | grep TypeMatrix | grep keyboard | sed 's/.*id=\([0-9]*\).*/\1/')
+STANDARD=$(xinput list | grep "USB Keyboard" | grep -v TypeMatrix | grep keyboard | sed 's/.*id=\([0-9]*\).*/\1/')
+
+if [ -n "$TYPEMATRIX" ]; then
+  setxkbmap -device $TYPEMATRIX us -variant colemak
+  notify-send -i "input-keyboard" "Success" "Typematrix keyboard enabled"
+else
+  notify-send -i "error" "Error" "Typematrix keyboard NOT ENABLED"
+fi
+
+if [ -n "$STANDARD" ]; then
+  setxkbmap -device $STANDARD fr -option ""
+  notify-send -i "input-keyboard" "Success" "Azerty keyboard enabled"
+else
+  notify-send -i "error" "Error" "Standard keyboard NOT ENABLED"
+fi
+
