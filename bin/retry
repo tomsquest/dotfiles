@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Retries a command on key press
+#
+
+color_failure=$(tput bold)$(tput setaf 1) # Red
+color_notif=$(tput bold)$(tput setaf 4)   # Blue
+color_reset=$(tput sgr0)
+
+if [ $# -lt 1 ]; then
+  echo "${color_failure}No arguments supplied, nothing to retry${color_reset}"
+  echo "Usage:   $(basename $0) <command> [arguments]"
+  echo "Example: $(basename $0) curl http://localhost:8080/test"
+  exit 1
+fi
+
+while true; do
+  "$@"
+  exitCode=$?
+
+  if [[ $exitCode -ne 0 ]]; then
+    echo "${color_failure}Failure return code: ${exitCode}${color_reset}"
+  fi
+
+  # -n 1 : capture a single char
+  # -r : recommended by ShellCheck to handle backslash
+  # -s : silent, don't echo the captured char
+  # -p : prompt
+  echo "${color_notif}$(date +"%T") - Press any key to retry: $*${color_reset}"
+  read -n 1 -r -s
+  printf "\n"
+done
+
