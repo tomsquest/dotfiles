@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+DEFAULT_AUDIO_PROFILE="output:analog-stereo"
+HDMI_AUDIO_PROFILE="output:hdmi-stereo"
+HDMI_VIDEO_OUTPUT="HDMI-1"
+
+function toggle-hdmi-video {
+  if xrandr | grep -q "$HDMI_VIDEO_OUTPUT disconnected"; then
+    xrandr --output $HDMI_VIDEO_OUTPUT --right-of LVDS-1 --auto
+  else
+    xrandr --output $HDMI_VIDEO_OUTPUT --off
+  fi
+}
+
+function use-audio-ouput {
+  local output=$1
+  pactl set-card-profile 0 "$output"
+}
+
+CURRENT_PROFILE=$(pactl list | grep -i "active profile"| cut -d ' ' -f 3-)
+if [ "$CURRENT_PROFILE" = "$DEFAULT_AUDIO_PROFILE" ] ; then
+  toggle-hdmi-video
+  use-audio-ouput $HDMI_AUDIO_PROFILE
+  echo "HDMI ON"
+else
+  toggle-hdmi-video
+  use-audio-ouput $DEFAULT_AUDIO_PROFILE
+  echo "HDMI OFF"
+fi
