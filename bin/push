@@ -1,0 +1,78 @@
+#!/bin/sh
+#
+# GIT Unbreakable build
+#
+# Allows to safely push your changes by running a build command from a clone of your current project
+#
+# Source: https://pmiossec.github.io/git/2013/03/24/Git-Build/
+#
+
+LOCATION=$(pwd)
+REMOTE=${1:-origin}
+BRANCH=$(git symbolic-ref -q HEAD)
+BRANCH=${BRANCH##refs/heads/}
+REPO_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
+REPO_NAME=${REPO_DIR##*/}
+BUILD_DIR=/tmp/git-private-build/${REPO_NAME}
+
+rollback_wip_commit() {
+    git log -1 | grep -q -c "WIP" && git reset HEAD~1
+}
+
+success() {
+    printf "\033[1;32m${1}\033[0m\n"
+    command -v notify-send >/dev/null 2>&1 && notify-send -t 3000 --icon="$0-success.png" "${REPO_NAME}" "${1}"
+    command -v growlnotify >/dev/null 2>&1 && growlnotify --image "$0-success.png" "${REPO_NAME}" -m "${1}"
+    command -v growlnotify.exe >/dev/null 2>&1 && growlnotify.exe //i:"$0-success.png" //t:"Git build [${REPO_NAME}]" "${1}"
+    exit 0
+}
+
+failure() {
+    printf "\033[1;31m${1}\033[0m\n"
+    command -v notify-send >/dev/null 2>&1 && notify-send -t 3000 --icon="$0-error.png" "${REPO_NAME}" "${1}"
+    command -v growlnotify >/dev/null 2>&1 && growlnotify --image "$0-error.png" "${REPO_NAME}" -m "${1}"
+    command -v growlnotify.exe >/dev/null 2>&1 && growlnotify.exe //i:"$0-error.png" //t:"Git build [${REPO_NAME}]" "${1}"
+    exit 1
+}
+
+# Get command for build from Git config
+COMMAND=$(git config --get private-build.command)
+if [ -z "${COMMAND}" ]; then
+    failure "Build command not configured! Example: git config private-build.command \"mvn clean install\""
+fi
+
+# Commit "work in progress"
+git fetch ${REMOTE}
+git add -A $REPO_DIR && git commit -m "WIP"
+REBASE="$REMOTE/$BRANCH"
+git branch -r | grep -q -c ${REBASE} || REBASE="$REMOTE/master"
+echo "rebase ${REBASE}"
+git rebase --preserve-merges ${REBASE}
+if [ "$?" -ne 0 ]; then
+    git rebase --abort
+    rollback_wip_commit
+    failure "Unable to rebase!"
+fi
+rollback_wip_commit
+
+# Clone private repo
+rm -Rf ${BUILD_DIR}
+git clone --local --shared --branch "${BRANCH}" ${REPO_DIR} ${BUILD_DIR}
+
+# Run private build
+cd ${BUILD_DIR}
+eval ${COMMAND}
+if [ $? -ne 0 ]; then
+    failure "Unable to build!"
+fi
+
+# Push
+REMOTE_URL=$(git remote show -n ${REMOTE} | awk '/Fetch/ {print $3}')
+git push ${REMOTE_URL} ${BRANCH}
+if [ $? -ne 0 ]; then
+    failure "Unable to push!"
+fi
+
+# Update working directory
+cd ${LOCATION} && git fetch ${REMOTE}
+success "Yet another successful build!"
