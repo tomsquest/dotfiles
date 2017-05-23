@@ -15,7 +15,7 @@ if [ $# -lt 1 ]; then
 fi
 
 while true; do
-  "$@"
+  eval "$@"
   exitCode=$?
 
   if [[ $exitCode -ne 0 ]]; then
