@@ -14,7 +14,7 @@ function precmd {
   # Compute the lengths of the strings
   local exitcodesize=${#${(%):-%(?..%? )}}
   local promptsize=${#${(%):-hh-mm-ss-}}
-  local pwdsize=${#${(%):-%~}}
+  local pwdsize=${#${(%):-$PWD}}
 
   # Global width
   local TERMWIDTH
@@ -43,7 +43,7 @@ local user_and_host=""
 local the_date="%{$fg_bold[green]%}%D{%H:%M:%S}%{$reset_color%}"
 local last_command_status="%(?..%{$fg_bold[red]%}%? %{$reset_color%})"
 local start_of_input="%{$fg_bold[white]%}$%{$reset_color%}"
-PROMPT='$the_date %{$fg_bold[blue]%}%$PR_PWDLEN<...<%~%<<%{$reset_color%} $last_command_status%{$fg_bold[white]%}${(e)PR_FILLBAR}%{$reset_color%}
+PROMPT='$the_date %{$fg_bold[blue]%}%$PR_PWDLEN<...<$PWD%<<%{$reset_color%} $last_command_status%{$fg_bold[white]%}${(e)PR_FILLBAR}%{$reset_color%}
 $start_of_input '
 
 # Git prompt, displayed at right (RPROMPT)
