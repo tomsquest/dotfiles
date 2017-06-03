@@ -33,9 +33,9 @@ success() {
 failure() {
     local msg="$1"
     printf "\033[1;31m%s\033[0m\n" "$msg"
-    command -v notify-send >/dev/null 2>&1 && notify-send -t 3000 --icon="$0-error.png" "$REPO_NAME" "$msg"
-    command -v growlnotify >/dev/null 2>&1 && growlnotify --image "$0-error.png" "$REPO_NAME" -m "$msg"
-    command -v growlnotify.exe >/dev/null 2>&1 && growlnotify.exe //i:"$0-error.png" //t:"Git build [$REPO_NAME]" "$msg"
+    command -v notify-send >/dev/null 2>&1 && notify-send -t 3000 --icon="$0-failure.png" "$REPO_NAME" "$msg"
+    command -v growlnotify >/dev/null 2>&1 && growlnotify --image "$0-failure.png" "$REPO_NAME" -m "$msg"
+    command -v growlnotify.exe >/dev/null 2>&1 && growlnotify.exe //i:"$0-failure.png" //t:"Git build [$REPO_NAME]" "$msg"
     exit 1
 }
 
