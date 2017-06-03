@@ -67,7 +67,7 @@ git clone --local --shared --branch $BRANCH "$REPO_DIR" "$BUILD_DIR"
 cd "$BUILD_DIR"
 eval "$BUILD_COMMAND"
 if [ $? -ne 0 ]; then
-    failure "Unable to build!"
+    failure "Build failure!"
 fi
 
 # Push
@@ -79,4 +79,4 @@ fi
 # Update working directory
 cd "$LOCATION"
 git fetch $REMOTE
-success "Yet another successful build!"
+success "Build success!"
