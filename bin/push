@@ -10,8 +10,7 @@
 LOCATION=$(pwd)
 REMOTE=${1:-origin}
 REMOTE_URL=$(git ls-remote --get-url $REMOTE)
-BRANCH=$(git symbolic-ref -q HEAD)
-BRANCH=${BRANCH##refs/heads/}
+BRANCH=$(git symbolic-ref -q --short HEAD)
 REPO_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
 REPO_NAME=${REPO_DIR##*/}
 BUILD_DIR="/tmp/git-private-build/${REPO_NAME}"
