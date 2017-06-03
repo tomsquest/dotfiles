@@ -15,19 +15,16 @@ if [ $# -lt 1 ]; then
 fi
 
 while true; do
-  eval "$@"
-  exitCode=$?
-
-  if [[ $exitCode -ne 0 ]]; then
-    echo "${color_failure}Failure return code: ${exitCode}${color_reset}"
+  if "$@"; then
+    echo "${color_notif}$(date +"%T") - Press any key to retry: $*${color_reset}"
+    # -n 1 : capture a single char
+    # -r : recommended by ShellCheck to handle backslash
+    # -s : silent, don't echo the captured char
+    # -p : prompt
+    read -n 1 -r -s
+    printf "\n"
+  else
+    echo "${color_failure}Failure. return code: ${exitCode}${color_reset}"
   fi
-
-  # -n 1 : capture a single char
-  # -r : recommended by ShellCheck to handle backslash
-  # -s : silent, don't echo the captured char
-  # -p : prompt
-  echo "${color_notif}$(date +"%T") - Press any key to retry: $*${color_reset}"
-  read -n 1 -r -s
-  printf "\n"
 done
 
