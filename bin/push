@@ -48,12 +48,12 @@ fi
 
 # Commit "work in progress"
 git fetch $REMOTE
-git add -A "$REPO_DIR" && git commit -m "WIP"
+git add -A "$REPO_DIR"
+git commit -m "WIP"
 REBASE="$REMOTE/$BRANCH"
 git branch -r | grep -q -c $REBASE || REBASE="$REMOTE/master"
-echo "rebase $REBASE"
-git rebase --preserve-merges $REBASE
-if [ "$?" -ne 0 ]; then
+echo "Rebasing with: $REBASE"
+if ! git rebase --preserve-merges $REBASE; then
     git rebase --abort
     rollback_wip_commit
     failure "Unable to rebase!"
@@ -66,14 +66,12 @@ git clone --local --shared --branch $BRANCH "$REPO_DIR" "$BUILD_DIR"
 
 # Run private build
 cd "$BUILD_DIR"
-eval "$BUILD_COMMAND"
-if [ $? -ne 0 ]; then
+if ! eval "$BUILD_COMMAND"; then
     failure "Build failure!"
 fi
 
 # Push
-git push $REMOTE_URL $BRANCH
-if [ $? -ne 0 ]; then
+if ! git push $REMOTE_URL $BRANCH; then
     failure "Unable to push!"
 fi
 
