@@ -9,6 +9,7 @@
 
 LOCATION=$(pwd)
 REMOTE=${1:-origin}
+REMOTE_URL=$(git ls-remote --get-url ${REMOTE})
 BRANCH=$(git symbolic-ref -q HEAD)
 BRANCH=${BRANCH##refs/heads/}
 REPO_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
@@ -67,7 +68,6 @@ if [ $? -ne 0 ]; then
 fi
 
 # Push
-REMOTE_URL=$(git remote show -n ${REMOTE} | awk '/Fetch/ {print $3}')
 git push ${REMOTE_URL} ${BRANCH}
 if [ $? -ne 0 ]; then
     failure "Unable to push!"
