@@ -7,13 +7,15 @@
 # Source: https://pmiossec.github.io/git/2013/03/24/Git-Build/
 #
 
-LOCATION=$(pwd)
-REMOTE=${1:-origin}
-REMOTE_URL=$(git ls-remote --get-url $REMOTE)
-BRANCH=$(git symbolic-ref -q --short HEAD)
-REPO_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
-REPO_NAME=${REPO_DIR##*/}
-BUILD_DIR="/tmp/git-private-build/${REPO_NAME}"
+set -u -o pipefail
+
+readonly LOCATION=$(pwd)
+readonly REMOTE=${1:-origin}
+readonly REMOTE_URL=$(git ls-remote --get-url $REMOTE)
+readonly BRANCH=$(git symbolic-ref -q --short HEAD)
+readonly REPO_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
+readonly REPO_NAME=${REPO_DIR##*/}
+readonly BUILD_DIR="/tmp/git-private-build/${REPO_NAME}"
 
 rollback_wip_commit() {
     git log -1 | grep -q -c "WIP" && git reset HEAD~1
@@ -75,5 +77,6 @@ if [ $? -ne 0 ]; then
 fi
 
 # Update working directory
-cd "$LOCATION" && git fetch $REMOTE
+cd "$LOCATION"
+git fetch $REMOTE
 success "Yet another successful build!"
