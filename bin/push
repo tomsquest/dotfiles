@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # GIT Unbreakable build
 #
@@ -9,46 +9,48 @@
 
 LOCATION=$(pwd)
 REMOTE=${1:-origin}
-REMOTE_URL=$(git ls-remote --get-url ${REMOTE})
+REMOTE_URL=$(git ls-remote --get-url $REMOTE)
 BRANCH=$(git symbolic-ref -q HEAD)
 BRANCH=${BRANCH##refs/heads/}
 REPO_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
 REPO_NAME=${REPO_DIR##*/}
-BUILD_DIR=/tmp/git-private-build/${REPO_NAME}
+BUILD_DIR="/tmp/git-private-build/${REPO_NAME}"
 
 rollback_wip_commit() {
     git log -1 | grep -q -c "WIP" && git reset HEAD~1
 }
 
 success() {
-    printf "\033[1;32m${1}\033[0m\n"
-    command -v notify-send >/dev/null 2>&1 && notify-send -t 3000 --icon="$0-success.png" "${REPO_NAME}" "${1}"
-    command -v growlnotify >/dev/null 2>&1 && growlnotify --image "$0-success.png" "${REPO_NAME}" -m "${1}"
-    command -v growlnotify.exe >/dev/null 2>&1 && growlnotify.exe //i:"$0-success.png" //t:"Git build [${REPO_NAME}]" "${1}"
+    local msg="$1"
+    printf "\033[1;32m%s\033[0m\n" "$msg"
+    command -v notify-send >/dev/null 2>&1 && notify-send -t 3000 --icon="$0-success.png" "$REPO_NAME" "$msg"
+    command -v growlnotify >/dev/null 2>&1 && growlnotify --image "$0-success.png" "$REPO_NAME" -m "$msg"
+    command -v growlnotify.exe >/dev/null 2>&1 && growlnotify.exe //i:"$0-success.png" //t:"Git build [$REPO_NAME]" "$msg"
     exit 0
 }
 
 failure() {
-    printf "\033[1;31m${1}\033[0m\n"
-    command -v notify-send >/dev/null 2>&1 && notify-send -t 3000 --icon="$0-error.png" "${REPO_NAME}" "${1}"
-    command -v growlnotify >/dev/null 2>&1 && growlnotify --image "$0-error.png" "${REPO_NAME}" -m "${1}"
-    command -v growlnotify.exe >/dev/null 2>&1 && growlnotify.exe //i:"$0-error.png" //t:"Git build [${REPO_NAME}]" "${1}"
+    local msg="$1"
+    printf "\033[1;31m%s\033[0m\n" "$msg"
+    command -v notify-send >/dev/null 2>&1 && notify-send -t 3000 --icon="$0-error.png" "$REPO_NAME" "$msg"
+    command -v growlnotify >/dev/null 2>&1 && growlnotify --image "$0-error.png" "$REPO_NAME" -m "$msg"
+    command -v growlnotify.exe >/dev/null 2>&1 && growlnotify.exe //i:"$0-error.png" //t:"Git build [$REPO_NAME]" "$msg"
     exit 1
 }
 
 # Get command for build from Git config
-COMMAND=$(git config --get private-build.command)
-if [ -z "${COMMAND}" ]; then
+BUILD_COMMAND=$(git config --get private-build.command)
+if [ -z "$BUILD_COMMAND" ]; then
     failure "Build command not configured! Example: git config private-build.command \"mvn clean install\""
 fi
 
 # Commit "work in progress"
-git fetch ${REMOTE}
-git add -A $REPO_DIR && git commit -m "WIP"
+git fetch $REMOTE
+git add -A "$REPO_DIR" && git commit -m "WIP"
 REBASE="$REMOTE/$BRANCH"
-git branch -r | grep -q -c ${REBASE} || REBASE="$REMOTE/master"
-echo "rebase ${REBASE}"
-git rebase --preserve-merges ${REBASE}
+git branch -r | grep -q -c $REBASE || REBASE="$REMOTE/master"
+echo "rebase $REBASE"
+git rebase --preserve-merges $REBASE
 if [ "$?" -ne 0 ]; then
     git rebase --abort
     rollback_wip_commit
@@ -57,22 +59,22 @@ fi
 rollback_wip_commit
 
 # Clone private repo
-rm -Rf ${BUILD_DIR}
-git clone --local --shared --branch "${BRANCH}" ${REPO_DIR} ${BUILD_DIR}
+rm -Rf "$BUILD_DIR"
+git clone --local --shared --branch $BRANCH "$REPO_DIR" "$BUILD_DIR"
 
 # Run private build
-cd ${BUILD_DIR}
-eval ${COMMAND}
+cd "$BUILD_DIR"
+eval "$BUILD_COMMAND"
 if [ $? -ne 0 ]; then
     failure "Unable to build!"
 fi
 
 # Push
-git push ${REMOTE_URL} ${BRANCH}
+git push $REMOTE_URL $BRANCH
 if [ $? -ne 0 ]; then
     failure "Unable to push!"
 fi
 
 # Update working directory
-cd ${LOCATION} && git fetch ${REMOTE}
+cd "$LOCATION" && git fetch $REMOTE
 success "Yet another successful build!"
