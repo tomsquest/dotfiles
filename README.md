@@ -16,8 +16,8 @@ cd ~/.dotfiles
 * ZSH Prompt:
 
  ``` bash
-06:42:21 ~/.dotfiles ------------------------------
-$                                    (master|●1✚1…)
+06:42:21 /home/tom/.dotfiles ------------------------------
+$                                            (master|●1✚1…)
 ```
 
 - ZSH plugins with [Zgen](https://github.com/tarjoilija/zgen)
