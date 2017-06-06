@@ -2,6 +2,7 @@
 Version=1.0
 Type=Application
 Name=Firefox Developer
+Comment=Firefox Developer Edition
 Icon=/home/tom/Apps/firefox-developer/current/browser/icons/mozicon128.png
 Exec="/home/tom/Apps/firefox-developer/current/firefox" %f
 Categories=Development;
