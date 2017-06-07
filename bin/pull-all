@@ -8,12 +8,12 @@ function pull {
   if [ -d .git ]; then
     if git config remote.origin.url > /dev/null; then
       echo "$(tput bold)Pulling in $d$(tput sgr0)"
-      git pull
+      git pull --rebase=preserve
     fi
   fi
 }
 
-# Require to handle a empty $DIR
+# Require to handle a potential empty $DIR
 shopt -s nullglob
 
 (
