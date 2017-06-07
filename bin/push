@@ -46,6 +46,10 @@ if [ -z "$BUILD_COMMAND" ]; then
     failure "Build command not configured! Example: git config private-build.command \"mvn clean install\""
 fi
 
+if ! git rev-parse --abbrev-ref --symbolic-full-name "@{u}" 2>&1>/dev/null; then
+    failure "No remote configured!"
+fi
+
 # Commit "work in progress"
 git fetch $REMOTE
 git add -A "$REPO_DIR"
