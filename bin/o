@@ -12,7 +12,7 @@ if [ -z "$file" ]; then
 fi
 
 if [ -a "$file" ]; then
-    if [ -w "$file" ]; then
+    if [ -w "$file" ] || [ -d "$file" ]; then
         $opener "$file"
     else
         read -n 1 -r -p "You don't have write permission for $file, use sudo instead (y/n) ? " -s reply
