@@ -126,3 +126,6 @@ autoload zmv
 # Example: z foo
 # See: https://github.com/rupa/z
 source ~/.zsh/rupa-z/z.sh
+
+# Create directory and move into
+mcd() { [ -n "$1" ] && mkdir -p "$1" && cd "$1"}
