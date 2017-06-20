@@ -55,10 +55,7 @@ alias  gp='git pull'
 alias gaa='git add -A'
 
 # Maven
-# Override the mvn command with the colorized one.
-alias mvn="mvn-in-colors"
-compdef _mvn mvn=mvn-in-colors
-alias m='mvn'
+alias m='mvn-in-colors'
 compdef _mvn m=mvn
 MAVEN_SKIP_TESTS='-Dmaven.test.skip=true' # or -DskipTests
 alias   mc='alert printAndRun mvn-in-colors clean'
