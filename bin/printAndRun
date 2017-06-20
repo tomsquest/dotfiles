@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Print then run the given command
+#
+
+readonly color_notif=$(tput bold)$(tput setaf 4)
+readonly color_reset=$(tput sgr0)
+
+echo "${color_notif}$*${color_reset}"
+"$@"
