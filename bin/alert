@@ -1,0 +1,41 @@
+#!/bin/bash
+
+function notify_success() {
+  if [ -f /usr/bin/notify-send ]; then
+    /usr/bin/notify-send -i "terminal" "Success" "$1"
+  fi
+  if [ -f /usr/bin/beep ]; then
+    /usr/bin/beep -l 100 -f 500 -n -l 50 -f 1000
+  fi
+}
+
+function notify_failure() {
+    readonly cmd="$1"
+    readonly exitcode="$2"
+
+  if [ -f /usr/bin/notify-send ]; then
+    /usr/bin/notify-send -i "error" "Error: $cmd" "$exitcode"
+  fi
+  if [ -f /usr/bin/beep ]; then
+    /usr/bin/beep -l 100 -f 100 -r 2
+  fi
+}
+
+# Hide 'printAndRun' from being shown in notification
+if [ "$1" == "printAndRun" ]; then
+    shift
+fi
+
+# Execution
+readonly cmd=$*
+eval "$@"
+exitstatus="$?"
+
+# Notification
+if [ $exitstatus = "0" ]; then
+    notify_success "$cmd"
+else
+    notify_failure "$cmd" "$exitstatus"
+fi
+
+exit $exitstatus
