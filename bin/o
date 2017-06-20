@@ -25,12 +25,11 @@ if [ -a "$file" ]; then
         fi
     fi
 else
-    read -n 1 -r -p "$file does not exist. Do you want to create a file with this name (y/n) ? " -s reply
+    read -n 1 -r -p "$file does not exist. Do you want to create it (y/n) ? " -s reply
     printf "\n"
 
     if [ "$reply" == "y" ]; then
-        touch "$file"
-        $opener "$file"
+        mkdir -p "$(dirname "$file")" && touch "$file" && $opener "$file"
     else
         exit 1
     fi
