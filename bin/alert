@@ -1,24 +1,15 @@
 #!/bin/bash
 
+readonly PROG_DIR=$(readlink -m "$(dirname "$0")")
+
 function notify_success() {
-  if [ -f /usr/bin/notify-send ]; then
-    /usr/bin/notify-send -i "terminal" "Success" "$1"
-  fi
-  if [ -f /usr/bin/beep ]; then
-    /usr/bin/beep -l 100 -f 500 -n -l 50 -f 1000
-  fi
+    command -v notify-send >/dev/null 2>&1 && notify-send --icon="${PROG_DIR}/success.png" "Success" "$1"
+    command -v beep >/dev/null 2>&1 && beep -l 100 -f 500 -n -l 50 -f 1000
 }
 
 function notify_failure() {
-    readonly cmd="$1"
-    readonly exitcode="$2"
-
-  if [ -f /usr/bin/notify-send ]; then
-    /usr/bin/notify-send -i "error" "Error: $cmd" "$exitcode"
-  fi
-  if [ -f /usr/bin/beep ]; then
-    /usr/bin/beep -l 100 -f 100 -r 2
-  fi
+    command -v notify-send >/dev/null 2>&1 && notify-send --icon="${PROG_DIR}/failure.png" "Error: $2" "$1"
+    command -v beep >/dev/null 2>&1 && beep -l 100 -f 100 -r 2
 }
 
 # Hide 'printAndRun' from being shown in notification
@@ -27,15 +18,15 @@ if [ "$1" == "printAndRun" ]; then
 fi
 
 # Execution
-readonly cmd=$*
+readonly CMD=$*
 eval "$@"
-exitstatus="$?"
+readonly EXIT_STATUS="$?"
 
 # Notification
-if [ $exitstatus = "0" ]; then
-    notify_success "$cmd"
+if [ "$EXIT_STATUS" = "0" ]; then
+    notify_success "$CMD"
 else
-    notify_failure "$cmd" "$exitstatus"
+    notify_failure "$CMD" "$EXIT_STATUS"
 fi
 
-exit $exitstatus
+exit "$EXIT_STATUS"
