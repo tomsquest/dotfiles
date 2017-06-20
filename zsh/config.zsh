@@ -129,3 +129,7 @@ source ~/.zsh/rupa-z/z.sh
 
 # Create directory and move into
 mcd() { [ -n "$1" ] && mkdir -p "$1" && cd "$1"}
+
+# Print then run the given command
+printAndRun() { print "$fg_bold[blue]$@$reset_color" && $@ }
+
