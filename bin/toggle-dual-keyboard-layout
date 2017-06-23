@@ -1,21 +1,36 @@
 #!/bin/bash
+#
+# Enable other standard keyboards along a connected TypeMatrix.
+# Beware: the typematrix needs to be re-activated after in order to not be overridden.
+#
 
 set -eu
 
-TYPEMATRIX=$(xinput list | grep TypeMatrix | grep keyboard | sed 's/.*id=\([0-9]*\).*/\1/')
-STANDARD=$(xinput list | grep "USB Keyboard" | grep -v TypeMatrix | grep keyboard | sed 's/.*id=\([0-9]*\).*/\1/')
+readonly TYPEMATRIX_KEYBOARDS=$(xinput list | \
+        grep TypeMatrix | \
+        grep keyboard | \
+        sed 's/.*id=\([0-9]*\).*/\1/')
+readonly OTHER_KEYBOARDS=$(xinput list | \
+        grep -v TypeMatrix | \
+        grep -v Virtual | \
+        grep -v "Power Button" | \
+        grep "slave  keyboard" | \
+        sed 's/.*id=\([0-9]*\).*/\1/')
 
-if [ -n "$TYPEMATRIX" ]; then
-  setxkbmap -device $TYPEMATRIX us -variant colemak
-  notify-send -i "input-keyboard" "Success" "Typematrix keyboard enabled"
+if [ -n "$OTHER_KEYBOARDS" ]; then
+    for keyboard in $OTHER_KEYBOARDS ; do
+        setxkbmap -device "$keyboard" fr -option ""
+        notify-send -i "input-keyboard" "Success" "Azerty keyboard enabled"
+    done
 else
-  notify-send -i "error" "Error" "Typematrix keyboard NOT ENABLED"
+    notify-send -i "error" "Error" "Standard keyboard NOT ENABLED"
 fi
 
-if [ -n "$STANDARD" ]; then
-  setxkbmap -device $STANDARD fr -option ""
-  notify-send -i "input-keyboard" "Success" "Azerty keyboard enabled"
+if [ -n "$TYPEMATRIX_KEYBOARDS" ]; then
+    for keyboard in $TYPEMATRIX_KEYBOARDS ; do
+        setxkbmap -device "$keyboard" us -variant colemak
+        notify-send -i "input-keyboard" "Success" "Typematrix keyboard enabled"
+    done
 else
-  notify-send -i "error" "Error" "Standard keyboard NOT ENABLED"
+    notify-send -i "error" "Error" "Typematrix keyboard NOT ENABLED"
 fi
-
