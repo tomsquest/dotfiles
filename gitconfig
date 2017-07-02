@@ -8,7 +8,7 @@
 	st = status
 	br = branch
 	l  = log --graph --abbrev-commit --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-	diffw = diff --word-diff
+	diffw = diff --word-diff=color
 [color]
 	ui = auto
 [diff]
