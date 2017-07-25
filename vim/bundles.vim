@@ -16,7 +16,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'tomtom/quickfixsigns_vim'
 Plugin 'sheerun/vim-polyglot'
-Plugin 'scrooloose/nerdcommenter'
+Plugin 'tomtom/tcomment_vim'
 
 
 " All of your Plugins must be added before the following line
