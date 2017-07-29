@@ -8,7 +8,9 @@ function pull {
   if [ -d .git ]; then
     if git config remote.origin.url > /dev/null; then
       echo "$(tput bold)Pulling in $d$(tput sgr0)"
+      set +e
       git pull --rebase=preserve
+      set -e
     fi
   fi
 }
