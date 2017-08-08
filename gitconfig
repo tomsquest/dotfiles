@@ -18,6 +18,7 @@
 	excludesfile = ~/.gitignore
 	autocrlf = input
 	editor = gvim -f
+	pager = less -+F -+X
 [push]
 	default = simple
 [pull]
