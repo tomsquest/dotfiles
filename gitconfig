@@ -31,12 +31,11 @@
 	sort = version:refname
 [credential]
 	helper = cache
-[commit]
-        #gpgsign = true
 [rerere]
 	enabled = true
 [commit]
 	verbose = true
+        #gpgsign = true
 [submodule]
 	fetchJobs = 4
 [rebase]
