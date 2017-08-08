@@ -13,10 +13,11 @@ alias mu='multitail -cS apache -cS log4j -n 1000 --no-repeat -b 2 --mark-interva
 alias h='history -iD'
 
 # ls
-alias ls='ls                                  --classify --group-directories-first --color=auto'
-alias  l='ls -l              --human-readable --classify --group-directories-first --color=auto'
-alias ll='ls -l              --human-readable --classify --group-directories-first --color=auto'
-alias la='ls -l --almost-all --human-readable --classify --group-directories-first --color=auto'
+# -v: natural sort of version
+alias ls='ls                                  -v --classify --group-directories-first --color=auto'
+alias  l='ls -l              --human-readable -v --classify --group-directories-first --color=auto'
+alias ll='ls -l              --human-readable -v --classify --group-directories-first --color=auto'
+alias la='ls -l --almost-all --human-readable -v --classify --group-directories-first --color=auto'
 
 # grep
 alias  grep='grep --color=auto'
