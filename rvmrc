@@ -1,2 +1,2 @@
-rvm_install_on_use_flag=1
+#rvm_install_on_use_flag=1
 rvm_project_rvmrc_default=1
