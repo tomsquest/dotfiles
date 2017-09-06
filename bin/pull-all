@@ -7,7 +7,8 @@ DIR="${1-$(pwd)}"
 function pull {
   if [ -d .git ]; then
     if git config remote.origin.url > /dev/null; then
-      echo "$(tput bold)Pulling in $d$(tput sgr0)"
+      BRANCH="$(git symbolic-ref --short HEAD)"
+      echo "$(tput bold)Pulling $d on branch $(tput setaf 4)$BRANCH$(tput sgr0)"
       set +e
       git pull --rebase=preserve
       set -e
