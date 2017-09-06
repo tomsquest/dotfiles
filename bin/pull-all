@@ -1,14 +1,17 @@
 #!/bin/bash
 
-set -eu -o pipefail
+BASE_DIR="${1-$(pwd)}"
 
-DIR="${1-$(pwd)}"
+set -eu -o pipefail
+# Required to handle a potential empty $BASE_DIR
+shopt -s nullglob
 
 function pull {
+  CURRENT_DIR=$1
   if [ -d .git ]; then
     if git config remote.origin.url > /dev/null; then
       BRANCH="$(git symbolic-ref --short HEAD)"
-      echo "$(tput bold)Pulling $d on branch $(tput setaf 4)$BRANCH$(tput sgr0)"
+      echo "$(tput bold)Pulling $CURRENT_DIR on branch $(tput setaf 4)$BRANCH$(tput sgr0)"
       set +e
       git pull --rebase=preserve
       set -e
@@ -16,11 +19,8 @@ function pull {
   fi
 }
 
-# Require to handle a potential empty $DIR
-shopt -s nullglob
-
 (
-  cd "$DIR"
+  cd "$BASE_DIR"
   for d in */ ; do
   (
     cd "$d"
