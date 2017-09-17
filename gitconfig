@@ -42,3 +42,6 @@
 	autostash = true
 [status]
 	showUntrackedFiles = all
+[merge]
+        # Show more context in conflict
+	conflictstyle = diff3
