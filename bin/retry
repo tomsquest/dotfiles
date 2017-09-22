@@ -3,8 +3,12 @@
 # Retries a command on key press
 #
 
+set -e
+set -u
+set -o pipefail
+
 color_failure=$(tput bold)$(tput setaf 1) # Red
-color_notif=$(tput bold)$(tput setaf 4)   # Blue
+color_success=$(tput bold)$(tput setaf 4)   # Blue
 color_reset=$(tput sgr0)
 
 if [ $# -lt 1 ]; then
@@ -15,16 +19,23 @@ if [ $# -lt 1 ]; then
 fi
 
 while true; do
-  if "$@"; then
-    echo "${color_notif}$(date +"%T") - Press any key to retry: $*${color_reset}"
-    # -n 1 : capture a single char
-    # -r : recommended by ShellCheck to handle backslash
-    # -s : silent, don't echo the captured char
-    # -p : prompt
-    read -n 1 -r -s
-    printf "\n"
+
+  set +e
+  "$@"
+  exitCode=$?
+  set -e
+
+  if [ $exitCode -eq 0 ]; then
+    echo "${color_success}$(date +"%T") Press any key to retry command: $*${color_reset}"
   else
-    echo "${color_failure}Failure. return code: ${exitCode}${color_reset}"
+    echo "${color_failure}$(date +"%T") Failed: ${exitCode} - Press any key to retry command: $*${color_reset}"
   fi
+
+  # Ask for input:
+  # -n 1 : capture a single char
+  # -r : recommended by ShellCheck to handle backslash
+  # -s : silent, don't echo the captured char
+  # -p : prompt
+  read -n 1 -r -s
 done
 
