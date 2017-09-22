@@ -15,6 +15,7 @@
 	mnemonicprefix = true
 	indentHeuristic = true
 	compactionHeuristic = true
+	tool = intellij
 [core]
 	excludesfile = ~/.gitignore
 	autocrlf = input
@@ -23,7 +24,7 @@
 [push]
 	default = simple
 [pull]
-        # pull will do a rebase instead of a merge
+	# pull will do a rebase instead of a merge
 	rebase = true
 [help]
 	autocorrect = 1
@@ -35,7 +36,7 @@
 	enabled = true
 [commit]
 	verbose = true
-        #gpgsign = true
+    #gpgsign = true
 [submodule]
 	fetchJobs = 4
 [rebase]
@@ -43,5 +44,11 @@
 [status]
 	showUntrackedFiles = all
 [merge]
-        # Show more context in conflict
+	# Show more context in conflict
 	conflictstyle = diff3
+	tool = intellij
+[mergetool "intellij"]
+	cmd = idea merge $(cd $(dirname "$LOCAL") && pwd)/$(basename "$LOCAL") $(cd $(dirname "$REMOTE") && pwd)/$(basename "$REMOTE") $(cd $(dirname "$BASE") && pwd)/$(basename "$BASE") $(cd $(dirname "$MERGED") && pwd)/$(basename "$MERGED")
+	trustExitCode = true
+[difftool "intellij"]
+	cmd = idea diff $(cd $(dirname "$LOCAL") && pwd)/$(basename "$LOCAL") $(cd $(dirname "$REMOTE") && pwd)/$(basename "$REMOTE")
