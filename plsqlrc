@@ -1,14 +1,26 @@
 -- Taken from : https://www.periscope.io/blog/optimizing-your-psql.html
 
+-- Display query duration
 \timing on
-\setenv LESS -imx4F
+
+-- Pager
+-- \setenv LESS -imx4F
+
+-- Expanded table formatting
 \x auto
 
--- Put a space in front of queries you don't want to save
-\set HISTCONTROL ignorespace
+-- Don't save to duplicate entries and entries starting with a space
+\set HISTCONTROL ignoreboth
+
+-- History per DB
 \set HISTFILE ~/.psql_history- :DBNAME
 \set HISTSIZE 20000
 
 -- Better null printing
 \pset null '[NULL]'
 
+-- Error printing
+\pset VERBOSITY verbose
+
+-- Display hostname and database
+\set PROMPT1 '%[%033[1m%][%/] # '
