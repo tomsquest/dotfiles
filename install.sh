@@ -19,6 +19,9 @@ function link_if_missing() {
   fi
 }
 
+echo "Creating additional PATH directories..."
+mkdir -p "$HOME/.local/bin"
+
 echo "Linking files..."
 link_if_missing "$PWD/bin"                    "$HOME/bin"
 link_if_missing "$PWD/bash"                   "$HOME/.bash"

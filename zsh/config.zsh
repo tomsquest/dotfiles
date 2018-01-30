@@ -80,6 +80,8 @@ export TERM=xterm-256color
 export TIME_STYLE=long-iso
 # SSH ash-pass. Require pkg ssh-askpass
 export SSH_ASKPASS=/usr/bin/ssh-askpass
+# set PATH so it includes user's private bin directories
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 # Java
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 export PATH="$PATH:$JAVA_HOME/bin"
