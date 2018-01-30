@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Firefox Latest
+Comment=Firefox Latest Edition
+Icon=/home/tom/Apps/firefox/browser/icons/mozicon128.png
+Exec="/home/tom/Apps/firefox/firefox" %f
+Categories=Internet;
+Terminal=false
