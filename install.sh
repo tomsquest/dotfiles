@@ -3,6 +3,7 @@
 set -euo pipefail
 
 # Fetch the code from the other Git repos like zsh-git-prompt, Vim vundle...
+echo "Fetching submodules..."
 git submodule update --remote --init
 
 # Create the symlinks in $HOME
@@ -10,6 +11,7 @@ function link_if_missing() {
   SRC=$1
   DEST=$2
 
+  mkdir -p $(dirname $DEST)
   if ! [ -L "$DEST" ]; then
     ln -ivs "$SRC" "$DEST"
   else
@@ -17,6 +19,7 @@ function link_if_missing() {
   fi
 }
 
+echo "Linking files..."
 link_if_missing "$PWD/bin"                    "$HOME/bin"
 link_if_missing "$PWD/bash"                   "$HOME/.bash"
 link_if_missing "$PWD/zsh"                    "$HOME/.zsh"
@@ -39,5 +42,5 @@ do
   link_if_missing "$file" "$HOME/.local/share/applications/$(basename "$file")"
 done
 
-# Install vim plugins using Vundle
+echo "Installing Vim plugins..."
 vim +PluginInstall +qall
