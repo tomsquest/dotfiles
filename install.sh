@@ -7,7 +7,7 @@ function install-submodules {
     git submodule update --remote --init
 }
 
-function mkdir-paths {
+function make-paths {
     echo "Creating additional PATH directories..."
     mkdir -p "$HOME/.local/bin"
 }
@@ -16,7 +16,7 @@ function create-link {
   SRC=$1
   DEST=$2
 
-  mkdir -p $(dirname $DEST)
+  mkdir -p "$(dirname "$DEST")"
   if ! [ -L "$DEST" ]; then
     ln -ivs "$SRC" "$DEST"
   else
@@ -26,9 +26,16 @@ function create-link {
 
 function install-fzf {
     echo "Installing FZF..."
-    readonly URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
+    local URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
     curl -sL "$URL" | tar xz fzf -C /tmp \
         && mv fzf ~/.local/bin/
+}
+
+function install-ripgrep {
+    echo "Installing Ripgrep..."
+    local URL=$(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep browser_download_url | grep x86_64-unknown-linux | cut -d '"' -f 4)
+    curl -sL "$URL" | tar zx --wildcards '*/rg' --strip 1 -C /tmp \
+       && mv rg ~/.local/bin/
 }
 
 function link-files {
@@ -61,12 +68,13 @@ function install-vim-plugins {
     vim +PluginInstall +qall
 }
 
-function main {
-    mkdir-paths
+function install-all {
+    make-paths
     link-files
     install-fzf
+    install-ripgrep
     install-submodules
     install-vim-plugins
 }
 
-main
+install-all
