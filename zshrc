@@ -26,6 +26,7 @@ source ~/.zsh/completion.zsh
 source ~/.zsh/aliases.zsh
 source ~/.zsh/bindkey.zsh
 source ~/.zsh/prompt.zsh
+source ~/.zsh/fzf.zsh
 
 if [ -f ~/.zshrc.local ]; then
   source ~/.zshrc.local
