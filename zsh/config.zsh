@@ -82,6 +82,8 @@ export TIME_STYLE=long-iso
 export SSH_ASKPASS=/usr/bin/ssh-askpass
 # set PATH so it includes user's private bin directories
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+# Additional MANPATH
+export MANPATH="$MANPATH:$HOME/.local/man"
 # Java
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 export PATH="$PATH:$JAVA_HOME/bin"

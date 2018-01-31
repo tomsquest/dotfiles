@@ -10,6 +10,8 @@ function install-submodules {
 function make-paths {
     echo "Creating additional PATH directories..."
     mkdir -p "$HOME/.local/bin"
+    echo "Creating additional MANPATH directories..."
+    mkdir -p "$HOME"/.local/man/man{1..8}
 }
 
 function create-link {
@@ -26,16 +28,17 @@ function create-link {
 
 function install-fzf {
     echo "Installing FZF..."
-    local URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
-    curl -sL "$URL" | tar xz fzf -C /tmp \
-        && mv fzf ~/.local/bin/
+    local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
+    curl -sL "$URL" | tar xz fzf -C /tmp  && mv fzf $HOME/.local/bin/
+    curl -sL "https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1" > $HOME/.local/man/man1/fzf.1
 }
 
 function install-ripgrep {
     echo "Installing Ripgrep..."
-    local URL=$(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep browser_download_url | grep x86_64-unknown-linux | cut -d '"' -f 4)
-    curl -sL "$URL" | tar zx --wildcards '*/rg' --strip 1 -C /tmp \
-       && mv rg ~/.local/bin/
+    local -r URL=$(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep browser_download_url | grep x86_64-unknown-linux | cut -d '"' -f 4)
+    curl -sL "$URL" | tar zx --wildcards '*/rg*' --strip 1 -C /tmp \
+       && mv rg $HOME/.local/bin/ \
+       && mv rg.1 $HOME/.local/man/man1
 }
 
 function link-files {
