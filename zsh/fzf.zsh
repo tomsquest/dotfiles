@@ -2,3 +2,5 @@ export FZF_DEFAULT_OPTS='--height=50% --reverse --multi --preview="[[ $(file --m
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow 2> /dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+source $HOME/.local/fzf/completion.zsh
