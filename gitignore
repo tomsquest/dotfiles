@@ -1,19 +1,15 @@
+# Trick for some tools (ripgrep) using these pattern to ignore files
+.git/
+
 *.swp
 *~
-.svn/
 .sass-cache
-/log/*
-/tmp/*
-*.sqlite3
-*.sqlite
-*.class
 target/
+node_modules/
 .classpath
-.settings
 .project
-.metadata
-.springBeans
-.idea
+.settings/
+.idea/
 *.iml
 .DS_Store
 Thumbs.db
