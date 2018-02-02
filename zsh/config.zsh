@@ -56,6 +56,7 @@ setopt complete_aliases
 #
 # ENV
 #
+eval "$(dircolors -b ~/.dircolors)"
 export EDITOR='/usr/bin/vim'
 export VISUAL='/usr/bin/vim'
 export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --tabs=4'

@@ -81,6 +81,11 @@ function install-vim-plugins {
     vim +PluginInstall +qall
 }
 
+function install-dircolors {
+    echo "Installing dircolors..."
+    curl -sl "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark" > ~/.dircolors
+}
+
 function install-all {
     make-paths
     link-files
@@ -88,6 +93,7 @@ function install-all {
     install-ripgrep
     install-submodules
     install-vim-plugins
+    install-dircolors
 }
 
 install-all
