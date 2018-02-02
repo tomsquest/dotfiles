@@ -58,7 +58,7 @@ setopt complete_aliases
 #
 export EDITOR='/usr/bin/vim'
 export VISUAL='/usr/bin/vim'
-export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --quit-if-one-screen --hilite-unread --tabs=4'
+export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --tabs=4'
 eval $(lesspipe)
 # Colors for less binary.
 # Src: https://unix.stackexchange.com/questions/119/colors-in-man-pages/147#147
