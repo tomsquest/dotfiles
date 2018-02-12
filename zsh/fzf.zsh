@@ -2,6 +2,7 @@ export FZF_DEFAULT_OPTS='--height=50% --reverse --multi --preview="[[ $(file --m
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--exit-0 --select-1 --expect=ctrl-o,ctrl-e"
 export FZF_ALT_C_COMMAND="rg --files --hidden --null "$1" | xargs -0 dirname | sort -u"
 
 source $HOME/.local/fzf/completion.zsh
@@ -18,11 +19,13 @@ _fzf_compgen_dir() {
   rg --files --hidden --null "$1" | xargs -0 dirname | sort -u
 }
 
+
 # Open the selected file with keybindings
 # Usage:   o [FUZZY PATTERN]
 # Example: o SomeFile.py
 #    then press ctrl-o to open, ctrl-e to edit in vim, enter to open in Idea)
-o() {
+fzf-open() {
+  #zle accept-line
   local out file key
   IFS=$'\n' out=($(fzf --query="$1" --exit-0 --select-1 --expect=ctrl-o,ctrl-e))
   key=$(head -1 <<< "$out")
@@ -40,4 +43,26 @@ o() {
         ;;
     esac
   fi
+  #zle redisplay
 }
+
+
+fzf-open-file() {
+  #IFS=$'\n' out="$(__fsel)"
+  out="$(__fsel)"
+  local ret=$?
+  echo "Out: $out."
+  echo "Ret: $ret."
+
+  key=$(head -1 <<< "$out")
+  file=$(head -2 <<< "$out" | tail -1)
+  echo "Key: $key."
+  echo "Fil: $file."
+
+  return $ret
+}
+
+zle     -N   fzf-open-file
+bindkey '^O' fzf-open-file
+
+
