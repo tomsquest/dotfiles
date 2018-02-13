@@ -38,8 +38,8 @@ bindkey -s '^ ' 'git status --short^M'
 
 # Accept and execute the current suggestion (using zsh-autosuggestions)
 # Find the key with: showkey -a
-# '^J': Ctrl+Enter
-bindkey '^J' autosuggest-execute
+# '^M': Ctrl+Enter
+bindkey '^M' autosuggest-execute
 
 # Disable the capslock key and map it to escape
 #xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
