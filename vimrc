@@ -167,7 +167,6 @@ nmap <C-Down> ]e
 vmap <C-Up> [egv
 vmap <C-Down> ]egv
 
-
 " Indent/unindent visual mode selection
 vmap <tab> >gv
 vmap <S-tab> <gv
@@ -177,6 +176,9 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+" Smart lines join
+set formatoptions+=j
 
 "
 " Autoexec commands
