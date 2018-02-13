@@ -41,6 +41,7 @@
 	fetchJobs = 4
 [rebase]
 	autostash = true
+	autosquash = true
 [status]
 	showUntrackedFiles = all
 [merge]
