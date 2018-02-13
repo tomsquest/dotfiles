@@ -52,3 +52,5 @@
 	trustExitCode = true
 [difftool "intellij"]
 	cmd = idea diff $(cd $(dirname "$LOCAL") && pwd)/$(basename "$LOCAL") $(cd $(dirname "$REMOTE") && pwd)/$(basename "$REMOTE")
+[fetch]
+	prune = true
