@@ -45,10 +45,12 @@ function install-fzf {
 
 function install-ripgrep {
     echo "Installing Ripgrep..."
+    local -r TMP=$(mktemp -d)
     local -r URL=$(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep browser_download_url | grep x86_64-unknown-linux | cut -d '"' -f 4)
-    curl -sL "$URL" | tar zx -C /tmp --strip 1 --wildcards '*/rg' --wildcards '*/rg.1' \
-       && mv /tmp/rg $HOME/.local/bin/ \
-       && mv /tmp/rg.1 $HOME/.local/man/man1
+    curl -sL "$URL" | tar zx -C "$TMP" --strip 1 --wildcards '*/rg' --wildcards '*/rg.1' \
+       && mv "$TMP/rg" $HOME/.local/bin/ \
+       && mv "$TMP/doc/rg.1" $HOME/.local/man/man1 \
+       && rm -rf "$DEST"
 }
 
 function link-files {
