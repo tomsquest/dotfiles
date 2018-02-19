@@ -1,40 +1,36 @@
+# Original idea: http://aperiodic.net/phil/prompt/
+
 # Enable parameter expansion, command substitution and arithmetic expansion in prompts
 setopt prompt_subst
 
 # Load the colors
-autoload -U colors;
-colors;
+autoload -U colors
+colors
 
-# Create a separation bar after the path
-# see: http://aperiodic.net/phil/prompt/
-function compute-separation-bar {
-  # Compute the lengths of the strings
-  local exitcodesize=${#${(%):-%(?..%? )}}
-  local promptsize=${#${(%):-hh-mm-ss-}}
-  local pwdsize=${#${(%):-$PWD}}
-  local termwidth=$(($COLUMNS - 1))
+function build_prompt {
+    # Exit code needs to be computed first
+    local -r exit_code="${(%):-%(?..%? )}"
+    local -r time="$(date +"%T")"
 
-  # The horizontal bar
-  barsize=""
-  # The path, truncated if too long
-  pathsize=""
+    # Build separator bar
+    local -r separator="―"
+    local -r assembled_prompt="$time $PWD $exit_code"
+    local -r assembled_prompt_length=${#assembled_prompt}
+    local -r bar_length=$((COLUMNS - ($assembled_prompt_length % COLUMNS)))
+    local -r bar="\${(l.(($bar_length))..$separator.)}"
 
-  # Compute the path length and the horizontal bar
-  if [[ "$promptsize + $pwdsize + $exitcodesize" -gt $termwidth ]]; then
-    ((pathsize=$termwidth - $promptsize - $exitcodesize))
-  else
-    barsize="\${(l.(($termwidth - $promptsize - $pwdsize - $exitcodesize))..—.)}"
-  fi
+    # Build prompt
+    local -r colored_exit="%{$fg_bold[red]%}$exit_code%{$reset_color%}"
+    local -r colored_time="%{$fg_bold[green]%}$time%{$reset_color%}"
+    local -r colored_path="%{$fg_bold[blue]%}$PWD%{$reset_color%}"
+    local -r colored_bar="%{$fg_bold[white]%}$bar%{$reset_color%}"
+    local -r start_of_input="%{$fg_bold[white]%}$%{$reset_color%}"
+    PROMPT="$colored_time $colored_path $colored_exit$colored_bar
+$start_of_input "
 }
-add-zsh-hook precmd compute-separation-bar
 
-# Finally, set the prompt
-local the_date="%{$fg_bold[green]%}%D{%H:%M:%S}%{$reset_color%}"
-local last_command_status="%(?..%{$fg_bold[red]%}%? %{$reset_color%})"
-local start_of_input="%{$fg_bold[white]%}$%{$reset_color%}"
-PROMPT='$the_date %{$fg_bold[blue]%}%$pathsize<...<$PWD%<<%{$reset_color%} $last_command_status%{$fg_bold[white]%}${(e)barsize}%{$reset_color%}
-$start_of_input '
+add-zsh-hook precmd build_prompt
 
-# Git prompt, displayed at right (RPROMPT)
+# Git prompt
 # See: https://github.com/olivierverdier/zsh-git-prompt
 RPROMPT='$(git_super_status)'
