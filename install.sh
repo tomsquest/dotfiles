@@ -15,8 +15,8 @@ function make-paths {
 }
 
 function create-link {
-  SRC=$1
-  DEST=$2
+  local -r SRC=$1
+  local -r DEST=$2
 
   mkdir -p "$(dirname "$DEST")"
   if ! [ -L "$DEST" ]; then
@@ -50,7 +50,7 @@ function install-ripgrep {
     curl -sL "$URL" | tar zx -C "$TMP" --strip 1 --wildcards '*/rg' --wildcards '*/rg.1' \
        && mv "$TMP/rg" $HOME/.local/bin/ \
        && mv "$TMP/doc/rg.1" $HOME/.local/man/man1 \
-       && rm -rf "$DEST"
+       && rm -rf "$TMP"
 }
 
 function link-files {
