@@ -24,8 +24,7 @@
 [push]
 	default = simple
 [pull]
-	# pull will do a rebase instead of a merge
-	rebase = true
+	ff = only
 [help]
 	autocorrect = 1
 [tag]
