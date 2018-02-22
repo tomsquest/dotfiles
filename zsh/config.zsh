@@ -98,7 +98,8 @@ export PATH="$PATH:$SCALA_HOME/bin:$SBT_HOME/bin"
 export PLAY_EDITOR="http://localhost:63342/api/file/?file=%s&line=%s"
 # Go
 export GOROOT="$HOME/Apps/go/current"
-export PATH="$PATH:$GOROOT/bin:$PATH:$HOME/go/bin"
+export GOPATH="$HOME/go"
+export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 # Python
 export PATH="$PATH:/home/tom/Apps/miniconda3/bin"
 
