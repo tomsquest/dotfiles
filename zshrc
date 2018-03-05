@@ -5,6 +5,7 @@ if ! zgen saved; then
 
   zgen load zsh-users/zsh-autosuggestions
   zgen load zsh-users/zsh-syntax-highlighting
+  zgen oh-my-zsh
   zgen oh-my-zsh plugins/history-substring-search # MUST be after zsh-syntax-highlighting
   zgen oh-my-zsh plugins/sudo
   zgen oh-my-zsh plugins/httpie
