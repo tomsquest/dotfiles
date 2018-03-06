@@ -21,6 +21,9 @@ if ! zgen saved; then
   zgen load tomsquest/nvm-init.zsh
   zgen load tomsquest/nvm-auto-use.zsh
 
+  # Remove Zsh completion cache, given we may have updated a completion
+  rm ~/.zcompdump || true
+
   zgen save
 fi
 

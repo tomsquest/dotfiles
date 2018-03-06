@@ -133,6 +133,9 @@ autoload zmv
 # See: https://github.com/rupa/z
 source ~/.zsh/rupa-z/z.sh
 
+# Load completions
+# Should be done by Zgen, but it does not seem to run it
+autoload -Uz compinit && compinit
+
 # Create directory and move into
 mcd() { [ -n "$1" ] && mkdir -p "$1" && cd "$1"}
-
