@@ -17,6 +17,7 @@ if ! zgen saved; then
   zgen load johnhamelink/env-zsh
   zgen load theunraveler/zsh-fancy_ctrl_z
   zgen load BurntSushi/ripgrep complete
+  zgen load docker/compose contrib/completion/zsh
   zgen load tomsquest/nvm-init.zsh
   zgen load tomsquest/nvm-auto-use.zsh
 
