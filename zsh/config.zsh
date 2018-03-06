@@ -128,11 +128,6 @@ bindkey '\C-x\C-e' edit-command-line
 # Example: zmv '(**/)file.xml' '$1anotherName.xml'
 autoload zmv
 
-# Load rupa Z: quickly jump to recent directory with the z command
-# Example: z foo
-# See: https://github.com/rupa/z
-source ~/.zsh/rupa-z/z.sh
-
 # Load completions
 # Should be done by Zgen, but it does not seem to run it
 autoload -Uz compinit && compinit
