@@ -6,6 +6,7 @@ export FZF_ALT_C_COMMAND="rg --files --hidden --null "$1" 2>/dev/null | xargs -0
 
 # Disable preview, useless for History completion
 export FZF_CTRL_R_OPTS="--no-preview"
+export FZF_ALT_C_OPTS="--no-preview"
 
 source $HOME/.local/fzf/completion.zsh
 source $HOME/.local/fzf/key-bindings.zsh
