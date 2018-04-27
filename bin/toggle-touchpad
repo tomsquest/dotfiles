@@ -1,5 +1,14 @@
 #!/bin/bash
 
-current_status=$(synclient | grep -i touchpadoff | cut -d "=" -f 2 | tr -d "[:blank:]")
-toggled_status=$((1-$current_status))
-synclient touchpadoff="$toggled_status"
+set -euo pipefail
+
+readonly CURRENT_STATUS=$(synclient | grep -i touchpadoff | cut -d "=" -f 2 | tr -d "[:blank:]")
+readonly TOGGLE_STATUS=$((1-$CURRENT_STATUS))
+
+synclient touchpadoff="$TOGGLE_STATUS"
+
+if [[ $TOGGLE_STATUS = 0 ]]; then
+  notify-send -i notification-input-touchpad-symbolic "Touchpad enabled" "The Touchpad has been enabled"
+else
+  notify-send -i notification-touchpad-disabled-symbolic "Touchpad disabled" "The Touchpad has been disabled"
+fi
