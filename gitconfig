@@ -16,6 +16,7 @@
 	indentHeuristic = true
 	compactionHeuristic = true
 	tool = intellij
+	colorMoved = default
 [core]
 	excludesfile = ~/.gitignore
 	autocrlf = input
