@@ -281,12 +281,20 @@
     </keybind>
     <keybind key="Print">
       <action name="Execute">
-        <command>lxsession-default screenshot</command>
+          <!--
+          -s: capture selection
+
+          Configure Shutter with:
+           - Preferences/Main, select 'Do not save file automatically'
+           - Preferences/Actions, select 'Open with: Built-in editor'
+          -->
+          <command>shutter -s</command>
       </action>
     </keybind>
     <keybind key="A-Print">
       <action name="Execute">
-        <command>lxsession-default screenshot window</command>
+          <!-- -r: redo screenshot -->
+          <command>shutter -r</command>
       </action>
     </keybind>
     <keybind key="XF86AudioRaiseVolume">
