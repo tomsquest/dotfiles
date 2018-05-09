@@ -835,7 +835,7 @@
     <application title="Mozilla Thunderbird">
       <decor>false</decor>
     </application>
-    <application role="browser">
+    <application name="Navigator">
       <decor>false</decor>
     </application>
   </applications>
