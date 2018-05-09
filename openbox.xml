@@ -355,7 +355,7 @@
     </keybind>
     <keybind key="W-A-F1">
       <action name="Execute">
-          <command>/home/tom/bin/toggle-hdmi-video-output</command>
+          <command>/home/tom/bin/toggle-external-video-output</command>
       </action>
     </keybind>
       <keybind key="C-A-S-F1">
