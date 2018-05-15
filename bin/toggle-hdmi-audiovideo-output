@@ -7,10 +7,10 @@ HDMI_AUDIO_PROFILE="output:hdmi-stereo"
 HDMI_VIDEO_OUTPUT="HDMI-1"
 
 function toggle-hdmi-video {
-  if xrandr | grep -q "$HDMI_VIDEO_OUTPUT disconnected"; then
-    xrandr --output $HDMI_VIDEO_OUTPUT --right-of LVDS-1 --auto
-  else
+  if xrandr | grep -q "$HDMI_VIDEO_OUTPUT connected 1280x720"; then
     xrandr --output $HDMI_VIDEO_OUTPUT --off
+  else
+    xrandr --output $HDMI_VIDEO_OUTPUT --right-of LVDS-1 --auto
   fi
 }
 
