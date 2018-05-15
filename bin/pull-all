@@ -1,22 +1,32 @@
 #!/bin/bash
 
-BASE_DIR="${1-$(pwd)}"
+set -euo pipefail
 
-set -eu -o pipefail
+BASE_DIR="${1-$(pwd)}"
+BRANCH="${2-master}"
+
 # Required to handle a potential empty $BASE_DIR
 shopt -s nullglob
 
 function pull {
   CURRENT_DIR=$1
+  TARGET_BRANCH=$2
   if [ -d .git ]; then
     if git config remote.origin.url > /dev/null; then
-      BRANCH="$(git symbolic-ref -q --short HEAD || echo 'detached')"
-      if [ "$BRANCH" == "detached" ]; then
-        echo "$(tput bold)$(tput setaf 3)Skipping $CURRENT_DIR in detached HEAD$(tput sgr0)"
+      CURRENT_BRANCH="$(git symbolic-ref -q --short HEAD || echo 'detached')"
+
+      if [ "$CURRENT_BRANCH" == "detached" ]; then
+        echo "$(tput bold)$(tput setaf 3)Skipping $CURRENT_DIR: detached HEAD$(tput sgr0)"
+      elif ! git branch | grep -q "$TARGET_BRANCH"; then
+        echo "$(tput bold)$(tput setaf 3)Skipping $CURRENT_DIR: branch $TARGET_BRANCH missing$(tput sgr0)"
       else
-        echo "$(tput bold)Pulling $CURRENT_DIR on branch $(tput setaf 4)$BRANCH$(tput sgr0)"
+        if [ "$CURRENT_BRANCH" != "$TARGET_BRANCH" ]; then
+          git checkout "$TARGET_BRANCH"
+        fi
+
+        echo "$(tput bold)Pulling $CURRENT_DIR on branch $(tput setaf 4)$TARGET_BRANCH$(tput sgr0)"
         set +e
-        git pull --rebase=preserve
+        git pull
         set -e
       fi
     fi
@@ -28,7 +38,7 @@ function pull {
   for d in */ ; do
   (
     cd "$d"
-    pull "$d"
+    pull "${d%/}" "$BRANCH"
   )
   done
 )
