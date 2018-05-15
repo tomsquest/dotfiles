@@ -10,5 +10,5 @@ if xrandr | grep -q "$OUTPUT_EXTERNAL connected (normal"; then
   notify-send --icon monitor "External output on" "Output '$OUTPUT_EXTERNAL' enabled"
 else
   xrandr --output "$OUTPUT_EXTERNAL" --off
-  notify-send --icon error "External output off" "Output '$OUTPUT_EXTERNAL' disabled"
+  notify-send --icon monitor "External output off" "Output '$OUTPUT_EXTERNAL' disabled"
 fi
