@@ -360,7 +360,7 @@
     </keybind>
       <keybind key="C-A-S-F1">
       <action name="Execute">
-          <command>/home/tom/bin/toggle-dual-keyboard-layout</command>
+          <command>/home/tom/bin/enable-typematrix</command>
       </action>
     </keybind>
   </keyboard>
