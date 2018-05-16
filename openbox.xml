@@ -332,6 +332,11 @@
         <command>lxsession-default quit</command>
       </action>
     </keybind>
+    <keybind key="XF86TouchpadToggle">
+      <action name="Execute">
+        <command>/home/tom/bin/toggle-touchpad</command>
+      </action>
+    </keybind>
     <!-- Focus special apps -->
     <keybind key="W-F1">
       <action name="Execute">
