@@ -1,4 +1,0 @@
-[submodule "bash/bash-sensible"]
-	path = bash/bash-sensible
-	url = https://github.com/mrzool/bash-sensible
-	shallow = true

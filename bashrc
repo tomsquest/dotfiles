@@ -2,8 +2,8 @@
 [ -z "$PS1" ] && return
 
 # Use saner defaults
-if [ -f ~/.bash/bash-sensible/sensible.bash ]; then
-   source ~/.bash/bash-sensible/sensible.bash
+if [ -f ~/.bash-sensible/sensible.bash ]; then
+   source ~/.bash-sensible/sensible.bash
 fi
 
 # Prompt

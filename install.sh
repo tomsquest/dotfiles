@@ -40,6 +40,13 @@ function install-zgen {
     git clone https://github.com/tarjoilija/zgen.git "$installDir"
 }
 
+function install-bash-sensible {
+    echo "Installing Bash-Sensible..."
+    local -r installDir="$HOME/.bash-sensible"
+    rm -rf "$installDir" || true
+    git clone https://github.com/mrzool/bash-sensible "$installDir"
+}
+
 function install-fzf {
     echo "Installing FZF..."
     local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
@@ -70,7 +77,6 @@ function install-ripgrep {
 function link-files {
     echo "Linking files..."
     create-link "$PWD/bin"                    "$HOME/bin"
-    create-link "$PWD/bash"                   "$HOME/.bash"
     create-link "$PWD/zsh"                    "$HOME/.zsh"
     create-link "$PWD/vim"                    "$HOME/.vim"
     create-link "$PWD/bashrc"                 "$HOME/.bashrc"
@@ -113,6 +119,7 @@ function install-all {
     link-files
     install-rupa-z
     install-zgen
+    install-bash-sensible
     install-fzf
     install-ripgrep
     install-submodules
