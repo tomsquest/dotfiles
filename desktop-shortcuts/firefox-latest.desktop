@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Firefox Latest
-Comment=Firefox Latest Edition
-Icon=/home/tom/Apps/firefox-latest/browser/icons/mozicon128.png
-Exec="/home/tom/Apps/firefox-latest/firefox" %f
-Categories=GNOME;GTK;Network;WebBrowser;
-Terminal=false
