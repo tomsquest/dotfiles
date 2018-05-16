@@ -2,7 +2,7 @@ zmodload -i zsh/complist
 
 # Enable completion caching, use rehash to clear
 zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' cache-path ~/.zshcache
 
 # The name of the tag for the matches will be used as the name of the group
 zstyle ':completion:*' group-name ''
