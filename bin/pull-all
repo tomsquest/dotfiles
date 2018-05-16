@@ -2,29 +2,34 @@
 
 set -euo pipefail
 
-BASE_DIR="${1-$(pwd)}"
-BRANCH="${2-master}"
+readonly BASE_DIR="${1-$(pwd)}"
+readonly TARGET_BRANCH="${2-}"
 
 # Required to handle a potential empty $BASE_DIR
 shopt -s nullglob
 
 function pull {
-  CURRENT_DIR=$1
-  TARGET_BRANCH=$2
+  local -r CURRENT_DIR=$1
+  local -r CHECKOUT_BRANCH=$2
+
   if [ -d .git ]; then
     if git config remote.origin.url > /dev/null; then
-      CURRENT_BRANCH="$(git symbolic-ref -q --short HEAD || echo 'detached')"
+      local -r CURRENT_BRANCH="$(git symbolic-ref -q --short HEAD || echo 'detached')"
+
+      echo "$(tput bold)Pulling $CURRENT_DIR$(tput sgr0)"
 
       if [ "$CURRENT_BRANCH" == "detached" ]; then
-        echo "$(tput bold)$(tput setaf 3)Skipping $CURRENT_DIR: detached HEAD$(tput sgr0)"
-      elif ! git branch | grep -q "$TARGET_BRANCH"; then
-        echo "$(tput bold)$(tput setaf 3)Skipping $CURRENT_DIR: branch $TARGET_BRANCH missing$(tput sgr0)"
+        echo "  $(tput bold)$(tput setaf 3)> Skipped: detached HEAD$(tput sgr0)"
+      elif ! git branch | grep -q "$CHECKOUT_BRANCH"; then
+        echo "  $(tput bold)$(tput setaf 3)> Skipped: branch $CHECKOUT_BRANCH missing$(tput sgr0)"
       else
-        if [ "$CURRENT_BRANCH" != "$TARGET_BRANCH" ]; then
-          git checkout "$TARGET_BRANCH"
+        if [ ! -z "$CHECKOUT_BRANCH" -a "$CURRENT_BRANCH" != "$CHECKOUT_BRANCH" ]; then
+          git checkout "$CHECKOUT_BRANCH"
+          echo "  $(tput bold)> Switched to branch $CHECKOUT_BRANCH$(tput sgr0)"
         fi
 
-        echo "$(tput bold)Pulling $CURRENT_DIR on branch $(tput setaf 4)$TARGET_BRANCH$(tput sgr0)"
+        local -r BRANCH="${CHECKOUT_BRANCH:-$CURRENT_BRANCH}"
+        echo "  $(tput bold)$(tput setaf 2)> Pulling branch $BRANCH$(tput sgr0)"
         set +e
         git pull
         set -e
@@ -38,7 +43,7 @@ function pull {
   for d in */ ; do
   (
     cd "$d"
-    pull "${d%/}" "$BRANCH"
+    pull "${d%/}" "$TARGET_BRANCH"
   )
   done
 )
