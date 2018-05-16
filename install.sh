@@ -26,6 +26,13 @@ function create-link {
   fi
 }
 
+function install-rupa-z {
+    echo "Installing Rupa-Z..."
+    local -r installDir="$HOME/.rupa-z"
+    rm -rf "$installDir" || true
+    git clone https://github.com/rupa/z.git "$installDir"
+}
+
 function install-fzf {
     echo "Installing FZF..."
     local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
@@ -81,9 +88,9 @@ function link-files {
 
 function install-vim-plugins {
     echo "Installing Vundle..."
-    local -r vundleInstallDir="~/.vundle"
-    rm -rf "$vundleInstallDir" || true
-    git clone https://github.com/VundleVim/Vundle.vim.git "$vundleInstallDir"
+    local -r installDir="$HOME/.vundle"
+    rm -rf "$installDir" || true
+    git clone https://github.com/VundleVim/Vundle.vim.git "$installDir"
 
     echo "Installing Vim plugins..."
     vim +PluginInstall +qall
@@ -97,6 +104,7 @@ function install-dircolors {
 function install-all {
     make-paths
     link-files
+    install-rupa-z
     install-fzf
     install-ripgrep
     install-submodules

@@ -36,7 +36,7 @@ source ~/.zsh/fzf.zsh
 # Load rupa Z: quickly jump to recent directory with the z command
 # Example: z foo
 # See: https://github.com/rupa/z
-source ~/.zsh/rupa-z/z.sh
+source ~/.rupa-z/z.sh
 
 if [ -f ~/.zshrc.local ]; then
   source ~/.zshrc.local
