@@ -12,7 +12,7 @@ filetype indent on
 "
 " Vundle configuration
 "
-source ~/.vim/bundles.vim
+source ~/.vim/vundle-config.vim
 
 " Display extra whitespace
 set list listchars=tab:»·,trail:·

@@ -80,6 +80,11 @@ function link-files {
 }
 
 function install-vim-plugins {
+    echo "Installing Vundle..."
+    local -r vundleInstallDir="~/.vundle"
+    rm -rf "$vundleInstallDir" || true
+    git clone https://github.com/VundleVim/Vundle.vim.git "$vundleInstallDir"
+
     echo "Installing Vim plugins..."
     vim +PluginInstall +qall
 }

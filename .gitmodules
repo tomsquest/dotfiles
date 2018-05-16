@@ -1,7 +1,3 @@
-[submodule "vim/bundle/Vundle.vim"]
-	path = vim/bundle/Vundle.vim
-	url = https://github.com/gmarik/Vundle.vim.git
-	shallow = true
 [submodule "zsh/rupa-z"]
 	path = zsh/rupa-z
 	url = https://github.com/rupa/z.git
