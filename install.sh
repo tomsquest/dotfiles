@@ -33,6 +33,13 @@ function install-rupa-z {
     git clone https://github.com/rupa/z.git "$installDir"
 }
 
+function install-zgen {
+    echo "Installing Zgen..."
+    local -r installDir="$HOME/.zgen"
+    rm -rf "$installDir" || true
+    git clone https://github.com/tarjoilija/zgen.git "$installDir"
+}
+
 function install-fzf {
     echo "Installing FZF..."
     local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
@@ -105,6 +112,7 @@ function install-all {
     make-paths
     link-files
     install-rupa-z
+    install-zgen
     install-fzf
     install-ripgrep
     install-submodules

@@ -1,5 +1,5 @@
 # zgen
-source "${HOME}/.zsh/zgen/zgen.zsh"
+source ~/.zgen/zgen.zsh
 if ! zgen saved; then
   echo "Creating a zgen save"
 
