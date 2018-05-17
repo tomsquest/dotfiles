@@ -358,7 +358,8 @@
         <command>wmctrl -a 'firefox developer'</command>
       </action>
     </keybind>
-    <keybind key="W-A-F1">
+    <!-- W-P is bound to the laptop button to switch output mode -->
+    <keybind key="W-P">
       <action name="Execute">
           <command>/home/tom/bin/toggle-external-video-output</command>
       </action>
