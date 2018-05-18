@@ -43,11 +43,12 @@ failure() {
 # Get command for build from Git config
 BUILD_COMMAND=$(git config --get private-build.command)
 if [ -z "$BUILD_COMMAND" ]; then
-    failure "Build command not configured! Example: git config private-build.command \"mvn clean install\""
+    failure "Build command not configured! Fix: git config private-build.command \"mvn clean install\""
 fi
 
 if ! git rev-parse --abbrev-ref --symbolic-full-name "@{u}" 2>&1>/dev/null; then
-    failure "No remote configured!"
+    CURRENT_BRANCH="$(git symbolic-ref -q --short HEAD)"
+    failure "No remote configured! Fix: git push --set-upstream origin $CURRENT_BRANCH"
 fi
 
 # Commit "work in progress"
