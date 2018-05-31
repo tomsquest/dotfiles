@@ -74,6 +74,14 @@ function install-ripgrep {
        && rm -rf "$TMP"
 }
 
+function install-docker-compose {
+    echo "Installing Docker-Compose..."
+    local -r URL=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url | grep Linux-x86_64\" | cut -d '"' -f 4)
+    local -r DEST="$HOME/.local/bin/docker-compose"
+    curl -sL "$URL" > "$DEST" \
+      && chmod +x "$DEST"
+}
+
 function link-files {
     echo "Linking files..."
     create-link "$PWD/bin"                    "$HOME/bin"
@@ -122,6 +130,7 @@ function install-all {
     install-bash-sensible
     install-fzf
     install-ripgrep
+    install-docker-compose
     install-submodules
     install-vim-plugins
     install-dircolors
