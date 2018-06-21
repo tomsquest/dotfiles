@@ -88,7 +88,6 @@ function link-files {
     create-link "$PWD/zsh"                    "$HOME/.zsh"
     create-link "$PWD/vim"                    "$HOME/.vim"
     create-link "$PWD/bashrc"                 "$HOME/.bashrc"
-    create-link "$PWD/ackrc"                  "$HOME/.ackrc"
     create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
     create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"

@@ -1,8 +1,0 @@
---type-add=html:ext:html.erb,haml,slim
---type-add=css:ext:sass,scss,less
-
---type-set=slim:ext:slim
---type-set=haml:ext:haml
-
---smart-case
---sort-files
