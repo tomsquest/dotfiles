@@ -93,7 +93,6 @@ function link-files {
     create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
     create-link "$PWD/rvmrc"                  "$HOME/.rvmrc"
-    create-link "$PWD/tmux.conf"              "$HOME/.tmux.conf"
     create-link "$PWD/vimrc"                  "$HOME/.vimrc"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
