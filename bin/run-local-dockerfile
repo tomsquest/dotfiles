@@ -1,12 +1,12 @@
-  #!/usr/bin/env bash
+#!/usr/bin/env bash
 
-  if [ ! -f Dockerfile ]; then
-      echo "Dockerfile missing!"
-      exit 1
-  fi
+if [ ! -f Dockerfile ]; then
+    echo "Dockerfile missing!"
+    exit 1
+fi
 
-  echo "Building..."
-  IMAGE_ID=$(docker build -q .)
+echo "Building..."
+IMAGE_ID=$(docker build -q .)
 
-  echo "Running..."
-  docker run -it --rm "$IMAGE_ID"
+echo "Running..."
+docker run -it --rm "$IMAGE_ID"
