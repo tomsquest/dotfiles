@@ -5,7 +5,7 @@
 # The retry count is given by ATTEMPTS (default 5). Use ATTEMPT=0 for unlimited retries
 # The time between retries is given by TIMEOUT in seconds (default 0 second)
 #
-# Example: ./rerun curl 'http://thisdomainshouldnotberesolvable12345.com'
+# Example: ./rerunfailure curl 'http://something-not-accessible.com'
 #
 # Adapted from:
 # http://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs
@@ -39,7 +39,7 @@ while [[ $max_attempts -eq 0 || $attempt -lt $max_attempts ]]; do
 done
 
 if [[ $exitCode -ne 0 ]]; then
-  echo "${color_failure}Command failed $attempt times and never succeded! ($@)${color_reset}" 1>&2
+  echo "${color_failure}Command failed $attempt times and never succeeded! ($@)${color_reset}" 1>&2
 else
   echo "${color_success}Command failed $attempt times before succeeding. ($@)${color_reset}" 1>&2
 fi
