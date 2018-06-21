@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # https://github.com/mikelward/scripts/blob/master/he
 
 # he - print brief help about a single option or command
@@ -45,31 +44,27 @@ esac
 man ${section:+-s $section} "$manpage" | perl -n -e '
 BEGIN {
     $option = "'$option'";
-    $inside = 0;
+    $inside_option = 0;
 }
-if (!$inside) {
+if (!$inside_option) {
     if (/^(\s*)\Q$option\E\b/p) {
         # start of this option
-        $start = $1;
-        $inside = 1;
-        $blank = 0;
+        $option_indentation = $1;
+        $inside_option = 1;
+        $saw_blank_line = 0;
         print;
     }
-}
-else {
+} else {
     if (/^$/) {
-        $blank = 1;
+        $saw_blank_line = 1;
         print;
-    }
-    elsif (/^\Q$start\E\S/ and $blank) {
-        # start of next option;
-        $inside = 0;
-    }
-    elsif (/^\S/) {
-        # start of next section
-        $inside = 0;
-    }
-    else {
+    } elsif (/^\Q$option_indentation\E\S/ and $saw_blank_line) {
+        # item at same indentation => start of next option
+        $inside_option = 0;
+    } elsif (/^\S/) {
+        # new heading => start of next section
+        $inside_option = 0;
+    } else {
         print;
     }
 }
