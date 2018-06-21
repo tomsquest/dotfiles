@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# Retries a command a configurable number of times until a success or a failure
+# Adapted from:
+# http://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs
+
+# Colors
+color_success=$(tput bold)$(tput setaf 2) # Green
+color_failure=$(tput bold)$(tput setaf 1) # Red
+color_notif=$(tput bold)$(tput setaf 4)   # Blue
+color_reset=$(tput sgr0)
+
+# Config
+max_attempts=${ATTEMPTS-5}
+pause=${PAUSE-0}
+attempt=0
+exitCode=0
+
+function usage {
+  local -r script=$(basename "$0")
+  cat << EOF
+Usage: $script success|failure command with some arguments
+Example:
+$ $script success curl 'http://example.com'
+$ $script failure curl 'http://example.com'
+$ ATTEMPTS=2 PAUSE=5 $script success curl 'http://example.com'
+
+Retries a command a configurable number of times until a success or a failure.
+
+ATTEMPTS (default: 5) is the number of retry. ATTEMPT=0 means unlimited retries.
+PAUSE (default: 0) is the time in seconds between retries.
+EOF
+}
+
+function success_msg {
+  local -r msg="$1"
+  echo "${color_success}$msg${color_reset}"
+}
+
+function error_msg {
+  local -r msg="$1"
+  echo "${color_failure}$msg${color_reset}"
+}
+
+function info_msg {
+  local -r msg="$1"
+  echo "${color_notif}$msg${color_reset}"
+}
+
+if [ -z "$1" ]
+then
+  usage
+  exit 85
+fi
+
+# Type of result awaited, success or failure
+type=$1
+shift
+
+if [[ $type != "success" && $type != "failure" ]]; then
+  error_msg "Invalid type '$type': must be 'success' or 'failure'"
+  usage
+  exit 85
+fi
+
+if [ -z "$1" ]
+then
+  error_msg "Missing command to run"
+  usage
+  exit 85
+fi
+
+function rerun {
+  while [[ $max_attempts -eq 0 || $attempt -lt $max_attempts ]]; do
+    set +e
+    "$@"
+    exitCode=$?
+    set -e
+
+    if [[ "$type" = "success" && $exitCode -ne 0 ]]; then
+      break
+    elif [[ "$type" = "failure" && $exitCode -eq 0 ]]; then
+      break
+    fi
+
+    info_msg "Attempt $attempt. Retrying in $pause second(s)..."
+    sleep "$pause"
+    attempt=$(( attempt + 1 ))
+    pause=$(( pause ))
+  done
+
+  if [[ "$type" = "success" ]]; then
+    if [[ $exitCode -eq 0 ]]; then
+      error_msg "Command succeeded $attempt times and never failed!"
+    else
+      success_msg "Command succeeded $attempt times before failing."
+    fi
+  else
+    if [[ $exitCode -ne 0 ]]; then
+      error_msg "Command failed $attempt times and never succeeded!"
+    else
+      success_msg "Command failed $attempt times before succeeding."
+    fi
+  fi
+}
+
+rerun "$@"
