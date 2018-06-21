@@ -92,7 +92,6 @@ function link-files {
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
     create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
     create-link "$PWD/irbrc"                  "$HOME/.irbrc"
-    create-link "$PWD/plsqlrc"                "$HOME/.plsqlrc"
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
     create-link "$PWD/rvmrc"                  "$HOME/.rvmrc"
     create-link "$PWD/tmux.conf"              "$HOME/.tmux.conf"
