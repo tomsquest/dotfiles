@@ -3,8 +3,8 @@
 set -eu -o pipefail
 
 DEFAULT_AUDIO_PROFILE="output:analog-stereo"
-HDMI_AUDIO_PROFILE="output:hdmi-stereo"
-HDMI_VIDEO_OUTPUT="HDMI-1"
+HDMI_AUDIO_PROFILE="output:hdmi-stereo-extra1"
+HDMI_VIDEO_OUTPUT="HDMI-2"
 
 function toggle-hdmi-video {
   if xrandr | grep -q "$HDMI_VIDEO_OUTPUT connected 1280x720"; then
