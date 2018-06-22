@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Source: https://github.com/Sylvain303/move-to-next-monitor/blob/center-screen-offset/move-to-next-monitor
+
 #
 # Move the current window to the next monitor.
 #
@@ -230,4 +233,3 @@ main() {
 if [[ $sourced -eq 0  ]] ; then
   main "$@"
 fi
-
