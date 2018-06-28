@@ -37,7 +37,7 @@ bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
 
 # Ctrl+space: print Git status
-bindkey -s '^ ' 'git status --short^M'
+bindkey -s '^ ' ' git status --short^M'
 
 # Alt+~: run Git WTF script
 function _git_wtf {
