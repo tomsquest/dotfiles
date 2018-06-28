@@ -1,4 +1,7 @@
-# Standard and additional keybindings:
+# Standard and additional keybindings
+#
+# Find the key with: showkey -a
+#
 #   ctrl + u     : clear line
 #   ctrl + w     : delete word backward
 #   alt  + d     : delete word
@@ -36,8 +39,16 @@ bindkey '^[[1;5C' forward-word
 # Ctrl+space: print Git status
 bindkey -s '^ ' 'git status --short^M'
 
+# Alt+~: run Git WTF script
+function _git_wtf {
+  echo
+  git-wtf
+  zle reset-prompt
+}
+zle -N _git_wtf
+bindkey '^[`' _git_wtf
+
 # Execute the current suggestion (using zsh-autosuggestions)
-# Find the key with: showkey -a
 # Alt+Enter = '^[^M' on recent VTE and '^[^J' for older (Lxterminal)
 bindkey '^[^M' autosuggest-execute
 bindkey '^[^J' autosuggest-execute
