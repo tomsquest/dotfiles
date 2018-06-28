@@ -118,6 +118,14 @@ function install-dircolors {
     curl -sl "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark" > ~/.dircolors
 }
 
+function copy-sysctl-conf {
+    echo "Copying sysctl config files..."
+    for file in $PWD/sysctl.d/*
+    do
+      sudo cp "$file" "/etc/sysctl.d/$(basename "$file")"
+    done
+}
+
 function install-all {
     make-paths
     link-files
@@ -130,6 +138,7 @@ function install-all {
     install-submodules
     install-vim-plugins
     install-dircolors
+    copy-sysctl-conf
 }
 
 install-all
