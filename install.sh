@@ -21,6 +21,27 @@ function create-link {
   fi
 }
 
+function link-files {
+    echo "Linking files..."
+    create-link "$PWD/bin"                    "$HOME/bin"
+    create-link "$PWD/zsh"                    "$HOME/.zsh"
+    create-link "$PWD/vim"                    "$HOME/.vim"
+    create-link "$PWD/bashrc"                 "$HOME/.bashrc"
+    create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
+    create-link "$PWD/gitignore"              "$HOME/.gitignore"
+    create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
+    create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
+    create-link "$PWD/rvmrc"                  "$HOME/.rvmrc"
+    create-link "$PWD/vimrc"                  "$HOME/.vimrc"
+    create-link "$PWD/zshrc"                  "$HOME/.zshrc"
+    create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
+    create-link "$PWD/openbox.xml"            "$HOME/.config/openbox/lubuntu-rc.xml"
+    for file in $PWD/desktop-shortcuts/*
+    do
+      create-link "$file" "$HOME/.local/share/applications/$(basename "$file")"
+    done
+}
+
 function install-rupa-z {
     echo "Installing Rupa-Z..."
     local -r installDir="$HOME/.rupa-z"
@@ -75,27 +96,6 @@ function install-docker-compose {
     local -r DEST="$HOME/.local/bin/docker-compose"
     curl -sL "$URL" > "$DEST" \
       && chmod +x "$DEST"
-}
-
-function link-files {
-    echo "Linking files..."
-    create-link "$PWD/bin"                    "$HOME/bin"
-    create-link "$PWD/zsh"                    "$HOME/.zsh"
-    create-link "$PWD/vim"                    "$HOME/.vim"
-    create-link "$PWD/bashrc"                 "$HOME/.bashrc"
-    create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
-    create-link "$PWD/gitignore"              "$HOME/.gitignore"
-    create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
-    create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
-    create-link "$PWD/rvmrc"                  "$HOME/.rvmrc"
-    create-link "$PWD/vimrc"                  "$HOME/.vimrc"
-    create-link "$PWD/zshrc"                  "$HOME/.zshrc"
-    create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
-    create-link "$PWD/openbox.xml"            "$HOME/.config/openbox/lubuntu-rc.xml"
-    for file in $PWD/desktop-shortcuts/*
-    do
-      create-link "$file" "$HOME/.local/share/applications/$(basename "$file")"
-    done
 }
 
 function install-vim-plugins {
