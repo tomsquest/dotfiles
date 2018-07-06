@@ -2,11 +2,6 @@
 
 set -euo pipefail
 
-function install-submodules {
-    echo "Fetching submodules..."
-    git submodule update --remote --init
-}
-
 function make-paths {
     echo "Creating additional PATH directories..."
     mkdir -p "$HOME/.local/bin"
@@ -135,7 +130,6 @@ function install-all {
     install-fzf
     install-ripgrep
     install-docker-compose
-    install-submodules
     install-vim-plugins
     install-dircolors
     copy-sysctl-conf
