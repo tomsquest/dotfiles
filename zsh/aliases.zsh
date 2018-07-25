@@ -3,7 +3,7 @@ alias du='du -h'
 alias df='df -h'
 alias f='find -iname'
 alias v='vim'
-alias meteo='curl http://wttr.in/Arras'
+alias meteo='curl http://wttr.in/Lille'
 alias up="sudo apt update && sudo apt -V --yes upgrade"
 
 # Multitail with basic java colorization
