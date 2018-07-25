@@ -36,7 +36,7 @@
 	enabled = true
 [commit]
 	verbose = true
-  #gpgsign = true
+        gpgsign = true
 [submodule]
 	fetchJobs = 4
 [rebase]
