@@ -27,7 +27,7 @@
 [pull]
 	ff = only
 [help]
-	autocorrect = 1
+	autocorrect = -1
 [tag]
 	sort = version:refname
 [credential]
