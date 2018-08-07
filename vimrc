@@ -237,3 +237,8 @@ let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$\|\target$\|\.class$\|\.settin
 " Increase windows height
 let g:ctrlp_max_height = 30
 
+"
+" Airline
+"
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='sol'
