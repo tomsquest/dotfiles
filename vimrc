@@ -92,9 +92,10 @@ set sidescrolloff=5
 set sidescroll=1
 
 " Apparence
-set background=dark
 set t_Co=256
-colorscheme Tomorrow-Night
+set termguicolors
+let ayucolor="light"
+colorscheme ayu
 
 " Highlight current line
 set cursorline
