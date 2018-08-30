@@ -86,7 +86,7 @@ export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 # Additional MANPATH
 export MANPATH="$MANPATH:$HOME/.local/man"
 # Java
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 export PATH="$PATH:$JAVA_HOME/bin"
 # Maven
 export M2_HOME="$HOME/Apps/maven/current"
