@@ -54,8 +54,7 @@ bindkey '^[^M' autosuggest-execute
 bindkey '^[^J' autosuggest-execute
 
 # Disable the capslock key and map it to escape
-#xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
-setxkbmap -option caps:escape
+setxkbmap -option caps:backspace
 
 # Remap the Mail key to Insert
 xmodmap -e 'keycode 163=Insert'
