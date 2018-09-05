@@ -19,6 +19,7 @@ if ! zgen saved; then
   zgen load docker/compose contrib/completion/zsh
   zgen load tomsquest/nvm-init.zsh
   zgen load tomsquest/nvm-auto-use.zsh
+  zgen load tomsquest/q.plugin.zsh
 
   # Remove Zsh completion cache, given we may have updated a completion
   rm ~/.zcompdump || true
