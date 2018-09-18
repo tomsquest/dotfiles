@@ -7,8 +7,10 @@
 	ci = commit
 	st = status
 	br = branch
-	l  = log --graph --abbrev-commit --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	l	 = log --graph --abbrev-commit --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 	diffw = diff --word-diff=color
+	fixup = !sh -c 'REV=$(git rev-parse $1) && git commit --fixup $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
+	squash = !sh -c 'REV=$(git rev-parse $1) && git commit --squash $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
 [color]
 	ui = auto
 [diff]
@@ -36,7 +38,7 @@
 	enabled = true
 [commit]
 	verbose = true
-        gpgsign = true
+	gpgsign = true
 [submodule]
 	fetchJobs = 4
 [rebase]
