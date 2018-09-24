@@ -50,7 +50,12 @@ def process_args(argv):
                 else:
                     args.append(os.path.abspath(arg))
             else:
-                args.append(os.path.abspath(arg))
+                p = os.path.abspath(arg)
+                if not os.path.exists(p):
+                    create_file = raw_input("Create file '{}'? (Y/n) ".format(p))
+                    if create_file is not 'n':
+                        open(p, 'a').close()
+                args.append(p)
 
     return args
 
