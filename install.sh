@@ -21,6 +21,20 @@ function create-link {
   fi
 }
 
+function install-from-git-repo {
+    local -r name="$1"
+    local -r repo="$2"
+    local -r dest="$3"
+
+    echo "Installing $name..."
+    if [ -d "$dest" ]; then
+      (cd "$dest" && git pull)
+    else
+      rm -rf "$dest"
+      git clone "$repo" "$dest"
+    fi
+}
+
 function link-files {
     echo "Linking files..."
     create-link "$PWD/bin"                    "$HOME/bin"
@@ -44,27 +58,6 @@ function link-files {
     done
 }
 
-function install-rupa-z {
-    echo "Installing Rupa-Z..."
-    local -r installDir="$HOME/.rupa-z"
-    rm -rf "$installDir" || true
-    git clone https://github.com/rupa/z.git "$installDir"
-}
-
-function install-zgen {
-    echo "Installing Zgen..."
-    local -r installDir="$HOME/.zgen"
-    rm -rf "$installDir" || true
-    git clone https://github.com/tarjoilija/zgen.git "$installDir"
-}
-
-function install-bash-sensible {
-    echo "Installing Bash-Sensible..."
-    local -r installDir="$HOME/.bash-sensible"
-    rm -rf "$installDir" || true
-    git clone https://github.com/mrzool/bash-sensible "$installDir"
-}
-
 function install-fzf {
     echo "Installing FZF..."
     local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
@@ -84,12 +77,12 @@ function install-fzf {
 
 function install-ripgrep {
     echo "Installing Ripgrep..."
-    local -r TMP=$(mktemp -d)
+    local -r TMP_DIR=$(mktemp -d)
     local -r URL=$(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep browser_download_url | grep x86_64-unknown-linux | cut -d '"' -f 4)
-    curl -sL "$URL" | tar zx -C "$TMP" --strip 1 --wildcards '*/rg' --wildcards '*/rg.1' \
-       && mv "$TMP/rg" $HOME/.local/bin/ \
-       && mv "$TMP/doc/rg.1" $HOME/.local/man/man1 \
-       && rm -rf "$TMP"
+    curl -sL "$URL" | tar zx -C "$TMP_DIR" --strip 1 --wildcards '*/rg' --wildcards '*/rg.1' \
+       && mv "$TMP_DIR/rg" $HOME/.local/bin/ \
+       && mv "$TMP_DIR/doc/rg.1" $HOME/.local/man/man1 \
+       && rm -rf "$TMP_DIR"
 }
 
 function install-docker-compose {
@@ -101,11 +94,6 @@ function install-docker-compose {
 }
 
 function install-vim-plugins {
-    echo "Installing Vundle..."
-    local -r installDir="$HOME/.vundle"
-    rm -rf "$installDir" || true
-    git clone https://github.com/VundleVim/Vundle.vim.git "$installDir"
-
     echo "Installing Vim plugins..."
     vim +PluginInstall +qall
 }
@@ -126,9 +114,10 @@ function copy-sysctl-conf {
 function install-all {
     make-paths
     link-files
-    install-rupa-z
-    install-zgen
-    install-bash-sensible
+    install-from-git-repo "Rupa-Z"        "https://github.com/rupa/z"               "$HOME/.rupa-z"
+    install-from-git-repo "Zgen"          "https://github.com/tarjoilija/zgen"      "$HOME/.zgen"
+    install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
+    install-from-git-repo "Vim Vundle"    "https://github.com/VundleVim/Vundle.vim" "$HOME/.vundle"
     install-fzf
     install-ripgrep
     install-docker-compose
