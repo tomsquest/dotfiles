@@ -103,6 +103,9 @@ export GOPATH="$HOME/go"
 export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 # Python
 export PATH="$PATH:/home/tom/Apps/miniconda3/bin"
+# Node.js
+# Help IDE not rely on hardcoded version: make NVM create a symlink $NVM_DIR/current
+export NVM_SYMLINK_CURRENT=true
 
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
