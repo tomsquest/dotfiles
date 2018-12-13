@@ -55,6 +55,8 @@ alias  gs='git status'
 alias  gl='git l'
 alias  gp='git pull'
 alias gaa='git add -A'
+alias gcm='git checkout master'
+alias  gc='git checkout -'
 
 # Maven
 alias m='mvn-in-colors'
