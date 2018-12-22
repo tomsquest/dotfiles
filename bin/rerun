@@ -19,7 +19,8 @@ exitCode=0
 function usage {
   local -r script=$(basename "$0")
   cat << EOF
-Usage: $script success|failure command with some arguments
+Usage: $script success|failure aCommand with arguments
+
 Example:
 $ $script success curl 'http://example.com'
 $ $script failure curl 'http://example.com'
