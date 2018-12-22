@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Build & Run ephemeral container given a Dockefile in current directory
+#
+
+set -euo pipefail
 
 if [ ! -f Dockerfile ]; then
     echo "Dockerfile missing!"
