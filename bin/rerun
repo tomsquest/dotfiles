@@ -48,8 +48,7 @@ function info_msg {
   echo "${color_info}$msg${color_reset}"
 }
 
-if [ -z "$1" ]
-then
+if [[ -z "$1" ]]; then
   usage
   exit 85
 fi
@@ -64,8 +63,7 @@ if [[ $type != "success" && $type != "failure" ]]; then
   exit 85
 fi
 
-if [ -z "$1" ]
-then
+if [[ -z "$1" ]]; then
   error_msg "Missing command to run"
   usage
   exit 85
