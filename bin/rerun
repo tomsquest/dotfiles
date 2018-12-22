@@ -7,7 +7,7 @@
 # Colors
 color_success=$(tput bold)$(tput setaf 2) # Green
 color_failure=$(tput bold)$(tput setaf 1) # Red
-color_notif=$(tput bold)$(tput setaf 4)   # Blue
+color_info=$(tput bold)$(tput setaf 4)   # Blue
 color_reset=$(tput sgr0)
 
 # Config
@@ -45,7 +45,7 @@ function error_msg {
 
 function info_msg {
   local -r msg="$1"
-  echo "${color_notif}$msg${color_reset}"
+  echo "${color_info}$msg${color_reset}"
 }
 
 if [ -z "$1" ]
