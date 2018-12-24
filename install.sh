@@ -28,10 +28,10 @@ function install-from-git-repo {
 
     echo "Installing $name..."
     if [ -d "$dest" ]; then
-      (cd "$dest" && git pull)
+      (cd "$dest" && git pull --progress)
     else
       rm -rf "$dest"
-      git clone "$repo" "$dest"
+      git clone --progress "$repo" "$dest"
     fi
 }
 
