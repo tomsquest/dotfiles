@@ -49,14 +49,16 @@ alias -g ......='../../../../..'
 alias -g .......='../../../../../..'
 
 # Git
-alias   g='git'
-compdef g=git
-alias  gs='git status'
-alias  gl='git l'
-alias  gp='git pull'
-alias gaa='git add -A'
-alias gcm='git checkout master'
-alias  gc='git checkout -'
+alias      g='git'
+compdef    g=git
+alias     gs='git status'
+alias     gl='git l'
+alias     gp='git pull'
+alias    gaa='git add -A'
+alias    gcm='git checkout master'
+alias     gc='git checkout -'
+alias   gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m "--wip-- [skip ci]"'
+alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 
 # Maven
 alias m='mvn-in-colors'
