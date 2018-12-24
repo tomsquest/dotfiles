@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo 'Setup position of the two external screens...'
+xrandr --output HDMI-2 --right-of DP-1 --auto --output DP-1 --right-of eDP-1 --auto --output eDP-1 --auto
+echo '...done'
+
+echo 'Set DPI to default value...'
+xfconf-query -c xsettings -p '/Xft/DPI' -s '96'
+echo '...done'

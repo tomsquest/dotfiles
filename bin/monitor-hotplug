@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+LAPTOP_OUTPUT="eDP-1"
+DP_OUTPUT="DP-1"
+HDMI_OUTPUT="HDMI-2"
+
+LAPTOP_STATUS=$(</sys/class/drm/card0-eDP-1/status)
+DP_STATUS=$(</sys/class/drm/card0-DP-1/status)
+HDMI_STATUS=$(</sys/class/drm/card0-HDMI-A-2/status)
+
+function log {
+    echo "$(date +"%T") $1" >> /home/tom/tmp/udev
+}
+
+function configureScreens {
+    if [[ 'disconnected' == "$DP_STATUS" && 'disconnected' == "$HDMI_STATUS" ]]; then
+        log "Both DP and HDMI are disconnected, enabling LAPTOP screen"
+        xrandr \
+            --output "$DP_OUTPUT"     --off \
+            --output "$HDMI_OUTPUT"   --off \
+            --output "$LAPTOP_OUTPUT" --auto
+    elif [[ 'connected' == "$DP_STATUS" && 'connected' == "$HDMI_STATUS" ]]; then
+        log "Both DP and HDMI are connected, enabling them and disabling LAPTOP"
+        xrandr \
+            --output "$DP_OUTPUT"     --auto \
+            --output "$HDMI_OUTPUT"   --auto \
+            --output "$LAPTOP_OUTPUT" --off
+    else
+        log "Doing nothing: LAPTOP is $LAPTOP_STATUS, DP is $DP_STATUS, HDMI is $HDMI_STATUS"
+    fi
+}
+
+configureScreens
