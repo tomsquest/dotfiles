@@ -49,6 +49,7 @@ function link-files {
     create-link "$PWD/rvmrc"                  "$HOME/.rvmrc"
     create-link "$PWD/vimrc"                  "$HOME/.vimrc"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"
+    create-link "$PWD/libinput-gestures.conf" "$HOME/.config/libinput-gestures.conf"
     create-link "$PWD/safe-rm"                "$HOME/.config/safe-rm"
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
     create-link "$PWD/openbox.xml"            "$HOME/.config/openbox/lubuntu-rc.xml"
