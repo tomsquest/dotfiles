@@ -55,6 +55,7 @@ def process_args(argv):
                 if not os.path.exists(path):
                     create_file = raw_input("Create file '{}'? (Y/n) ".format(path))
                     if create_file is not 'n':
+                        os.makedirs(os.path.dirname(path))
                         open(path, 'a').close()
             args.append(os.path.abspath(path))
 
