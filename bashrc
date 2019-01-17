@@ -34,9 +34,6 @@ fi
 export NVM_DIR="~/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
 
-# set PATH so it includes user's private bin directories
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
-
 # Aliases
 alias ls='ls                                  --classify --group-directories-first --color=auto'
 alias  l='ls -l              --human-readable --classify --group-directories-first --color=auto'
