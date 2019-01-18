@@ -15,3 +15,6 @@ node_modules/
 Thumbs.db
 .env
 *wallaby.js
+
+# Direnv
+.envrc

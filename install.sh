@@ -95,6 +95,14 @@ function install-docker-compose {
       && chmod +x "$DEST"
 }
 
+function install-direnv {
+    echo "Installing Direnv..."
+    local -r URL=$(curl -s https://api.github.com/repos/direnv/direnv/releases/latest | grep browser_download_url | grep linux-amd64\" | cut -d '"' -f 4)
+    local -r DEST="$HOME/.local/bin/direnv"
+    curl -sL "$URL" > "$DEST" \
+      && chmod +x "$DEST"
+}
+
 function install-vim-plugins {
     echo "Installing Vim plugins..."
     vim +PluginInstall +qall
@@ -123,6 +131,7 @@ function install-all {
     install-fzf
     install-ripgrep
     install-docker-compose
+    install-direnv
     install-vim-plugins
     install-dircolors
     copy-sysctl-conf

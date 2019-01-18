@@ -42,3 +42,7 @@ source ~/.rupa-z/z.sh
 if [ -f ~/.zshrc.local ]; then
   source ~/.zshrc.local
 fi
+
+# Load direnv
+# See: https://github.com/direnv/direnv
+eval "$(direnv hook zsh)"
