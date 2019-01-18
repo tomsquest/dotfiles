@@ -64,7 +64,7 @@ function install-fzf {
     echo "Installing FZF..."
     local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
     echo "- Binary"
-    curl -sL "$URL" | tar xz -C /tmp fzf  && mv /tmp/fzf $HOME/.local/bin/
+    curl -L --progress-bar "$URL" | tar xz -C /tmp fzf  && mv /tmp/fzf $HOME/.local/bin/
 
     echo "- Man page"
     curl -sL "https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1" > $HOME/.local/man/man1/fzf.1
@@ -81,7 +81,7 @@ function install-ripgrep {
     echo "Installing Ripgrep..."
     local -r TMP_DIR=$(mktemp -d)
     local -r URL=$(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep browser_download_url | grep x86_64-unknown-linux | cut -d '"' -f 4)
-    curl -sL "$URL" | tar zx -C "$TMP_DIR" --strip 1 --wildcards '*/rg' --wildcards '*/rg.1' \
+    curl -L --progress-bar "$URL" | tar zx -C "$TMP_DIR" --strip 1 --wildcards '*/rg' --wildcards '*/rg.1' \
        && mv "$TMP_DIR/rg" $HOME/.local/bin/ \
        && mv "$TMP_DIR/doc/rg.1" $HOME/.local/man/man1 \
        && rm -rf "$TMP_DIR"
@@ -91,7 +91,7 @@ function install-docker-compose {
     echo "Installing Docker-Compose..."
     local -r URL=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url | grep Linux-x86_64\" | cut -d '"' -f 4)
     local -r DEST="$HOME/.local/bin/docker-compose"
-    curl -sL "$URL" > "$DEST" \
+    curl -L --progress-bar "$URL" > "$DEST" \
       && chmod +x "$DEST"
 }
 
@@ -99,7 +99,7 @@ function install-direnv {
     echo "Installing Direnv..."
     local -r URL=$(curl -s https://api.github.com/repos/direnv/direnv/releases/latest | grep browser_download_url | grep linux-amd64\" | cut -d '"' -f 4)
     local -r DEST="$HOME/.local/bin/direnv"
-    curl -sL "$URL" > "$DEST" \
+    curl -L --progress-bar "$URL" > "$DEST" \
       && chmod +x "$DEST"
 }
 
