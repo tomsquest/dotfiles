@@ -121,6 +121,17 @@ function copy-sysctl-conf {
     done
 }
 
+# Configure NPM instead of versioning ~/.npmrc as it contains NPM registry Auth Tokens
+function configure-npm {
+    npm set init.author.name "Thomas Queste"
+    npm set init.author.email "tom@tomsquest.com"
+    npm set init.author.url "http://www.tomsquest.com"
+    npm set init.license "MIT"
+    npm set init.version "1.0.0"
+    # Use exact versions, not range
+    npm config set save-exact true
+}
+
 function install-all {
     make-paths
     link-files
@@ -135,6 +146,7 @@ function install-all {
     install-vim-plugins
     install-dircolors
     copy-sysctl-conf
+    configure-npm
 }
 
 install-all
