@@ -62,8 +62,8 @@ function disableAllMonitorsExceptLaptop {
 function enableDualLowDpiMonitors {
     echo "Setup position of the two external screens..."
     xrandr \
-        --output HDMI-2 --right-of DP-1  --auto --primary \
-        --output DP-1   --right-of eDP-1 --auto \
+        --output HDMI-2 --right-of DP-1  --auto \
+        --output DP-1   --right-of eDP-1 --auto --primary \
         --output eDP-1  --off
     echo "...done"
 }
