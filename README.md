@@ -12,8 +12,8 @@ cd ~/.dotfiles
 
 ## Main features
 
-* ZSH: heavily commented configuration : config, completion, prompt, key bindings...
-* ZSH Prompt:
+* Heavily commented ZSH configuration : completion, prompt, key bindings...
+* Efficient ZSH Prompt with horizontal separator:
 
  ``` bash
 06:42:21 /home/tom/.dotfiles ------------------------------
@@ -21,15 +21,9 @@ $                                            (master|●1✚1…)
 ```
 
 - ZSH plugins with [Zgen](https://github.com/tarjoilija/zgen)
-- [ZSH Git prompt](https://github.com/olivierverdier/zsh-git-prompt)
 - Vim config, using [Vundle](https://github.com/gmarik/vundle)
 - Bash ["Sensible" config](https://github.com/mrzool/bash-sensible)
 - Jump to recent directories with [Rupa's Z](https://github.com/rupa/z)
 - Search file and directories with [Fzf](https://github.com/junegunn/fzf)
 - Search inside files with [Ripgrep](https://github.com/BurntSushi/ripgrep)
-
-Others:
-
 - Git config
-- Terminator, Openbox config
-- '.desktop' files pointing to `~/Apps/$the-app/current/$the-launcher`
