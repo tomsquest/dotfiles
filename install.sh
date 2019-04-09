@@ -113,6 +113,11 @@ function install-dircolors {
     curl -sl "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark" > ~/.dircolors
 }
 
+function install-xfce-settings {
+    echo "Installing XFCE settings..."
+    create-link "$PWD/xfce-settings/xfce4-keyboard-shortcuts.xml" "$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml"
+}
+
 function copy-sysctl-conf {
     echo "Copying sysctl config files..."
     for file in $PWD/sysctl.d/*
@@ -145,6 +150,7 @@ function install-all {
     install-direnv
     install-vim-plugins
     install-dircolors
+    install-xfce-settings
     copy-sysctl-conf
     configure-npm
 }
