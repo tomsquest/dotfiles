@@ -1,6 +1,7 @@
 alias szshrc='source ~/.zshrc'
 alias du='du -h'
 alias df='df -h'
+alias free='free -h'
 alias f='find -iname'
 alias v='vim'
 alias meteo='curl http://wttr.in/Lille'
