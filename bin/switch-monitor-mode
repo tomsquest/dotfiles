@@ -35,6 +35,15 @@ function setFirefoxDpi {
     echo "...done"
 }
 
+function setFirefoxDeveloperDpi {
+    local -r DPI="$1"
+    echo "Set Firefox Developer DPI to $DPI"
+    local -r profileDir="$(find ~/.mozilla/firefox -name '*.dev-edition-default')"
+    echo $profileDir
+    changeMozillaProductDpi "$profileDir" "$DPI"
+    echo "...done"
+}
+
 function setThunderbirdDpi {
     local -r DPI="$1"
     echo "Set Thunderbird DPI to $DPI"
@@ -47,9 +56,13 @@ function changeMozillaProductDpi {
     local -r MOZILLA_PRODUCT_DIR="$1"
     local -r DPI="$2"
     local -r userFile="$MOZILLA_PRODUCT_DIR/user.js"
-    touch "$userFile"
-    sed -ri "s|^(user_pref\(\"layout.css.devPixelsPerPx\", \")-?[0-9]*\.?[0-9]+(\"\);)|\1$DPI\2|g" "$userFile"
+    if [[ -f "$userFile" ]]; then
+        echo "user_pref(\"layout.css.devPixelsPerPx\", \"$DPI\");" >> $userFile
+    else
+        sed -ri "s|^(user_pref\(\"layout.css.devPixelsPerPx\", \")-?[0-9]*\.?[0-9]+(\"\);)|\1$DPI\2|g" "$userFile"
+    fi
 }
+
 function disableAllMonitorsExceptLaptop {
     echo "Disabling all monitors except Laptop"
     xrandr \
@@ -74,6 +87,7 @@ function configureLaptop {
     setXfcePanelSize 36
     setXfceCursorSize 36
     setFirefoxDpi "1.5"
+    setFirefoxDeveloperDpi "1.5"
     setThunderbirdDpi "1.5"
 }
 
@@ -83,6 +97,7 @@ function configureDualMonitors {
     setXfcePanelSize 26
     setXfceCursorSize 26
     setFirefoxDpi "-1"
+    setFirefoxDeveloperDpi "-1"
     setThunderbirdDpi "-1"
 }
 
