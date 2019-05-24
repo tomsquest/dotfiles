@@ -6,6 +6,10 @@ readonly SCRIPT_NAME="$(basename "$0")"
 readonly PROG_DIR=$(readlink -m "$(dirname "$0")")
 readonly MODE_ARG="${1:-laptop}"
 
+readonly MONITOR_LAPTOP=eDP1
+readonly MONITOR_HDMI=HDMI2
+readonly MONITOR_DP=DP1
+
 function setXorgDpi {
     local -r DPI="$1"
     echo "Set Xorg DPI to $DPI"
@@ -39,7 +43,7 @@ function setFirefoxDeveloperDpi {
     local -r DPI="$1"
     echo "Set Firefox Developer DPI to $DPI"
     local -r profileDir="$(find ~/.mozilla/firefox -name '*.dev-edition-default')"
-    echo $profileDir
+    echo "$profileDir"
     changeMozillaProductDpi "$profileDir" "$DPI"
     echo "...done"
 }
@@ -57,27 +61,27 @@ function changeMozillaProductDpi {
     local -r DPI="$2"
     local -r userFile="$MOZILLA_PRODUCT_DIR/user.js"
     if [[ -f "$userFile" ]]; then
-        echo "user_pref(\"layout.css.devPixelsPerPx\", \"$DPI\");" >> $userFile
+        echo "user_pref(\"layout.css.devPixelsPerPx\", \"$DPI\");" >> "$userFile"
     else
-        sed -ri "s|^(user_pref\(\"layout.css.devPixelsPerPx\", \")-?[0-9]*\.?[0-9]+(\"\);)|\1$DPI\2|g" "$userFile"
+        sed -ri "s|^(user_pref\\(\"layout.css.devPixelsPerPx\", \")-?[0-9]*\\.?[0-9]+(\"\\);)|\\1$DPI\\2|g" "$userFile"
     fi
 }
 
 function disableAllMonitorsExceptLaptop {
     echo "Disabling all monitors except Laptop"
     xrandr \
-        --output HDMI-2 --off \
-        --output DP-1   --off \
-        --output eDP-1  --auto --primary
+        --output "$MONITOR_HDMI"   --off \
+        --output "$MONITOR_DP"     --off \
+        --output "$MONITOR_LAPTOP" --auto --primary
     echo "...done"
 }
 
 function enableDualLowDpiMonitors {
     echo "Setup position of the two external screens..."
     xrandr \
-        --output HDMI-2 --right-of DP-1  --auto \
-        --output DP-1   --right-of eDP-1 --auto --primary \
-        --output eDP-1  --off
+        --output "$MONITOR_HDMI"   --right-of "$MONITOR_DP" --auto \
+        --output "$MONITOR_DP"     --right-of "$MONITOR_LAPTOP" --auto --primary \
+        --output "$MONITOR_LAPTOP" --off
     echo "...done"
 }
 
