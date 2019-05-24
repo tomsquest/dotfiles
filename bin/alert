@@ -2,28 +2,28 @@
 
 readonly PROG_DIR=$(readlink -m "$(dirname "$0")")
 
-function notify_success() {
+notify_success() {
     command -v notify-send >/dev/null 2>&1 && notify-send --icon="${PROG_DIR}/success.png" "Success" "$1"
     command -v beep >/dev/null 2>&1 && beep -l 100 -f 500 -n -l 50 -f 1000
 }
 
-function notify_failure() {
+notify_failure() {
     command -v notify-send >/dev/null 2>&1 && notify-send --icon="${PROG_DIR}/failure.png" "Error: $2" "$1"
     command -v beep >/dev/null 2>&1 && beep -l 100 -f 100 -r 2
 }
 
-# Hide 'printAndRun' from being shown in notification
-if [ "$1" == "printAndRun" ]; then
-    shift
-fi
-
 # Execution
-readonly CMD=$*
 eval "$@"
 readonly EXIT_STATUS="$?"
 
+# Hide 'printAndRun' from being shown in notification
+if [[ "$1" == "printAndRun" ]]; then
+    shift
+fi
+readonly CMD=$*
+
 # Notification
-if [ "$EXIT_STATUS" = "0" ]; then
+if [[ "$EXIT_STATUS" = "0" ]]; then
     notify_success "$CMD"
 else
     notify_failure "$CMD" "$EXIT_STATUS"
