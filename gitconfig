@@ -12,6 +12,7 @@
 	fixup = !sh -c 'REV=$(git rev-parse $1) && git commit --fixup $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
 	squash = !sh -c 'REV=$(git rev-parse $1) && git commit --squash $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
 	pr = !sh -c 'git fetch -fu ${2:-$(git remote |grep ^upstream || echo origin)} refs/pull/$1/head:pr/$1 && git checkout pr/$1' -
+	delete-merged-branches = "!f() { git branch -v | grep -F [gone] | awk '{print $1}' | xargs git branch -D ; }; f"
 [color]
 	ui = auto
 [diff]
