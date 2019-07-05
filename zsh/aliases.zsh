@@ -88,3 +88,4 @@ alias st='printAndRun sbt ~test-quick'
 
 # Docker compose
 alias dup='alert printAndRun docker-compose up -d'
+alias ddown='alert printAndRun docker-compose down -t 5'
