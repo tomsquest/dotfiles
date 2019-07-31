@@ -78,8 +78,8 @@ alias  msb='printAndRun mvn spring-boot:run'
 
 # NPM
 alias  ns='printAndRun npm start'
-alias nsd='printAndRun npm start:dev'
-alias nsw='printAndRun npm start:hmr'
+alias nsd='printAndRun npm run start:dev'
+alias nsw='printAndRun npm run start:hmr'
 alias  nt='printAndRun npm test'
 alias ntw='printAndRun npm run test:watch'
 
