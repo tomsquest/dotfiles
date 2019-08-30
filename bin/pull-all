@@ -23,7 +23,7 @@ function pull {
       elif ! git branch | grep -q "$CHECKOUT_BRANCH"; then
         echo "  $(tput bold)$(tput setaf 3)> Skipped: branch $CHECKOUT_BRANCH missing$(tput sgr0)"
       else
-        if [ ! -z "$CHECKOUT_BRANCH" -a "$CURRENT_BRANCH" != "$CHECKOUT_BRANCH" ]; then
+        if [ ! -z "$CHECKOUT_BRANCH" ] && [ "$CURRENT_BRANCH" != "$CHECKOUT_BRANCH" ]; then
           git checkout "$CHECKOUT_BRANCH"
           echo "  $(tput bold)> Switched to branch $CHECKOUT_BRANCH$(tput sgr0)"
         fi
