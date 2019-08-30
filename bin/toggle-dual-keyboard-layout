@@ -7,30 +7,30 @@
 
 set -euo pipefail
 
-readonly TYPEMATRIX_KEYBOARDS=$(xinput list | \
-        grep keyboard | \
-        grep TypeMatrix | \
-        sed 's/.*id=\([0-9]*\).*/\1/')
+readonly TYPEMATRIX_KEYBOARDS=$(xinput list |
+  grep keyboard |
+  grep TypeMatrix |
+  sed 's/.*id=\([0-9]*\).*/\1/')
 
-readonly OTHER_KEYBOARDS=$(xinput list | \
-        grep -i '↳ .*keyboard.*id=' | \
-        grep -vE '(TypeMatrix|XTEST)' | \
-        sed 's/.*id=\([0-9]*\).*/\1/')
+readonly OTHER_KEYBOARDS=$(xinput list |
+  grep -i 'keyboard.*id=.*slave.*keyboard' |
+  grep -vE '(TypeMatrix|XTEST|AT Translated)' |
+  sed 's/.*id=\([0-9]*\).*/\1/')
 
 if [[ -n "$OTHER_KEYBOARDS" ]]; then
-    for keyboard in $OTHER_KEYBOARDS ; do
-        setxkbmap -device "$keyboard" fr -option ""
-    done
-    notify-send -i "input-keyboard" "Success" "Azerty keyboard enabled"
+  for keyboard in $OTHER_KEYBOARDS; do
+    setxkbmap -device "$keyboard" fr -option ""
+  done
+  notify-send -i "input-keyboard" "Success" "Azerty keyboard enabled"
 else
-    notify-send -i "error" "Error" "Standard keyboard NOT ENABLED"
+  notify-send -i "error" "Error" "Standard keyboard NOT ENABLED"
 fi
 
 if [[ -n "$TYPEMATRIX_KEYBOARDS" ]]; then
-    for keyboard in $TYPEMATRIX_KEYBOARDS ; do
-        setxkbmap -device "$keyboard" us -variant colemak
-    done
-    notify-send -i "input-keyboard" "Success" "Typematrix keyboard enabled"
+  for keyboard in $TYPEMATRIX_KEYBOARDS; do
+    setxkbmap -device "$keyboard" us -variant colemak
+  done
+  notify-send -i "input-keyboard" "Success" "Typematrix keyboard enabled"
 else
-    notify-send -i "error" "Error" "Typematrix keyboard NOT ENABLED"
+  notify-send -i "error" "Error" "Typematrix keyboard NOT ENABLED"
 fi
