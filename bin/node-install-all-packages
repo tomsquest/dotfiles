@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# CD into all directories containing a `package.json` file and run `npm ci` in them
+#
+
+set -euo pipefail
+
+shopt -s globstar
+for packagejson in **/package.json; do
+  if [[ $packagejson != *"node_modules/"* ]]; then
+    dir=$(dirname "$packagejson")
+    echo "$(tput bold)$(tput setaf 4)Installing packages in $dir$(tput sgr0)"
+    (
+      cd "$dir"
+      npm ci
+    )
+  fi
+done
