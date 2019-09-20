@@ -10,7 +10,7 @@ zstyle ':completion:*' group-name ''
 # Menu friendly
 zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
 
-# Zhen there are a lot of choices
+# When there are a lot of choices
 zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
 
 # Completion menu
@@ -41,8 +41,18 @@ zstyle ':completion:*:warnings' format "%B$fg[red]%}---- no match for: $fg[white
 # cd will never select the parent directory (e.g.: cd ../<TAB>)
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 
-# Case insensitive completion
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# Case and hyphen insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
+
+# Separate directories and files
+# Example:
+#     $ ls
+#     ---- directory
+#     coverage/         deploy/
+#     ---- files
+#     deploy.yaml           http-client.env.json
+zstyle ':completion:*' list-dirs-first true
+
 
 # Kill completion
 zstyle ':completion:*:processes' command 'ps -au $USER'
