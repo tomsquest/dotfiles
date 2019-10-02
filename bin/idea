@@ -60,7 +60,6 @@ def process_args(argv):
                             os.makedirs(os.path.dirname(path))
                             print('created')
                         except:
-                            print('unable to create')
                             pass
                         open(path, 'a').close()
             args.append(os.path.abspath(path))
