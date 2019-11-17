@@ -12,7 +12,7 @@ for packagejson in **/package.json; do
     echo "$(tput bold)$(tput setaf 4)Installing packages in $dir$(tput sgr0)"
     (
       cd "$dir"
-      npm ci
+      npm install
     )
   fi
 done
