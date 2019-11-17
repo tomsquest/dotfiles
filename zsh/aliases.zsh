@@ -87,5 +87,9 @@ alias ntw='printAndRun npm run test:watch'
 alias st='printAndRun sbt ~test-quick'
 
 # Docker compose
-alias dup='alert printAndRun docker-compose up -d'
+alias   dup='alert printAndRun docker-compose up -d'
 alias ddown='alert printAndRun docker-compose down -t 5'
+alias   dsa='alert printAndRun docker-compose start'
+alias   dso='alert printAndRun docker-compose stop'
+alias    dl='docker-compose logs'
+alias   dlf='docker-compose logs -f'
