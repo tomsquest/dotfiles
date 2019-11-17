@@ -42,8 +42,7 @@ function setFirefoxDpi() {
 function setFirefoxDeveloperDpi() {
   local -r DPI="$1"
   echo "Set Firefox Developer DPI to $DPI"
-  local -r profileDir="$(find ~/.mozilla/firefox -name '*.dev-edition-default')"
-  echo "$profileDir"
+  local -r profileDir="$(find ~/.mozilla/firefox -name '*.dev-edition-default-*')"
   changeMozillaProductDpi "$profileDir" "$DPI"
   echo "...done"
 }
