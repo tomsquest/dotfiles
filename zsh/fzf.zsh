@@ -27,12 +27,17 @@ _fzf_compgen_dir() {
 # Example: o SomeFile.py
 #    then press ctrl-o to open, ctrl-e to edit in vim, enter to open in Idea)
 o() {
-  local out file key
-  IFS=$'\n' out=($(fzf --query="$1" --exit-0 --select-1 --expect=ctrl-o,ctrl-e))
-  key=$(head -1 <<< "$out")
-  file=$(head -2 <<< "$out" | tail -1)
-  if [ -n "$file" ]; then
-    case "$key" in
+  if [ -d "$1" ]; then
+    xdg-open "$1"
+  elif [ -f "$1" ]; then
+    idea "$1"
+  else
+    local out file key
+    IFS=$'\n' out=($(fzf --query="$1" --exit-0 --select-1 --expect=ctrl-o,ctrl-e))
+    key=$(head -1 <<<"$out")
+    file=$(head -2 <<<"$out" | tail -1)
+    if [ -n "$file" ]; then
+      case "$key" in
       "ctrl-o")
         xdg-open "$file"
         ;;
@@ -42,6 +47,7 @@ o() {
       *)
         idea "$file"
         ;;
-    esac
+      esac
+    fi
   fi
 }
