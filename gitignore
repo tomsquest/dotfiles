@@ -1,20 +1,29 @@
 # Trick for some tools (ripgrep) using these pattern to ignore files
 .git/
 
-*.swp
-*~
-.sass-cache
-target/
-node_modules/
-.classpath
-.project
-.settings/
-.idea/
-*.iml
+# OS
 .DS_Store
 Thumbs.db
-.env
-*wallaby.js
 
+# Temp files
+.sass-cache/
+jmeter.log
+*.swp
+*~
+
+# Editors
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+
+# Development
+node_modules/
+dist/
+target/
+*wallaby.js
+.env
 # Direnv
 .envrc
+
