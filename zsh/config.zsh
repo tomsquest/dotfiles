@@ -80,7 +80,9 @@ export LESS_TERMCAP_ZW=$(tput rsupm)
 export TERM=xterm-256color
 # Print dates in ISO format (in `ls -l` for example)
 export TIME_STYLE=long-iso
-# SSH ash-pass. Require pkg ssh-askpass
+# Ripgrep config
+export RIPGREP_CONFIG_PATH=/home/tom/.ripgreprc
+# SSH ask-pass. Require pkg ssh-askpass
 export SSH_ASKPASS=/usr/bin/ssh-askpass
 # set PATH so it includes user's private bin directories
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
