@@ -47,7 +47,6 @@ function link-files {
     create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
     create-link "$PWD/profile"                "$HOME/.profile"
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
-    create-link "$PWD/rvmrc"                  "$HOME/.rvmrc"
     create-link "$PWD/vimrc"                  "$HOME/.vimrc"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"
     create-link "$PWD/libinput-gestures.conf" "$HOME/.config/libinput-gestures.conf"
