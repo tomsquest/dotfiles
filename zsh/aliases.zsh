@@ -5,9 +5,9 @@ alias free='free -h'
 alias f='find -iname'
 alias v='vim'
 alias meteo='curl http://wttr.in/Lille'
-alias up="sudo apt update && sudo apt -V --yes upgrade"
+alias up='sudo apt update && sudo apt -V --yes upgrade'
 alias ydl="youtube-dl --format best --output '%(upload_date)s.%(title)s.%(ext)s' --restrict-filenames --write-description"
-alias rm="safe-rm"
+alias rm='safe-rm'
 
 # Multitail with basic java colorization
 alias mu='multitail -cS apache -cS log4j -n 1000 --no-repeat -b 2 --mark-interval 2'
