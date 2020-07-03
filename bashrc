@@ -30,10 +30,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# NVM
-export NVM_DIR="~/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-
 # Aliases
 alias ls='ls                                  --classify --group-directories-first --color=auto'
 alias  l='ls -l              --human-readable --classify --group-directories-first --color=auto'

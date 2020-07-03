@@ -12,13 +12,10 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/command-not-found
   zgen load zsh-users/zsh-completions src
   zgen load chrissicool/zsh-256color
-  #zgen load johnhamelink/rvm-zsh
   zgen load johnhamelink/env-zsh
   zgen load theunraveler/zsh-fancy_ctrl_z
   zgen load BurntSushi/ripgrep complete
   zgen load docker/compose contrib/completion/zsh
-  zgen load tomsquest/nvm-init.zsh
-  zgen load tomsquest/nvm-auto-use.zsh
   zgen load tomsquest/q.plugin.zsh
 
   # Remove Zsh completion cache, given we may have updated a completion
@@ -58,8 +55,8 @@ unset __conda_setup
 # See: https://github.com/direnv/direnv
 eval "$(direnv hook zsh)"
 
-# Local-to-this-machine configuration
-# SHOULD BE AT THE END
+# Local (to this machine) configuration
+# SHOULD BE LAST
 if [ -f ~/.zshrc.local ]; then
   source ~/.zshrc.local
 fi
