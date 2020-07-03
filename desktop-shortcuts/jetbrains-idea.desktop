@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=IntelliJ IDEA
+Name=IntelliJIdea
 Icon=/home/tom/Apps/idea/current/bin/idea.png
 Exec="/home/tom/Apps/idea/current/bin/idea.sh" %f
 Comment=The Drive to Develop
