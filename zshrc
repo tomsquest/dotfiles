@@ -10,6 +10,7 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/sudo
   zgen oh-my-zsh plugins/httpie
   zgen oh-my-zsh plugins/command-not-found
+  zgen oh-my-zsh plugins/asdf
   zgen load zsh-users/zsh-completions src
   zgen load chrissicool/zsh-256color
   zgen load johnhamelink/env-zsh
@@ -51,9 +52,8 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# Load direnv
-# See: https://github.com/direnv/direnv
-eval "$(direnv hook zsh)"
+# Load direnv through asdf
+eval "$(asdf exec direnv hook zsh)"
 
 # Local (to this machine) configuration
 # SHOULD BE LAST

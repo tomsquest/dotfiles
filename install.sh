@@ -37,21 +37,22 @@ function install-from-git-repo {
 
 function link-files {
     echo "Linking files..."
-    create-link "$PWD/bin"                    "$HOME/bin"
-    create-link "$PWD/zsh"                    "$HOME/.zsh"
-    create-link "$PWD/vim"                    "$HOME/.vim"
     create-link "$PWD/albertignore"           "$HOME/.albertignore"
     create-link "$PWD/bashrc"                 "$HOME/.bashrc"
+    create-link "$PWD/bin"                    "$HOME/bin"
     create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
     create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
+    create-link "$PWD/libinput-gestures.conf" "$HOME/.config/libinput-gestures.conf"
+    create-link "$PWD/npmrc"                  "$HOME/.npmrc"
     create-link "$PWD/profile"                "$HOME/.profile"
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
-    create-link "$PWD/vimrc"                  "$HOME/.vimrc"
-    create-link "$PWD/zshrc"                  "$HOME/.zshrc"
-    create-link "$PWD/libinput-gestures.conf" "$HOME/.config/libinput-gestures.conf"
     create-link "$PWD/safe-rm"                "$HOME/.config/safe-rm"
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
+    create-link "$PWD/vim"                    "$HOME/.vim"
+    create-link "$PWD/vimrc"                  "$HOME/.vimrc"
+    create-link "$PWD/zsh"                    "$HOME/.zsh"
+    create-link "$PWD/zshrc"                  "$HOME/.zshrc"
     for file in $PWD/desktop-shortcuts/*
     do
       create-link "$file" "$HOME/.local/share/applications/$(basename "$file")"
@@ -111,23 +112,21 @@ function install-dircolors {
     curl -sl "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark" > ~/.dircolors
 }
 
+function install-direnv {
+    echo "Installing Direnv through asdf..."
+    source $HOME/.asdf/asdf.sh
+    asdf plugin add direnv || true
+    asdf install direnv 2.20.0
+    asdf global  direnv 2.20.0
+    echo "source \$(asdf which direnv_use_asdf)" > ~/.config/direnv/direnvrc
+}
+
 function copy-sysctl-conf {
     echo "Copying sysctl config files..."
     for file in $PWD/sysctl.d/*
     do
       sudo cp "$file" "/etc/sysctl.d/$(basename "$file")"
     done
-}
-
-# Configure NPM instead of versioning ~/.npmrc as it contains NPM registry Auth Tokens
-function configure-npm {
-    npm set init.author.name "Thomas Queste"
-    npm set init.author.email "tom@tomsquest.com"
-    npm set init.author.url "http://www.tomsquest.com"
-    npm set init.license "MIT"
-    npm set init.version "1.0.0"
-    # Use exact versions, not range
-    npm config set save-exact true
 }
 
 function install-all {
@@ -137,14 +136,14 @@ function install-all {
     install-from-git-repo "Zgen"          "https://github.com/tarjoilija/zgen"      "$HOME/.zgen"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
     install-from-git-repo "Vim Vundle"    "https://github.com/VundleVim/Vundle.vim" "$HOME/.vundle"
+    install-from-git-repo "Asdf-vm"       "https://github.com/asdf-vm/asdf"         "$HOME/.asdf"
     install-fzf
     install-ripgrep
     install-docker-compose
-    install-direnv
     install-vim-plugins
     install-dircolors
+    install-direnv
     copy-sysctl-conf
-    configure-npm
 }
 
 install-all
