@@ -94,11 +94,6 @@ export PATH="$PATH:$JAVA_HOME/bin"
 # Maven
 export M2_HOME="$HOME/Apps/maven/current"
 export PATH="$PATH:$M2_HOME/bin"
-# Scala
-export SCALA_HOME="$HOME/Apps/scala/current"
-export SBT_HOME="$HOME/Apps/sbt/current"
-export PATH="$PATH:$SCALA_HOME/bin:$SBT_HOME/bin"
-export PLAY_EDITOR="http://localhost:63342/api/file/?file=%s&line=%s"
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
 # Default is: *?_-.[]~=/&;!#$%^(){}<>
