@@ -99,10 +99,6 @@ export SCALA_HOME="$HOME/Apps/scala/current"
 export SBT_HOME="$HOME/Apps/sbt/current"
 export PATH="$PATH:$SCALA_HOME/bin:$SBT_HOME/bin"
 export PLAY_EDITOR="http://localhost:63342/api/file/?file=%s&line=%s"
-# Go
-export GOROOT="$HOME/Apps/go/current"
-export GOPATH="$HOME/go"
-export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
 # Default is: *?_-.[]~=/&;!#$%^(){}<>
