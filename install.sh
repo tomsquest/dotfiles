@@ -47,7 +47,7 @@ function link-files {
     create-link "$PWD/npmrc"                  "$HOME/.npmrc"
     create-link "$PWD/profile"                "$HOME/.profile"
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
-    create-link "$PWD/safe-rm"                "$HOME/.config/safe-rm"
+    create-link "$PWD/safe-rm"                "$HOME/.safe-rm"
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
     create-link "$PWD/vim"                    "$HOME/.vim"
     create-link "$PWD/vimrc"                  "$HOME/.vimrc"
