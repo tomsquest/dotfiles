@@ -11,21 +11,17 @@
 	diffw = diff --word-diff=color
 	fixup = !sh -c 'REV=$(git rev-parse $1) && git commit --fixup $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
 	squash = !sh -c 'REV=$(git rev-parse $1) && git commit --squash $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
-	pr = !sh -c 'git fetch -fu ${2:-$(git remote |grep ^upstream || echo origin)} refs/pull/$1/head:pr/$1 && git checkout pr/$1' -
 	delete-merged-branches = "!f() { git branch -v | grep -F [gone] | awk '{print $1}' | xargs git branch -D ; }; f"
 [color]
 	ui = auto
 [diff]
-	mnemonicprefix = true
-	indentHeuristic = true
-	compactionHeuristic = true
 	tool = intellij
-	colorMoved = default
+ 	colorMoved = default
 [core]
 	excludesfile = ~/.gitignore
 	autocrlf = input
 	editor = vim
-	pager = less -+$LESS -RSX
+ 	pager = less -+$LESS -RSX
 [push]
 	default = simple
 [pull]
@@ -37,20 +33,15 @@
 [credential]
 	helper = cache
 [rerere]
-	enabled = true
+ 	enabled = true
 [commit]
-	verbose = true
 	gpgsign = true
-[submodule]
-	fetchJobs = 4
 [rebase]
 	autostash = true
 	autosquash = true
 [status]
 	showUntrackedFiles = all
 [merge]
-	# Show more context in conflict
-	conflictstyle = diff3
 	tool = intellij
 [mergetool "intellij"]
 	cmd = idea merge $(cd $(dirname "$LOCAL") && pwd)/$(basename "$LOCAL") $(cd $(dirname "$REMOTE") && pwd)/$(basename "$REMOTE") $(cd $(dirname "$BASE") && pwd)/$(basename "$BASE") $(cd $(dirname "$MERGED") && pwd)/$(basename "$MERGED")
