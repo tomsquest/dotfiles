@@ -54,13 +54,17 @@ alias -g .......='../../../../../..'
 alias      g='git'
 compdef    g=git
 alias     gs='git status'
-alias     gl='git l'
+alias     gl='git log --graph --abbrev-commit --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset"'
 alias     gp='git pull'
 alias    gaa='git add -A'
 alias    gcm='git checkout master'
 alias     gc='git checkout -'
+alias    gpf='git push --force-with-lease'
 alias   gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m "--wip-- [skip ci]"'
+alias  gwipp='gwip && git push --force-with-lease'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+# shellcheck disable=SC2142
+alias delete-merged-branches="git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '\$2 == \"[gone]\" {print \$1}' | xargs -r git branch -D"
 
 # Maven
 alias m='mvn-in-colors'
