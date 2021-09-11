@@ -19,10 +19,10 @@ bindkey -e
 # In menu completion, the Return key will accept the current selected match
 bindkey -M menuselect '^M' .accept-line
 
-# shift-tab : go backward in menu (invert of tab)
+# shift-tab: go backward in menu (invert of tab)
 bindkey '^[[Z' reverse-menu-complete
 
-# alt-x : insert last command result
+# alt-x: insert last command result
 zmodload -i zsh/parameter
 insert-last-command-output() {
   LBUFFER+="$(eval $history[$((HISTCMD-1))])"
@@ -30,11 +30,19 @@ insert-last-command-output() {
 zle -N insert-last-command-output
 bindkey '^[x' insert-last-command-output
 
-# ctrl+b/f or ctrl+left/right : move word by word (backward/forward)
+# ctrl+b/f or ctrl+left/right: move word by word (backward/forward)
 bindkey '^b' backward-word
 bindkey '^f' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
+
+# ctrl+backspace: delete word before
+bindkey '^H' backward-kill-word
+# ctrl+delete: delete word after
+bindkey "\e[3;5~" kill-word
+
+# alt+m: copy last word
+bindkey "^[m" copy-prev-shell-word
 
 # Ctrl+space: print Git status
 bindkey -s '^ ' ' git status --short^M'
