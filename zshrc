@@ -10,7 +10,6 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/sudo
   zgen oh-my-zsh plugins/httpie
   zgen oh-my-zsh plugins/command-not-found
-  zgen oh-my-zsh plugins/asdf
   zgen load zsh-users/zsh-completions src
   zgen load chrissicool/zsh-256color
   zgen load johnhamelink/env-zsh
@@ -24,6 +23,11 @@ if ! zgen saved; then
 
   zgen save
 fi
+
+# Load ASDF
+# Needs to be done before compinit in config.zsh
+. $HOME/.asdf/asdf.sh
+fpath=(${ASDF_DIR}/completions $fpath)
 
 source ~/.zsh/config.zsh
 source ~/.zsh/completion.zsh
@@ -51,11 +55,6 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
-# Load direnv through asdf
-eval "$(asdf exec direnv hook zsh)"
-# A shortcut for asdf managed direnv.
-direnv() { asdf exec direnv "$@"; }
 
 # Local (to this machine) configuration
 # SHOULD BE LAST
