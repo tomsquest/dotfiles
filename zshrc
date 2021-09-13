@@ -56,6 +56,11 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Load direnv through asdf
+eval "$(asdf exec direnv hook zsh)"
+# A shortcut for asdf managed direnv.
+direnv() { asdf exec direnv "$@"; }
+
 # Local (to this machine) configuration
 # SHOULD BE LAST
 if [ -f ~/.zshrc.local ]; then
