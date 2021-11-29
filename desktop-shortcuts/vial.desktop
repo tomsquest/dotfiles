@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=VIAL
+Comment=VIAL Keyboard manager
+Icon=input-keyboard
+Exec="/home/tom/Apps/Vial.AppImage"
+Categories=Development;
+Terminal=false
