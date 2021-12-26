@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Fynodoro
-Comment=Pomodoro Widget
-Icon=/home/tom/Apps/fynodoro.png
-Exec="/home/tom/Apps/fynodoro"
-Categories=Development;
-Terminal=false
