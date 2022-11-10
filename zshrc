@@ -57,9 +57,7 @@ source ~/.rupa-z/z.sh
 # <<< conda initialize <<<
 
 # Load direnv through asdf
-eval "$(asdf exec direnv hook zsh)"
-# A shortcut for asdf managed direnv.
-direnv() { asdf exec direnv "$@"; }
+source ~/.config/asdf-direnv/zshrc
 
 # Local (to this machine) configuration
 # SHOULD BE LAST
