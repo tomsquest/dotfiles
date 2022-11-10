@@ -4,7 +4,7 @@ Version=1.0
 Type=Application
 Name=IntelliJIdea
 Icon=/home/tom/Apps/idea/current/bin/idea.png
-Exec="/home/tom/Apps/idea/current/bin/idea.sh" %f
+Exec=env PATH=$PATH:/home/tom/.local/bin "/home/tom/Apps/idea/current/bin/idea.sh" %f
 Comment=The Drive to Develop
 Categories=Development;IDE;
 Terminal=false
