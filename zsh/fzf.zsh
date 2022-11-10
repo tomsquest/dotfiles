@@ -1,8 +1,8 @@
-export FZF_DEFAULT_OPTS='--height=50% --reverse --multi --preview="[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -500"'
+export FZF_DEFAULT_OPTS='--height=50% --reverse --multi --preview="[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --color=always --style=numbers --line-range=:500 {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -500"'
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden 2>/dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="rg --files --hidden --null "$1" 2>/dev/null | xargs -0 dirname | sort -u"
+export FZF_ALT_C_COMMAND="rg --files --hidden --null \"$1\" 2>/dev/null | xargs -0 dirname | sort -u"
 
 # Disable preview, useless for History completion
 export FZF_CTRL_R_OPTS="--no-preview"
@@ -25,7 +25,7 @@ _fzf_compgen_dir() {
 # Open the selected file with keybindings
 # Usage:   o [FUZZY PATTERN]
 # Example: o SomeFile.py
-#    then press ctrl-o to open, ctrl-e to edit in vim, enter to open in Idea)
+#    then press ctrl-o to open, ctrl-e to edit in vim, enter to open in Jetbrains IntelliJ IDEA)
 o() {
   if [ -d "$1" ]; then
     xdg-open "$1"
