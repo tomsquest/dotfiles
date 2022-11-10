@@ -89,7 +89,7 @@ function install-ripgrep {
 
 function install-docker-compose {
     echo "Installing Docker-Compose..."
-    local -r URL=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url | grep Linux-x86_64\" | cut -d '"' -f 4)
+    local -r URL=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url | grep linux-x86_64\" | cut -d '"' -f 4)
     local -r DEST="$HOME/.local/bin/docker-compose"
     curl -L --progress-bar "$URL" > "$DEST" \
       && chmod +x "$DEST"
