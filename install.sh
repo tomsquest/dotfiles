@@ -109,9 +109,8 @@ function install-direnv {
     echo "Installing Direnv through asdf..."
     source $HOME/.asdf/asdf.sh
     asdf plugin add direnv || true
-    asdf install direnv 2.20.0
-    asdf global  direnv 2.20.0
-    echo "source \$(asdf which direnv_use_asdf)" > ~/.config/direnv/direnvrc
+    asdf install direnv 2.32.1
+    asdf global  direnv 2.32.1
 }
 
 function copy-sysctl-conf {

@@ -57,7 +57,7 @@ source ~/.rupa-z/z.sh
 # <<< conda initialize <<<
 
 # Load direnv through asdf
-source ~/.config/asdf-direnv/zshrc
+source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 
 # Local (to this machine) configuration
 # SHOULD BE LAST
