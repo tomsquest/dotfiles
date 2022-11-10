@@ -98,6 +98,8 @@ export PATH="$PATH:$M2_HOME/bin"
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
 # Default is: *?_-.[]~=/&;!#$%^(){}<>
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+# Python REPL initialization
+export PYTHONSTARTUP="~/.pythonstartup"
 
 #
 # ZSH Modules config
