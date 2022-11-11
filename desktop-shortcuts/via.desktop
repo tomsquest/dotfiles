@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=VIA
-Comment=VIA Keyboard manager
-Icon=input-keyboard
-Exec="/usr/bin/via" %f
-Categories=Development;
-Terminal=false
