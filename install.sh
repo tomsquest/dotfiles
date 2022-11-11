@@ -52,7 +52,7 @@ function link-files {
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
     create-link "$PWD/vim"                    "$HOME/.vim"
     create-link "$PWD/vimrc"                  "$HOME/.vimrc"
-    create-link "$PWD/zprofile"                "$HOME/.zprofile"
+    create-link "$PWD/zprofile"               "$HOME/.zprofile"
     create-link "$PWD/zsh"                    "$HOME/.zsh"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"
     for file in $PWD/desktop-shortcuts/*
