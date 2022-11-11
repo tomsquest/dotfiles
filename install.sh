@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-function make-paths {
+function create-paths {
     echo "Creating additional PATH directories..."
     mkdir -p "$HOME/.local/bin"
     echo "Creating additional MANPATH directories..."
@@ -35,11 +35,15 @@ function install-from-git-repo {
     fi
 }
 
-function link-files {
-    echo "Linking files..."
+function create-links {
+    echo "Creating links..."
+    # directories
+    create-link "$PWD/bin"                    "$HOME/bin"
+    create-link "$PWD/vim"                    "$HOME/.vim"
+    create-link "$PWD/zsh"                    "$HOME/.zsh"
+    # files
     create-link "$PWD/albertignore"           "$HOME/.albertignore"
     create-link "$PWD/bashrc"                 "$HOME/.bashrc"
-    create-link "$PWD/bin"                    "$HOME/bin"
     create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
     create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
@@ -50,10 +54,8 @@ function link-files {
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
     create-link "$PWD/safe-rm"                "$HOME/.safe-rm"
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
-    create-link "$PWD/vim"                    "$HOME/.vim"
     create-link "$PWD/vimrc"                  "$HOME/.vimrc"
     create-link "$PWD/zprofile"               "$HOME/.zprofile"
-    create-link "$PWD/zsh"                    "$HOME/.zsh"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"
     for file in $PWD/desktop-shortcuts/*
     do
@@ -126,13 +128,13 @@ function copy-sysctl-conf {
 }
 
 function install-all {
-    make-paths
-    link-files
+    create-paths
+    create-links
     install-from-git-repo "Rupa-Z"        "https://github.com/rupa/z"               "$HOME/.rupa-z"
     install-from-git-repo "Zgen"          "https://github.com/tarjoilija/zgen"      "$HOME/.zgen"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
     install-from-git-repo "Vim Vundle"    "https://github.com/VundleVim/Vundle.vim" "$HOME/.vundle"
-    install-from-git-repo "Asdf-vm"       "https://github.com/asdf-vm/asdf"         "$HOME/.asdf"
+#    install-from-git-repo "Asdf-vm"       "https://github.com/asdf-vm/asdf"         "$HOME/.asdf"
     install-fzf
     install-ripgrep
     install-docker-compose
