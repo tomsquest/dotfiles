@@ -99,7 +99,7 @@ export PATH="$PATH:$M2_HOME/bin"
 # Default is: *?_-.[]~=/&;!#$%^(){}<>
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 # Python REPL initialization
-export PYTHONSTARTUP="~/.pythonstartup"
+export PYTHONSTARTUP="$HOME/.pythonstartup"
 
 #
 # ZSH Modules config
