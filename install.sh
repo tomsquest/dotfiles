@@ -65,7 +65,7 @@ function create-links {
 
 function install-fzf {
     echo "Installing FZF..."
-    local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf-bin/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
+    local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
     echo "- Binary"
     curl -L --progress-bar "$URL" | tar xz -C /tmp fzf  && mv /tmp/fzf $HOME/.local/bin/
 
