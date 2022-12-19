@@ -25,8 +25,8 @@
 [rerere]
  	enabled = true
 [commit]
-; disable until I create a sub-key for git signing
-; 	gpgsign = true
+    ; disable until I create a sub-key for git signing
+    ; gpgsign = true
 [rebase]
 	autostash = true
 	autosquash = true
@@ -35,6 +35,6 @@
 [fetch]
 	prune = true
 [push]
-        # Push to matching remote branch, or create branch if missing
-        # default is "simple" that does not create the remote branch
+    ; Push to matching remote branch, or create branch if missing
+    ; default is "simple" that does not create the remote branch
 	default = current
