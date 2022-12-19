@@ -14,8 +14,8 @@ if ! zgen saved; then
   zgen load chrissicool/zsh-256color
   zgen load johnhamelink/env-zsh
   zgen load theunraveler/zsh-fancy_ctrl_z
-  zgen load BurntSushi/ripgrep complete
-  zgen load docker/compose contrib/completion/zsh
+#   zgen load BurntSushi/ripgrep complete
+#   zgen load docker/compose contrib/completion/zsh
   zgen load tomsquest/q.plugin.zsh
 
   # Remove Zsh completion cache, given we may have updated a completion
@@ -36,10 +36,8 @@ source ~/.zsh/bindkey.zsh
 source ~/.zsh/prompt.zsh
 source ~/.zsh/fzf.zsh
 
-# Load rupa Z: quickly jump to recent directory with the z command
-# Example: z foo
-# See: https://github.com/rupa/z
-source ~/.rupa-z/z.sh
+# Load Zoxide: quickly jump to recent directory with the z command
+eval "$(zoxide init zsh)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

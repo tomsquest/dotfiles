@@ -63,41 +63,6 @@ function create-links {
     done
 }
 
-function install-fzf {
-    echo "Installing FZF..."
-    local -r URL=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)
-    echo "- Binary"
-    curl -L --progress-bar "$URL" | tar xz -C /tmp fzf  && mv /tmp/fzf $HOME/.local/bin/
-
-    echo "- Man page"
-    curl -sL "https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1" > $HOME/.local/man/man1/fzf.1
-
-    mkdir -p $HOME/.local/fzf
-    echo "- Completion"
-    curl -sL "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" > $HOME/.local/fzf/completion.zsh
-
-    echo "- Key bindings"
-    curl -sL "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" > $HOME/.local/fzf/key-bindings.zsh
-}
-
-function install-ripgrep {
-    echo "Installing Ripgrep..."
-    local -r TMP_DIR=$(mktemp -d)
-    local -r URL=$(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep browser_download_url | grep x86_64-unknown-linux | cut -d '"' -f 4)
-    curl -L --progress-bar "$URL" | tar zx -C "$TMP_DIR" --strip 1 --wildcards '*/rg' --wildcards '*/rg.1' \
-       && mv "$TMP_DIR/rg" $HOME/.local/bin/ \
-       && mv "$TMP_DIR/doc/rg.1" $HOME/.local/man/man1 \
-       && rm -rf "$TMP_DIR"
-}
-
-function install-docker-compose {
-    echo "Installing Docker-Compose..."
-    local -r URL=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url | grep linux-x86_64\" | cut -d '"' -f 4)
-    local -r DEST="$HOME/.local/bin/docker-compose"
-    curl -L --progress-bar "$URL" > "$DEST" \
-      && chmod +x "$DEST"
-}
-
 function install-vim-plugins {
     echo "Installing Vim plugins..."
     vim +PluginInstall +qall
@@ -108,7 +73,7 @@ function install-dircolors {
     curl -sl "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark" > ~/.dircolors
 }
 
-function install-direnv {
+function install-asdf-plugins {
     echo "Installing Direnv through asdf..."
     source $HOME/.asdf/asdf.sh
     asdf plugin add direnv || true
@@ -116,7 +81,24 @@ function install-direnv {
     asdf plugin add python || true
     asdf plugin add golang || true
     asdf install direnv 2.32.1
-    asdf global  direnv 2.32.1
+    asdf global direnv 2.32.1
+    asdf global python system
+}
+
+function install-homebrew {
+    echo "Installing Home Brew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+}
+
+function install-homebrew-apps {
+    echo "Installing Home Brew apps..."
+    brew install bat
+    brew install docker-compose
+    brew install exa
+    brew install fd
+    brew install fzf
+    brew install ripgrep
+    brew install zoxide
 }
 
 function copy-sysctl-conf {
@@ -130,17 +112,15 @@ function copy-sysctl-conf {
 function install-all {
     create-paths
     create-links
-    install-from-git-repo "Rupa-Z"        "https://github.com/rupa/z"               "$HOME/.rupa-z"
     install-from-git-repo "Zgen"          "https://github.com/tarjoilija/zgen"      "$HOME/.zgen"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
     install-from-git-repo "Vim Vundle"    "https://github.com/VundleVim/Vundle.vim" "$HOME/.vundle"
     install-from-git-repo "Asdf-vm"       "https://github.com/asdf-vm/asdf"         "$HOME/.asdf"
-    install-fzf
-    install-ripgrep
-    install-docker-compose
     install-vim-plugins
     install-dircolors
-    install-direnv
+    install-asdf-plugins
+    install-homebrew
+    install-homebrew-apps
     copy-sysctl-conf
 }
 
