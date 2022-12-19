@@ -16,10 +16,10 @@ alias h='history -iD'
 
 # ls
 # -v: natural sort of version
-alias ls='ls                                  -v --classify --group-directories-first --color=auto'
-alias  l='ls -l              --human-readable -v --classify --group-directories-first --color=auto'
-alias ll='ls -l              --human-readable -v --classify --group-directories-first --color=auto'
-alias la='ls -l --almost-all --human-readable -v --classify --group-directories-first --color=auto'
+alias ls='exa       --group-directories-first --color=auto --git --icons'
+alias  l='exa -l    --group-directories-first --color=auto --git --icons'
+alias ll='exa -l    --group-directories-first --color=auto --git --icons'
+alias la='exa -l -a --group-directories-first --color=auto --git --icons'
 
 # grep
 alias  grep='grep --color=auto'
@@ -97,3 +97,7 @@ alias   dsa='alert printAndRun docker-compose start'
 alias   dso='alert printAndRun docker-compose stop'
 alias    dl='docker-compose logs'
 alias   dlf='docker-compose logs -f'
+
+# Tools
+alias cat=bat
+alias cd=z
