@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+
+function toggle() {
+    # test if file /etc/systemd/resolved.conf.d/adeo.conf exist
+    if [[ -f "/etc/systemd/resolved.conf.d/adeo.conf" ]]; then
+        echo "ADEO DNS enabled. Switching OFF"
+        sudo mv /etc/systemd/resolved.conf.d/adeo.conf /etc/systemd/resolved.conf.d/adeo.conf.disabled
+    else
+        echo "ADEO DNS disabled. Switching ON"
+        sudo mv /etc/systemd/resolved.conf.d/adeo.conf.disabled /etc/systemd/resolved.conf.d/adeo.conf
+    fi
+
+    echo "Restarting systemd-resolved"
+    sudo systemctl restart systemd-resolved
+}
+
+toggle
