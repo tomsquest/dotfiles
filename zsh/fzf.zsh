@@ -31,6 +31,14 @@ o() {
     xdg-open "$1"
   elif [ -f "$1" ]; then
     idea "$1"
+  elif ! [ -z "$1" ] && ! [ -f "$1" ]; then
+    echo "File $1 does not exist. Create it? (y/n)"
+    read -k 1 answer
+    if [ -z "$answer" ] || [ "$answer" = "y" ]; then
+      touch "$1"
+      idea "$1"
+    fi
+    echo
   else
     local out file key
     IFS=$'\n' out=($(fzf --query="$1" --exit-0 --select-1 --expect=ctrl-o,ctrl-e))
