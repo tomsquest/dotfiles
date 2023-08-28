@@ -1,1 +1,1 @@
-/home/tom/Apps/idea/current/bin/idea.sh
+/home/tom/Apps/idea/bin/idea.sh
