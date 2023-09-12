@@ -14,6 +14,7 @@ if ! zgen saved; then
   zgen load chrissicool/zsh-256color
   zgen load johnhamelink/env-zsh
   zgen load theunraveler/zsh-fancy_ctrl_z
+  #zgen load Aloxaf/fzf-tab
 #   zgen load BurntSushi/ripgrep complete
 #   zgen load docker/compose contrib/completion/zsh
   zgen load tomsquest/q.plugin.zsh
