@@ -38,3 +38,5 @@
     ; Push to matching remote branch, or create branch if missing
     ; default is "simple" that does not create the remote branch
 	default = current
+[init]
+	defaultBranch = main
