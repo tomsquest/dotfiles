@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# This script will notify and beep upon success or failure of the specified command
+#
+# Example: `alert myLongCommand`
+#
 
 readonly PROG_DIR=$(readlink -m "$(dirname "$0")")
 
