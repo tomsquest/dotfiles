@@ -1,14 +1,15 @@
 #!/bin/sh
-# https://github.com/mikelward/scripts/blob/master/he
-
+# My own copy of the `he` script.
+# Source: https://github.com/mikelward/scripts/blob/master/he
+#
 # he - print brief help about a single option or command
 # Mikel Ward <mikel@mikelward.com>
-
+#
 # Example Usage:
 # he bash continue
 # he rsync -v
 
-scriptname=he
+scriptname=mana
 
 usage()
 {
