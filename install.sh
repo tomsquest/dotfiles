@@ -96,6 +96,7 @@ function install-homebrew-apps {
     brew install exa
     brew install fd
     brew install fzf
+    brew install httpie
     brew install ripgrep
     brew install zoxide
 }
