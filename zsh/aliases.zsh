@@ -4,12 +4,7 @@ alias df='df -h'
 alias free='free -h'
 alias f='find -iname'
 alias v='vim'
-alias meteo='curl http://wttr.in/Lille'
 alias up='sudo apt update && sudo apt -V --yes upgrade'
-alias ydl="youtube-dl --format best --output '%(upload_date)s.%(title)s.%(ext)s' --restrict-filenames --write-description"
-
-# Multitail with basic java colorization
-alias mu='multitail -cS apache -cS log4j -n 1000 --no-repeat -b 2 --mark-interval 2'
 
 # History with timestamps and elapsed time
 alias h='history -iD'
@@ -23,8 +18,8 @@ alias la='exa -l -a --group-directories-first --color=auto --git --icons'
 
 # grep
 alias  grep='grep --color=auto'
-alias egrep='grep --color=auto'
-alias zgrep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias zgrep='zgrep --color=auto'
 
 # More verbose fileutils
 alias cp='nocorrect cp -iv' # -i to prompt for every file
@@ -37,8 +32,6 @@ alias chown='chown -v'
 # ZSH global aliases for piping
 # Example : cat myfile.txt G pattern
 alias -g G='| grep -in'
-alias -g T='| tail'
-alias -g L='| less'
 
 # Parent directories
 alias cd..='cd ..'
