@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# CD into all directories containing a `package.json` file and run `npm ci` in them
+# Enter all directories below the current one and run `npm ci` if the directory containing a `package.json` file.
 #
 
 set -euo pipefail

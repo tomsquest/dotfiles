@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Retries a command a configurable number of times until a success or a failure
 # Adapted from:
 # http://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs
