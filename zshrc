@@ -3,20 +3,22 @@ source ~/.zgen/zgen.zsh
 if ! zgen saved; then
   echo "Creating a zgen save"
 
+  # Suggests commands as you type based on history and completions.
   zgen load zsh-users/zsh-autosuggestions
+  # Provides syntax highlighting for the shell zsh.
   zgen load zsh-users/zsh-syntax-highlighting
-  zgen oh-my-zsh plugins/history-substring-search # MUST be after zsh-syntax-highlighting
-  zgen oh-my-zsh plugins/gpg-agent
-  zgen oh-my-zsh plugins/sudo
-  zgen oh-my-zsh plugins/httpie
+  # Provides completion from history using UP and DOWN arrows
+  # MUST be after zsh-syntax-highlighting
+  zgen oh-my-zsh plugins/history-substring-search
+  # Provides suggested packages to be installed if a command cannot be found.
   zgen oh-my-zsh plugins/command-not-found
+  # Provides additional completions
   zgen load zsh-users/zsh-completions src
+  # Enhances the terminal environment with 256 colors
   zgen load chrissicool/zsh-256color
-  zgen load johnhamelink/env-zsh
+  # Allows you to foreground the last backgrounded job (when you would normally do fg) using Ctrl+Z
   zgen load theunraveler/zsh-fancy_ctrl_z
-  #zgen load Aloxaf/fzf-tab
-#   zgen load BurntSushi/ripgrep complete
-#   zgen load docker/compose contrib/completion/zsh
+  # Enable Q support in ZSH
   zgen load tomsquest/q.plugin.zsh
 
   # Remove Zsh completion cache, given we may have updated a completion
