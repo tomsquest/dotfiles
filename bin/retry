@@ -3,9 +3,7 @@
 # Retries a command on key press
 #
 
-set -e
-set -u
-set -o pipefail
+set -euo pipefail
 
 color_failure=$(tput bold)$(tput setaf 1) # Red
 color_success=$(tput bold)$(tput setaf 4)   # Blue
