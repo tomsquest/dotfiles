@@ -19,7 +19,7 @@ notify_failure() {
 }
 
 # Execution
-eval "$@"
+"$@"
 readonly EXIT_STATUS="$?"
 
 # Hide 'printAndRun' from being shown in notification
