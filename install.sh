@@ -42,7 +42,6 @@ function create-links {
     create-link "$PWD/vim"                    "$HOME/.vim"
     create-link "$PWD/zsh"                    "$HOME/.zsh"
     # files
-    create-link "$PWD/albertignore"           "$HOME/.albertignore"
     create-link "$PWD/bashrc"                 "$HOME/.bashrc"
     create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
