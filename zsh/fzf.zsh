@@ -10,14 +10,3 @@ export FZF_ALT_C_OPTS="--no-preview"
 
 source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/completion.zsh"
 source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh"
-
-#
-# Overrides completion, eg. `cd **`, `vim **`
-#
-_fzf_compgen_path() {
-  rg --files --hidden "$1" 2>/dev/null
-}
-
-_fzf_compgen_dir() {
-  rg --files --hidden --null "$1" 2>/dev/null | xargs -0 dirname | sort -u
-}
