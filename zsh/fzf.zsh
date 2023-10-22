@@ -1,4 +1,4 @@
-export FZF_DEFAULT_OPTS='--height=50% --reverse --multi --preview="[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --color=always --style=numbers --line-range=:500 {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -500"'
+export FZF_DEFAULT_OPTS='--height=50% --layout=reverse --info=inline --multi --preview=" --style=numbers --color=always --line-range :500 {}"'
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden 2>/dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
