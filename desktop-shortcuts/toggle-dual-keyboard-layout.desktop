@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Toggle dual keyboard layout
-Comment=Configure a second keyboard with another layout (azerty or qwerty)
-Icon=input-keyboard
-Exec="/home/tom/bin/toggle-dual-keyboard-layout"
-Categories=Development;
-Terminal=false
