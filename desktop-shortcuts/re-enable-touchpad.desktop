@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Re-enable the touchpad
-Comment=Sometimes, the touchpad is disabled after suspend. This script re-enables the touchpad
-Icon=input-mouse
-Exec="/home/tom/bin/re-enable-touchpad"
-Categories=Development;
-Terminal=false
