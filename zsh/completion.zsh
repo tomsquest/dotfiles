@@ -53,7 +53,6 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|
 #     deploy.yaml           http-client.env.json
 zstyle ':completion:*' list-dirs-first true
 
-
 # Kill completion
 zstyle ':completion:*:processes' command 'ps -au $USER'
 zstyle ':completion:*:processes-names' command 'ps -u $USER -o comm='
