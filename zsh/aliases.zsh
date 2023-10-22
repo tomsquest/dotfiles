@@ -65,21 +65,6 @@ alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 # shellcheck disable=SC2142
 alias delete-merged-branches="git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '\$2 == \"[gone]\" {print \$1}' | xargs -r git branch -D"
 
-# Maven
-alias m='mvn-in-colors'
-compdef _mvn m=mvn
-MAVEN_SKIP_TESTS='-Dmaven.test.skip=true' # or -DskipTests
-alias   mc='alert printAndRun mvn-in-colors clean'
-alias   mt='alert printAndRun mvn-in-colors test'
-alias  mct='alert printAndRun mvn-in-colors clean test'
-alias  mcp='alert printAndRun mvn-in-colors clean package'
-alias mcpt='alert printAndRun mvn-in-colors clean package $MAVEN_SKIP_TESTS'
-alias  mpt='alert printAndRun mvn-in-colors package $MAVEN_SKIP_TESTS'
-alias  mci='alert printAndRun mvn-in-colors clean install'
-alias mcit='alert printAndRun mvn-in-colors clean install $MAVEN_SKIP_TESTS'
-alias  mdt='mvn dependency:tree'
-alias  msb='printAndRun mvn spring-boot:run'
-
 # NPM
 alias  ns='printAndRun npm start'
 alias nsd='printAndRun npm run start:dev'

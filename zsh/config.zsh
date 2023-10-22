@@ -88,12 +88,6 @@ export SSH_ASKPASS=/usr/bin/ssh-askpass
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 # Additional MANPATH
 export MANPATH="$MANPATH:$HOME/.local/man"
-# Java
-#export JAVA_HOME="/usr/lib/jvm/java-18-openjdk-amd64"
-#export PATH="$PATH:$JAVA_HOME/bin"
-# Maven
-#export M2_HOME="$HOME/Apps/maven/current"
-#export PATH="$PATH:$M2_HOME/bin"
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
 # Default is: *?_-.[]~=/&;!#$%^(){}<>
@@ -126,7 +120,7 @@ autoload zmv
 autoload -Uz compinit && compinit
 
 # Create directory and move into
-mcd() { [ -n "$1" ] && mkdir -p "$1" && cd "$1"}
+mcd() { [ -n "$1" ] && mkdir -p "$1" && cd "$1" }
 
 # Delete old docker containers
 docker-clean() {
