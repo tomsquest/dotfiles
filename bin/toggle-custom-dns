@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+
+function toggle() {
+    # test if file /etc/systemd/resolved.conf.d/custom.conf exist
+    if [[ -f "/etc/systemd/resolved.conf.d/custom.conf" ]]; then
+        echo "Custom DNS enabled. Switching OFF"
+        sudo rm -rf /etc/systemd/resolved.conf.d/custom.conf
+    else
+        echo "Custom DNS disabled. Switching ON"
+        sudo cp /etc/systemd/resolved.conf.d/custom.conf.disabled /etc/systemd/resolved.conf.d/custom.conf
+    fi
+
+    echo "Restarting systemd-resolved"
+    sudo systemctl restart systemd-resolved
+}
+
+toggle
