@@ -5,7 +5,8 @@
 # Example: `alert myLongCommand`
 #
 
-readonly PROG_DIR=$(readlink -m "$(dirname "$0")")
+PROG_DIR=$(readlink -m "$(dirname "$0")")
+readonly PROG_DIR
 
 notify_success() {
     command -v notify-send >/dev/null 2>&1 && notify-send --icon="${PROG_DIR}/success.png" "Success" "$1"
