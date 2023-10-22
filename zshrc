@@ -42,10 +42,13 @@ source ~/.zsh/fzf.zsh
 # Load Zoxide: quickly jump to recent directory with the z command
 eval "$(zoxide init zsh)"
 
+# Load linuxbrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 # Load direnv through asdf
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 
-# Local (to this machine) configuration
+# Load local (to this machine) configuration
 # SHOULD BE LAST
 if [ -f ~/.zshrc.local ]; then
   source ~/.zshrc.local
