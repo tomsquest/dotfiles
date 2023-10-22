@@ -38,6 +38,7 @@ source ~/.zsh/aliases.zsh
 source ~/.zsh/bindkey.zsh
 source ~/.zsh/prompt.zsh
 source ~/.zsh/fzf.zsh
+source ~/.zsh/functions.zsh
 
 # Load Zoxide: quickly jump to recent directory with the z command
 eval "$(zoxide init zsh)"

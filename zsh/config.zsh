@@ -116,18 +116,3 @@ autoload zmv
 # Load completions
 # Should be done by Zgen, but it does not seem to run it
 autoload -Uz compinit && compinit
-
-# Create directory and move into
-mcd() { [ -n "$1" ] && mkdir -p "$1" && cd "$1" }
-
-# Delete old docker containers
-docker-clean() {
-  local MAX_AGE="90d"
-  echo "Deleting containers, images and volumes older than $MAX_AGE"
-  docker run -ti \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    yelp/docker-custodian \
-      --max-image-age "$MAX_AGE" \
-      --max-container-age "$MAX_AGE" \
-      --dangling-volumes
-}
