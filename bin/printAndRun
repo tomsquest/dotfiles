@@ -1,6 +1,9 @@
 #!/bin/bash
 #
-# Print then run the given command
+# Print then run the given command. Useful to print what an alias is doing.
+#
+# Example: printAndRun npm test
+# This will echo "npm test" then run "npm test".
 #
 
 readonly color_notif=$(tput bold)$(tput setaf 4)
