@@ -127,7 +127,6 @@ docker-clean() {
   docker run -ti \
     -v /var/run/docker.sock:/var/run/docker.sock \
     yelp/docker-custodian \
-    dcgc \
       --max-image-age "$MAX_AGE" \
       --max-container-age "$MAX_AGE" \
       --dangling-volumes
