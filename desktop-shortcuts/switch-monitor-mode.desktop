@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Switch monitor mode
-Comment=Configure the monitors for dual-screens-only or laptop-only modes
-Icon=utilities-terminal
-Exec="/home/tom/bin/switch-monitor-mode"
-Categories=Development;
-Terminal=false
