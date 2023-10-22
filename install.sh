@@ -101,6 +101,12 @@ function install-homebrew-apps {
     brew install zoxide
 }
 
+function install-terminator-editor-plugin {
+    echo "Installing Terminator Editor plugin..."
+    mkdir -p ~/.config/terminator/plugins
+    curl -sl "https://raw.githubusercontent.com/terminator-editor-plugin/blob/master/editor_plugin.py" > ~/.config/terminator/plugins/editor_plugin.py
+}
+
 function copy-sysctl-conf {
     echo "Copying sysctl config files..."
     for file in $PWD/sysctl.d/*
@@ -121,6 +127,7 @@ function install-all {
     install-asdf-plugins
     install-homebrew
     install-homebrew-apps
+    install-terminator-editor-plugin
     copy-sysctl-conf
 }
 
