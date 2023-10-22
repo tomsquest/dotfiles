@@ -12,7 +12,7 @@ cd ~/.dotfiles
 
 ## Main features
 
-* Heavily commented ZSH configuration : completion, prompt, key bindings...
+* Heavily commented ZSH configuration: completion, prompt, key bindings...
 * Efficient ZSH Prompt with horizontal separator:
 
  ``` bash
