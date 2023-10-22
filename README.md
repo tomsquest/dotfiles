@@ -2,6 +2,11 @@
 
 My config files, heavily commented.
 
+## Prerequisites
+
+1. Linux brew
+2. `sudo apt install safe-rm ruby libnotify-bin jq httpie xclip imwheel htop tree`
+
 ## Installation
 
 ``` bash
