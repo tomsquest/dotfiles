@@ -4,7 +4,7 @@
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
-# Share history betwen multiple termional sessions
+# Share history between multiple terminal sessions
 setopt share_history
 # Append history, instead of replace, when a terminal session exits
 setopt appendhistory
@@ -32,8 +32,6 @@ setopt prompt_subst
 setopt complete_in_word
 # When completing from the middle of a word, move the cursor to the end of the word
 setopt always_to_end
-# Completion correction : 'sl' instead of 'ls'
-#setopt correctall
 # If you type foo, and it isn't a command, and it is a directory in your cdpath, go there
 setopt autocd
 # Make cd push the old directory onto the directory stack.
