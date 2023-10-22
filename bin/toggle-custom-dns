@@ -1,19 +1,29 @@
 #!/bin/bash
+#
+# Enable or disable DNS custom configuration.
+#
+# For this script to run:
+# 1. sudo mkdir -p /etc/systemd/resolved.conf.d
+# 2. place a file `custom.conf.disabled` in `/etc/systemd/resolved.conf.d`
+#
 
 set -euo pipefail
 
+CUSTOM_DNS_FILE="/etc/systemd/resolved.conf.d/custom.conf"
+CUSTOM_DNS_FILE_DISABLED="$CUSTOM_DNS_FILE.disabled"
+
 function toggle() {
-    # test if file /etc/systemd/resolved.conf.d/custom.conf exist
-    if [[ -f "/etc/systemd/resolved.conf.d/custom.conf" ]]; then
+    if [[ -f "$CUSTOM_DNS_FILE" ]]; then
         echo "Custom DNS enabled. Switching OFF"
-        sudo rm -rf /etc/systemd/resolved.conf.d/custom.conf
+        sudo rm -rf "$CUSTOM_DNS_FILE"
     else
         echo "Custom DNS disabled. Switching ON"
-        sudo cp /etc/systemd/resolved.conf.d/custom.conf.disabled /etc/systemd/resolved.conf.d/custom.conf
+        sudo cp "$CUSTOM_DNS_FILE_DISABLED" "$CUSTOM_DNS_FILE"
     fi
 
     echo "Restarting systemd-resolved"
     sudo systemctl restart systemd-resolved
+    echo "✅ Done."
 }
 
 toggle
