@@ -40,11 +40,11 @@ source ~/.zsh/prompt.zsh
 source ~/.zsh/fzf.zsh
 source ~/.zsh/functions.zsh
 
-# Load Zoxide: quickly jump to recent directory with the z command
-eval "$(zoxide init zsh)"
-
 # Load linuxbrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Load Zoxide: quickly jump to recent directory with the z command
+eval "$(zoxide init zsh)"
 
 # Load direnv through asdf
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
