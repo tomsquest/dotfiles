@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# This script will emit a sound when called.
+# You can specify the sound file as the first argument.
+#
+# Example: `beep`
+#
+
+PROG_DIR=$(readlink -m "$(dirname "$0")")
+readonly PROG_DIR
+
+SOUND_FILE="$1"
+if ! [ -r "$SOUND_FILE" ]; then
+    SOUND_FILE="${PROG_DIR}/beep.mp3"
+fi
+
+if ! [ -r "$SOUND_FILE" ]; then
+    echo "Sound file not found: $SOUND_FILE"
+    exit 1
+fi
+
+if command -v ffplay &> /dev/null; then
+    ffplay "$SOUND_FILE" -nodisp -nostats -hide_banner -autoexit &> /dev/null &
+elif command -v mplayer &> /dev/null; then
+    mplayer "$SOUND_FILE" -really-quiet -noconsolecontrols -nolirc -nojoystick -nomouseinput -nogui &> /dev/null &
+elif command -v mpv &> /dev/null; then
+    mpv "$SOUND_FILE" --really-quiet --no-audio-display &> /dev/null &
+elif command -v play &> /dev/null; then
+    play "$SOUND_FILE" &> /dev/null &
+else
+    echo "No player found. Please install ffplay, mplayer, mpv, or sox."
+    exit 1
+fi
