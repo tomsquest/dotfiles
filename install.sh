@@ -104,7 +104,7 @@ function install-homebrew-apps {
 function install-terminator-editor-plugin {
     echo "Installing Terminator Editor plugin..."
     mkdir -p ~/.config/terminator/plugins
-    curl -sl "https://raw.githubusercontent.com/terminator-editor-plugin/blob/master/editor_plugin.py" > ~/.config/terminator/plugins/editor_plugin.py
+    curl -sl "https://raw.githubusercontent.com/mchelem/terminator-editor-plugin/master/editor_plugin.py" > ~/.config/terminator/plugins/editor_plugin.py
 }
 
 function copy-sysctl-conf {
