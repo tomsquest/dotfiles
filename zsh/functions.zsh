@@ -1,6 +1,6 @@
 # Create directory and move into it
 mcd() {
-    [ -n "$1" ] && mkdir -p "$1" && cd "$1" || exit
+    [ -n "$1" ] && mkdir -p "$1" && cd "$1"
 }
 
 # Delete old docker stuff
