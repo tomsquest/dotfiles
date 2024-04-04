@@ -78,4 +78,3 @@ alias   dlf='docker compose logs -f'
 
 # Tools
 alias cat=bat
-alias cd=z

@@ -97,7 +97,7 @@ function install-homebrew-apps {
     brew install fzf
     brew install httpie
     brew install ripgrep
-    brew install zoxide
+    brew install jump
 }
 
 function install-terminator-editor-plugin {

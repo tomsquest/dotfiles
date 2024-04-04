@@ -43,8 +43,9 @@ source ~/.zsh/functions.zsh
 # Load linuxbrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-# Load Zoxide: quickly jump to recent directory with the z command
-eval "$(zoxide init zsh)"
+# Load Jump: quickly jump to recent directory with the z command
+# Adds fuzzy matching which z doesn't have
+eval "$(jump shell --bind=z)"
 
 # Load direnv through asdf
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
