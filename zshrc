@@ -27,11 +27,6 @@ if ! zgen saved; then
   zgen save
 fi
 
-# Load ASDF
-# Needs to be done before compinit in config.zsh
-. $HOME/.asdf/asdf.sh
-fpath=(${ASDF_DIR}/completions $fpath)
-
 source ~/.zsh/config.zsh
 source ~/.zsh/completion.zsh
 source ~/.zsh/aliases.zsh
@@ -40,15 +35,20 @@ source ~/.zsh/prompt.zsh
 source ~/.zsh/fzf.zsh
 source ~/.zsh/functions.zsh
 
+# Load ASDF
+# Needs to be done before compinit in config.zsh
+. $HOME/.asdf/asdf.sh
+fpath=(${ASDF_DIR}/completions $fpath)
+
+# Load direnv through asdf
+source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+
 # Load linuxbrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Load Jump: quickly jump to recent directory with the z command
 # Adds fuzzy matching which z doesn't have
 eval "$(jump shell --bind=z)"
-
-# Load direnv through asdf
-source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 
 # Load local (to this machine) configuration
 # SHOULD BE LAST
