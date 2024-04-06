@@ -32,8 +32,10 @@ source ~/.zsh/completion.zsh
 source ~/.zsh/aliases.zsh
 source ~/.zsh/bindkey.zsh
 source ~/.zsh/prompt.zsh
-source ~/.zsh/fzf.zsh
 source ~/.zsh/functions.zsh
+
+# Load linuxbrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Load ASDF
 # Needs to be done before compinit in config.zsh
@@ -43,12 +45,14 @@ fpath=(${ASDF_DIR}/completions $fpath)
 # Load direnv through asdf
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 
-# Load linuxbrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
 # Load Jump: quickly jump to recent directory with the z command
 # Adds fuzzy matching which z doesn't have
 eval "$(jump shell --bind=z)"
+
+# FZF
+export FZF_DEFAULT_OPTS='--height=50% --reverse --multi'
+export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target --preview 'bat --style=numbers --color=always {}'"
+eval "$(fzf --zsh)"
 
 # Load local (to this machine) configuration
 # SHOULD BE LAST
