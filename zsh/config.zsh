@@ -2,8 +2,9 @@
 # History
 #
 HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
+HISTORY_IGNORE="(ls|cd|pwd|exit|cd)*"
 # Share history between multiple terminal sessions
 setopt share_history
 # Append history, instead of replace, when a terminal session exits
