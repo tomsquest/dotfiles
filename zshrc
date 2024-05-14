@@ -50,7 +50,7 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 eval "$(jump shell --bind=z)"
 
 # FZF
-export FZF_DEFAULT_OPTS='--height=50% --reverse --multi'
+export FZF_DEFAULT_OPTS="--height=50% --reverse --multi --highlight-line"
 export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target --preview 'bat --style=numbers --color=always {}'"
 export FZF_ALT_C_OPTS="--walker-skip .git,node_modules,target --preview 'tree -C {}'"
 eval "$(fzf --zsh)"
