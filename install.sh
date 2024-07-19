@@ -92,7 +92,7 @@ function install-homebrew {
 function install-homebrew-apps {
     echo "Installing Home Brew apps..."
     brew install bat
-    brew install exa
+    brew install eza # exa is unmaintained
     brew install fd
     brew install fzf
     brew install httpie

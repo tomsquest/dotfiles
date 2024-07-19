@@ -11,10 +11,10 @@ alias h='history -iD'
 
 # ls
 # -v: natural sort of version
-alias ls='exa       --group-directories-first --color=auto --git --icons'
-alias  l='exa -l    --group-directories-first --color=auto --git --icons'
-alias ll='exa -l    --group-directories-first --color=auto --git --icons'
-alias la='exa -l -a --group-directories-first --color=auto --git --icons'
+alias ls='eza       --group-directories-first --color=auto --git --icons'
+alias  l='eza -l    --group-directories-first --color=auto --git --icons'
+alias ll='eza -l    --group-directories-first --color=auto --git --icons'
+alias la='eza -l -a --group-directories-first --color=auto --git --icons'
 
 # grep
 alias  grep='grep --color=auto'
