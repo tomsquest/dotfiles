@@ -36,6 +36,7 @@ source ~/.zsh/functions.zsh
 
 # Load linuxbrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 
 # Load ASDF
 # Needs to be done before compinit in config.zsh
@@ -54,6 +55,13 @@ export FZF_DEFAULT_OPTS="--height=50% --reverse --multi --highlight-line"
 export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target --preview 'bat --style=numbers --color=always {}'"
 export FZF_ALT_C_OPTS="--walker-skip .git,node_modules,target --preview 'tree -C {}'"
 eval "$(fzf --zsh)"
+
+# Load completions
+# SHOULD BE LAST
+# rm using full path to escape from safe-rm
+/usr/bin/rm -f ~/.zcompdump || true
+autoload -Uz compinit
+compinit
 
 # Load local (to this machine) configuration
 # SHOULD BE LAST

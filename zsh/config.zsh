@@ -113,7 +113,3 @@ bindkey '\C-x\C-e' edit-command-line
 # Awesome MV
 # Example: zmv '(**/)file.xml' '$1anotherName.xml'
 autoload zmv
-
-# Load completions
-# Should be done by Zgen, but it does not seem to run it
-autoload -Uz compinit && compinit
