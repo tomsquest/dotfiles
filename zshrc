@@ -56,7 +56,7 @@ eval "$(jump shell --bind=z)"
 export FZF_DEFAULT_OPTS="--height=50% --reverse --multi --highlight-line"
 export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target --preview 'bat --style=numbers --color=always {}'"
 export FZF_ALT_C_OPTS="--walker-skip .git,node_modules,target --preview 'tree -C {}'"
-eval "$(fzf --zsh)"
+source <(fzf --zsh)
 
 # Load completions
 # SHOULD BE LAST
