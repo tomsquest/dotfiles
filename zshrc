@@ -12,6 +12,8 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/history-substring-search
   # Provides suggested packages to be installed if a command cannot be found.
   zgen oh-my-zsh plugins/command-not-found
+  # Provides ESC-ESC keybind to prepend last command with 'sudo'
+  zgen oh-my-zsh plugins/sudo
   # Provides additional completions
   zgen load zsh-users/zsh-completions src
   # Enhances the terminal environment with 256 colors
