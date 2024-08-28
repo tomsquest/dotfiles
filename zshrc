@@ -24,7 +24,7 @@ if ! zgen saved; then
   zgen load tomsquest/q.plugin.zsh
 
   # Remove Zsh completion cache, given we may have updated a completion
-  rm ~/.zcompdump || true
+  /usr/bin/rm ~/.zcompdump || true
 
   zgen save
 fi
