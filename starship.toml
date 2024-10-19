@@ -1,43 +1,66 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 # Inserts a blank line between shell prompts (default: true)
-add_newline = true
+add_newline = false
 
 format = """
 $time\
+[](fg:color_purple bg:color_blue)\
 $directory\
+[](fg:color_blue bg:color_aqua)\
 $git_branch\
 $git_state\
 $git_status\
+[](fg:color_aqua)\
 $cmd_duration\
 $fill\
 $line_break\
 $character"""
 
+palette = 'gruvbox_dark'
+
+[palettes.gruvbox_dark]
+color_fg0 = '#fbf1c7'
+color_bg1 = '#3c3836'
+color_bg3 = '#665c54'
+color_blue = '#458588'
+color_aqua = '#689d6a'
+color_green = '#98971a'
+color_orange = '#d65d0e'
+color_purple = '#b16286'
+color_red = '#cc241d'
+color_yellow = '#d79921'
+
 #[character]
-#success_symbol = "[❯](purple)"
-#error_symbol = "[❯](red)"
+#success_symbol = "[❯](color_green)"
+#error_symbol = "[❗](color_red)"
 
 [time]
 disabled = false # the module is disabled by default
-format = '[$time]($style) '
-style = "blue"
+format = '[ $time ]($style)'
+#style = "blue"
+style = "bg:color_purple fg:color_fg0"
 
 [directory]
 truncate_to_repo = false
-style = "bold black"
+format = "[ $path ]($style)"
+#style = "bold black"
+style = "fg:color_fg0 bg:color_blue"
 
 [fill]
 symbol = '─'
 style = 'white'
 
 [git_branch]
-format = "[$branch]($style) "
-style = "bold blue"
+#format = "[ $branch ]($style) "
+format = '[[ $branch ](fg:color_fg0 bg:color_aqua)]($style)'
+#style = "bold blue"
+style = "bg:color_aqua"
 
 [git_status]
-format = "([$all_status$ahead_behind]($style) )"
-style = "purple"
+#format = "([$all_status$ahead_behind]($style) )"
+format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+style = "bg:color_aqua fg:purple"
 # Do not show stashed
 stashed = ""
 # Add the count
@@ -49,4 +72,5 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 style = "bright-black"
 
 [cmd_duration]
-style = "yellow"
+style = "white"
+format = '[ took $duration ]($style)'
