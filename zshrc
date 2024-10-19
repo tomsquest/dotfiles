@@ -33,17 +33,20 @@ source ~/.zsh/config.zsh
 source ~/.zsh/completion.zsh
 source ~/.zsh/aliases.zsh
 source ~/.zsh/bindkey.zsh
-source ~/.zsh/prompt.zsh
 source ~/.zsh/functions.zsh
 
 # Load linuxbrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
+fpath+=("$(brew --prefix)/share/zsh/site-functions")
+
+# Starship prompt
+export STARSHIP_CONFIG="$HOME/.dotfiles/starship.toml"
+eval "$(starship init zsh)"
 
 # Load ASDF
 # Needs to be done before compinit in config.zsh
 . $HOME/.asdf/asdf.sh
-fpath=(${ASDF_DIR}/completions $fpath)
+fpath+=("${ASDF_DIR}/completions")
 
 # Load direnv through asdf
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"

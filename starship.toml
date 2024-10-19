@@ -1,0 +1,52 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts (default: true)
+add_newline = true
+
+format = """
+$time\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$cmd_duration\
+$fill\
+$line_break\
+$character"""
+
+#[character]
+#success_symbol = "[❯](purple)"
+#error_symbol = "[❯](red)"
+
+[time]
+disabled = false # the module is disabled by default
+format = '[$time]($style) '
+style = "blue"
+
+[directory]
+truncate_to_repo = false
+style = "bold black"
+
+[fill]
+symbol = '─'
+style = 'white'
+
+[git_branch]
+format = "[$branch]($style) "
+style = "bold blue"
+
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+style = "purple"
+# Do not show stashed
+stashed = ""
+# Add the count
+ahead = '⇡${count}'
+behind = '⇣${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+
+[git_state]
+style = "bright-black"
+
+[cmd_duration]
+style = "yellow"

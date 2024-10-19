@@ -96,8 +96,9 @@ function install-homebrew-apps {
     brew install fd
     brew install fzf
     brew install httpie
-    brew install ripgrep
     brew install jump
+    brew install ripgrep
+    brew install starship
 }
 
 function install-terminator-editor-plugin {
