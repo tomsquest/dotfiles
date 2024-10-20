@@ -72,5 +72,5 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 style = "bright-black"
 
 [cmd_duration]
-style = "white"
+style = "bright white"
 format = '[ took $duration ]($style)'
