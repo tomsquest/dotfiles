@@ -12,6 +12,7 @@ $git_branch\
 $git_state\
 $git_status\
 [](fg:color_3)\
+$status\
 $cmd_duration\
 $fill\
 $line_break\
@@ -59,6 +60,13 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 
 [git_state]
 style = "black"
+
+[status]
+disabled = false # the module is disabled by default
+format = '[ $status ]($style)'
+style = 'bold red'
+pipestatus = true
+pipestatus_format = '\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'
 
 [cmd_duration]
 format = '[ took $duration ]($style)'
