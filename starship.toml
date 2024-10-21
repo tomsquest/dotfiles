@@ -63,3 +63,4 @@ style = "black"
 [cmd_duration]
 format = '[ took $duration ]($style)'
 style = "bright white"
+min_time = 30_000
