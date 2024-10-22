@@ -61,7 +61,6 @@ alias delete-merged-branches="git fetch -p && git for-each-ref --format '%(refna
 # NPM
 alias  ns='printAndRun npm start'
 alias nsd='printAndRun npm run start:dev'
-alias nsh='printAndRun npm run start:hmr'
 alias  nt='printAndRun npm test'
 alias ntw='printAndRun npm run test:watch'
 
