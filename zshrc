@@ -1,4 +1,3 @@
-# zgen
 source ~/.zgen/zgen.zsh
 if ! zgen saved; then
   echo "Creating a zgen save"
@@ -35,7 +34,7 @@ source ~/.zsh/aliases.zsh
 source ~/.zsh/bindkey.zsh
 source ~/.zsh/functions.zsh
 
-# Load linuxbrew
+# linuxbrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fpath+=("$(brew --prefix)/share/zsh/site-functions")
 
@@ -43,16 +42,16 @@ fpath+=("$(brew --prefix)/share/zsh/site-functions")
 export STARSHIP_CONFIG="$HOME/.dotfiles/starship.toml"
 eval "$(starship init zsh)"
 
-# Load ASDF
+# ASDF
 # Needs to be done before compinit in config.zsh
 . $HOME/.asdf/asdf.sh
 fpath+=("${ASDF_DIR}/completions")
 
-# Load direnv through asdf
+# Direnv through asdf
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 
-# Load Jump: quickly jump to recent directory with the z command
-# Adds fuzzy matching which z doesn't have
+# Jump: quickly jump to recent directory with the z command
+# Adds fuzzy matching which zoxide does not have
 eval "$(jump shell --bind=z)"
 
 # FZF
@@ -61,15 +60,14 @@ export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target --preview 'bat --
 export FZF_ALT_C_OPTS="--walker-skip .git,node_modules,target --preview 'tree -C {}'"
 source <(fzf --zsh)
 
-# Load completions
-# SHOULD BE LAST
-# rm using full path to escape from safe-rm
-/usr/bin/rm -f ~/.zcompdump || true
-autoload -Uz compinit
-compinit
-
-# Load local (to this machine) configuration
+# Local configuration (to this machine)
 # SHOULD BE LAST
 if [ -f ~/.zshrc.local ]; then
   source ~/.zshrc.local
 fi
+
+# Completions
+# SHOULD BE LAST
+/usr/bin/rm -f ~/.zcompdump || true
+autoload -Uz compinit
+compinit
