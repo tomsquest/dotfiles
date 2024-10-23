@@ -66,7 +66,7 @@ disabled = false # the module is disabled by default
 format = '[ $status ]($style)'
 style = 'bold red'
 pipestatus = true
-pipestatus_format = '\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'
+pipestatus_format = ' \[$pipestatus\] => [$status ]($style)'
 
 [cmd_duration]
 format = '[ took $duration ]($style)'
