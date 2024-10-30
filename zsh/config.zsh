@@ -93,6 +93,10 @@ export MANPATH="$MANPATH:$HOME/.local/man"
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 # Python REPL initialization
 export PYTHONSTARTUP="$HOME/.pythonstartup"
+# Node 12/13... cache
+# The recommendation is to set to a tmp directory to avoid the cache growing too much. But I will see.
+# See: https://nodejs.org/api/module.html#module-compile-cache
+export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 
 #
 # ZSH Modules config
