@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Script to install Discord
+# Usage: ./install-discord [ptb]
+
+# Define colors for messages
+BLUE="\033[1;34m"
+GREEN="\033[1;32m"
+RED="\033[1;31m"
+RESET="\033[0m"
+
+# Determine if we should install the PTB version
+install_ptb=false
+if [ "$1" == "ptb" ]; then
+  install_ptb=true
+fi
+
+# Set the download URL based on the chosen version
+if [ "$install_ptb" = true ]; then
+  URL="https://discord.com/api/download/ptb?platform=linux&format=deb"
+  echo -e "${BLUE}Installing Discord PTB (Public Test Build) version...${RESET}"
+else
+  URL="https://discord.com/api/download?platform=linux&format=deb"
+  echo -e "${BLUE}Installing standard Discord version...${RESET}"
+fi
+
+# Name of the .deb file and download location
+DEB_FILE="/tmp/discord.deb"
+
+# Download the .deb file
+echo -e "${BLUE}Downloading Discord from $URL...${RESET}"
+if ! wget -O $DEB_FILE "$URL"; then
+  echo -e "${RED}Error: Download failed.${RESET}"
+  exit 1
+fi
+
+# Install the .deb file
+echo -e "${BLUE}Installing Discord...${RESET}"
+sudo dpkg -i $DEB_FILE
+
+# Remove the temporary .deb file
+echo -e "${BLUE}Cleaning up the downloaded file...${RESET}"
+rm -f $DEB_FILE
+
+echo -e "${GREEN}✅ Discord installation successful!${RESET}"
