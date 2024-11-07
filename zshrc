@@ -34,21 +34,9 @@ source ~/.zsh/aliases.zsh
 source ~/.zsh/bindkey.zsh
 source ~/.zsh/functions.zsh
 
-# linuxbrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fpath+=("$(brew --prefix)/share/zsh/site-functions")
-
 # Starship prompt
 export STARSHIP_CONFIG="$HOME/.dotfiles/starship.toml"
 eval "$(starship init zsh)"
-
-# ASDF
-# Needs to be done before compinit in config.zsh
-. $HOME/.asdf/asdf.sh
-fpath+=("${ASDF_DIR}/completions")
-
-# Direnv through asdf
-source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 
 # Jump: quickly jump to recent directory with the z command
 # Adds fuzzy matching which zoxide does not have

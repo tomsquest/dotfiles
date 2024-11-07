@@ -2,13 +2,6 @@
 
 set -euo pipefail
 
-function create-paths {
-    echo "Creating additional PATH directories..."
-    mkdir -p "$HOME/.local/bin"
-    echo "Creating additional MANPATH directories..."
-    mkdir -p "$HOME"/.local/man/man{1..8}
-}
-
 function create-link {
   local -r SRC=$1
   local -r DEST=$2
@@ -54,7 +47,7 @@ function create-links {
     create-link "$PWD/safe-rm"                "$HOME/.safe-rm"
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
     create-link "$PWD/vimrc"                  "$HOME/.vimrc"
-    create-link "$PWD/zprofile"               "$HOME/.zprofile"
+    create-link "$PWD/zshenv"                 "$HOME/.zshenv"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"
     for file in $PWD/desktop-shortcuts/*
     do
@@ -116,7 +109,6 @@ function copy-sysctl-conf {
 }
 
 function install-all {
-    create-paths
     create-links
     install-from-git-repo "Zgen"          "https://github.com/tarjoilija/zgen"      "$HOME/.zgen"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
