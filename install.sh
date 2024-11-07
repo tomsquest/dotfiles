@@ -69,9 +69,10 @@ function install-asdf-plugins {
     echo "Installing Direnv through asdf..."
     source $HOME/.asdf/asdf.sh
     asdf plugin add direnv || true
+    asdf plugin add golang || true
     asdf plugin add nodejs || true
     asdf plugin add python || true
-    asdf plugin add golang || true
+    asdf plugin add ruby || true
     asdf install direnv 2.32.1
     asdf global direnv 2.32.1
     asdf global python system
