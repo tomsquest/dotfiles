@@ -1,7 +1,8 @@
 #!/bin/bash
-
 # Script to install Discord
 # Usage: ./install-discord [ptb]
+
+set -euo pipefail
 
 # Define colors for messages
 BLUE="\033[1;34m"
@@ -11,9 +12,11 @@ RESET="\033[0m"
 
 # Determine if we should install the PTB version
 install_ptb=false
+set +u
 if [ "$1" == "ptb" ]; then
   install_ptb=true
 fi
+set -u
 
 # Set the download URL based on the chosen version
 if [ "$install_ptb" = true ]; then
