@@ -55,11 +55,12 @@ setopt complete_aliases
 #
 # ENV
 #
+export TERM=xterm-256color
+export TMPDIR="/tmp"
+export EDITOR="/usr/bin/vim"
+export VISUAL="/usr/bin/vim"
 eval "$(dircolors -b ~/.dircolors)"
-export TMPDIR='/tmp'
-export EDITOR='/usr/bin/vim'
-export VISUAL='/usr/bin/vim'
-export LESS='--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --tabs=2'
+export LESS="--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --tabs=2"
 eval $(lesspipe)
 # Colors for less binary.
 # Src: https://unix.stackexchange.com/questions/119/colors-in-man-pages/147#147
@@ -76,17 +77,16 @@ export LESS_TERMCAP_ZN=$(tput ssubm)
 export LESS_TERMCAP_ZV=$(tput rsubm)
 export LESS_TERMCAP_ZO=$(tput ssupm)
 export LESS_TERMCAP_ZW=$(tput rsupm)
-export TERM=xterm-256color
 # Print dates in ISO format (in `ls -l` for example)
-export TIME_STYLE=long-iso
+export TIME_STYLE="long-iso"
 # Ripgrep config
-export RIPGREP_CONFIG_PATH=/home/tom/.ripgreprc
+export RIPGREP_CONFIG_PATH="/home/tom/.ripgreprc"
 # SSH ask-pass. Require pkg ssh-askpass
-export SSH_ASKPASS=/usr/bin/ssh-askpass
+export SSH_ASKPASS="/usr/bin/ssh-askpass"
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
 # Default is: *?_-.[]~=/&;!#$%^(){}<>
-export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+export WORDCHARS="*?_-.[]~=&;!#$%^(){}<>"
 # Python REPL initialization
 export PYTHONSTARTUP="$HOME/.pythonstartup"
 # Node 22/23... cache
@@ -108,7 +108,7 @@ add-zsh-hook precmd update_terminal_title
 # Edit command line by pressing Ctrl+x Ctrl+e
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey '\C-x\C-e' edit-command-line
+bindkey "\C-x\C-e" edit-command-line
 
 # Awesome MV
 # Example: zmv '(**/)file.xml' '$1anotherName.xml'
