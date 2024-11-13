@@ -76,4 +76,4 @@ alias    dl='docker compose logs'
 alias   dlf='docker compose logs -f'
 
 # Tools
-alias cat=bat
+alias cat="bat --paging=never"
