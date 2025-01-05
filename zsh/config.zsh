@@ -65,6 +65,7 @@ export LESS="--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --t
 # Enable using less on archive (eg. `less foo.zip`)
 eval $(lesspipe)
 # Use bat to color manpage
+export MANROFFOPT="-c"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # Print dates in ISO format (in `ls -l` for example)
 export TIME_STYLE="long-iso"
