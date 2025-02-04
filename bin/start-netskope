@@ -1,0 +1,21 @@
+#!/bin/bash
+# Start NetSkope VPN (system service + user service + tray)
+
+set -euo pipefail
+
+# Define colors for messages
+BLUE="\033[1;34m"
+GREEN="\033[1;32m"
+RED="\033[1;31m"
+RESET="\033[0m"
+
+echo -e "${BLUE}Starting system service${RESET}"
+sudo systemctl start stagentd.service
+
+echo -e "${BLUE}Starting user service${RESET}"
+systemctl --user start stagentapp.service
+
+echo -e "${BLUE}Starting ui (tray)${RESET}"
+dex /usr/share/applications/stagentui.desktop
+
+echo -e "${GREEN}NetSkope VPN started${RESET}"
