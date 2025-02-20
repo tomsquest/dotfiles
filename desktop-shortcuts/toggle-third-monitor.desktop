@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Toggle third monitor
+Comment=Enable or disable the third monitor
+Icon=video-display
+Exec="/home/tom/bin/toggle-third-monitor"
+Categories=Development;
+Terminal=false
