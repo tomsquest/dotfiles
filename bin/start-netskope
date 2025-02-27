@@ -1,21 +1,46 @@
 #!/bin/bash
-# Start NetSkope VPN (system service + user service + tray)
+# Toggle NetSkope VPN (system service + user service + tray)
 
 set -euo pipefail
 
-# Define colors for messages
 BLUE="\033[1;34m"
 GREEN="\033[1;32m"
-RED="\033[1;31m"
 RESET="\033[0m"
 
-echo -e "${BLUE}Starting system service${RESET}"
-sudo systemctl start stagentd.service
+is_active() {
+    systemctl is-active --quiet "$1"
+}
 
-echo -e "${BLUE}Starting user service${RESET}"
-systemctl --user start stagentapp.service
+start() {
+    echo -e "${BLUE}Starting system service${RESET}"
+    sudo systemctl start stagentd.service
 
-echo -e "${BLUE}Starting ui (tray)${RESET}"
-dex /usr/share/applications/stagentui.desktop
+    echo -e "${BLUE}Starting user service${RESET}"
+    systemctl --user start stagentapp.service
 
-echo -e "${GREEN}NetSkope VPN started${RESET}"
+    echo -e "${BLUE}Starting ui (tray)${RESET}"
+    dex /usr/share/applications/stagentui.desktop
+
+    echo -e "${GREEN}NetSkope VPN started${RESET}"
+}
+
+stop() {
+    echo -e "${BLUE}Stopping system service${RESET}"
+    sudo systemctl stop stagentd.service
+
+    echo -e "${BLUE}Stopping user service${RESET}"
+    systemctl --user stop stagentapp.service
+
+    echo -e "${BLUE}Stopping ui (tray)${RESET}"
+    killall /opt/netskope/stagent/stAgentUI
+
+    echo -e "${GREEN}NetSkope VPN stopped${RESET}"
+}
+
+if is_active stagentd.service; then
+    echo -e "${BLUE}NetSkope VPN is active. Stopping...${RESET}"
+    stop
+else
+    echo -e "${BLUE}NetSkope VPN is inactive. Starting...${RESET}"
+    start
+fi
