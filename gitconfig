@@ -14,7 +14,7 @@
 [core]
 	excludesfile = ~/.gitignore
 	autocrlf = input
- 	pager = less -+$LESS -RSX
+ 	# pager = less -+$LESS -RSX
 [pull]
 	ff = only
 [help]
@@ -24,20 +24,24 @@
 [credential]
 	helper = cache
 [rerere]
- 	enabled = true
+	enabled = true
+	autoupdate = true
 [commit]
-    ; disable until I create a sub-key for git signing
-    ; gpgsign = true
+    # disable until I create a sub-key for git signing
+    # gpgsign = true
 [rebase]
-	autostash = true
-	autosquash = true
+	autoStash = true
+	autoSquash = true
+	updateRefs = true
 [status]
 	showUntrackedFiles = all
 [fetch]
 	prune = true
+	pruneTags = true
+	all = true
 [push]
-    ; Push to matching remote branch, or create branch if missing
-    ; default is "simple" that does not create the remote branch
+    # Push to matching remote branch, or create branch if missing
+    # default is "simple" that does not create the remote branch
 	default = current
 	autoSetupRemote = true
 [init]
@@ -50,3 +54,12 @@
 [diff "lockb"]
 	textconv = bun
 	binary = true
+[diff]
+    # Better diff algorithm
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[merge]
+    # In diff, adds a ||||||| block that shows you what the block looked like before either of you changed it
+	conflictstyle = zdiff3
