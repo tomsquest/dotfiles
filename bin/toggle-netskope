@@ -7,10 +7,6 @@ BLUE="\033[1;34m"
 GREEN="\033[1;32m"
 RESET="\033[0m"
 
-is_active() {
-    systemctl is-active --quiet "$1"
-}
-
 start() {
     echo -e "${BLUE}Starting system service${RESET}"
     sudo systemctl start stagentd.service
@@ -32,15 +28,26 @@ stop() {
     systemctl --user stop stagentapp.service
 
     echo -e "${BLUE}Stopping ui (tray)${RESET}"
-    killall /opt/netskope/stagent/stAgentUI
+    killall --quiet /opt/netskope/stagent/stAgentUI
 
     echo -e "${GREEN}NetSkope VPN stopped${RESET}"
 }
 
-if is_active stagentd.service; then
+# Function to disable NetSkope, because this thing re-enables itself on start
+disable_services() {
+    echo -e "${BLUE}Disabling system services${RESET}"
+    sudo systemctl disable stagentd.service
+
+    echo -e "${BLUE}Disabling user services${RESET}"
+    sudo systemctl disable --global stagentapp.service
+}
+
+if systemctl is-active --quiet stagentd.service; then
     echo -e "${BLUE}NetSkope VPN is active. Stopping...${RESET}"
     stop
+    disable_services
 else
     echo -e "${BLUE}NetSkope VPN is inactive. Starting...${RESET}"
     start
+    disable_services
 fi
