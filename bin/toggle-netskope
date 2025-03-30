@@ -1,5 +1,9 @@
 #!/bin/bash
 # Toggle NetSkope VPN (system service + user service + tray)
+# Usage: ./script.sh [start|stop]
+#   Without parameters: toggles the VPN state
+#   With 'start': forces the VPN to start
+#   With 'stop': forces the VPN to stop
 
 set -euo pipefail
 
@@ -28,7 +32,7 @@ stop() {
     systemctl --user stop stagentapp.service
 
     echo -e "${BLUE}Stopping ui (tray)${RESET}"
-    killall --quiet /opt/netskope/stagent/stAgentUI
+    killall --quiet /opt/netskope/stagent/stAgentUI || true
 
     echo -e "${GREEN}NetSkope VPN stopped${RESET}"
 }
@@ -42,12 +46,33 @@ disable_services() {
     sudo systemctl disable --global stagentapp.service
 }
 
-if systemctl is-active --quiet stagentd.service; then
-    echo -e "${BLUE}NetSkope VPN is active. Stopping...${RESET}"
-    stop
-    disable_services
+# Check if a parameter was provided
+if [ $# -ge 1 ]; then
+    case "$1" in
+        start)
+            echo -e "${BLUE}Forcing NetSkope VPN to start...${RESET}"
+            start
+            disable_services
+            ;;
+        stop)
+            echo -e "${BLUE}Forcing NetSkope VPN to stop...${RESET}"
+            stop
+            disable_services
+            ;;
+        *)
+            echo -e "${BLUE}Invalid option. Usage: $0 [start|stop]${RESET}"
+            exit 1
+            ;;
+    esac
 else
-    echo -e "${BLUE}NetSkope VPN is inactive. Starting...${RESET}"
-    start
-    disable_services
+    # Original toggle behavior
+    if systemctl is-active --quiet stagentd.service; then
+        echo -e "${BLUE}NetSkope VPN is active. Stopping...${RESET}"
+        stop
+        disable_services
+    else
+        echo -e "${BLUE}NetSkope VPN is inactive. Starting...${RESET}"
+        start
+        disable_services
+    fi
 fi
