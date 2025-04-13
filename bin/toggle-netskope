@@ -43,6 +43,8 @@ disable_services() {
     sudo systemctl disable stagentd.service
 
     echo -e "${BLUE}Disabling user services${RESET}"
+    sudo systemctl --user disable stagentapp.service
+    # On my laptop, the user service is enabled globally, so we need to disable it globally
     sudo systemctl disable --global stagentapp.service
 }
 
