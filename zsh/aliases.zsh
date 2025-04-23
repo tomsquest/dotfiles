@@ -9,15 +9,12 @@ alias up='sudo apt update && sudo apt -V --yes upgrade'
 # History with timestamps and elapsed time
 alias h='history -iD'
 
-# ls
-# -v: natural sort of version
-alias ls='eza            --group-directories-first --color=auto --git --icons --total-size'
-alias  l='eza -long      --group-directories-first --color=auto --git --icons --total-size'
-alias ll='eza -long      --group-directories-first --color=auto --git --icons --total-size'
-alias la='eza -long -all --group-directories-first --color=auto --git --icons --total-size'
+# ls/eza
+alias  l='eza -long      --group-directories-first --git --icons --total-size'
+alias la='eza -long -all --group-directories-first --git --icons --total-size'
 
 # grep
-alias  grep='grep --color=auto'
+alias  grep='grep  --color=auto'
 alias egrep='egrep --color=auto'
 alias zgrep='zgrep --color=auto'
 
