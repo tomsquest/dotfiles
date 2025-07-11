@@ -1,15 +1,18 @@
 #!/bin/bash
 # Toggle NetSkope VPN (system service + user service + tray)
-# Usage: ./script.sh [start|stop]
-#   Without parameters: toggles the VPN state
-#   With 'start': forces the VPN to start
-#   With 'stop': forces the VPN to stop
 
 set -euo pipefail
 
 BLUE="\033[1;34m"
 GREEN="\033[1;32m"
 RESET="\033[0m"
+
+usage() {
+    echo -e "${BLUE}Usage: $0 [start|stop|restart]${RESET}"
+    echo -e "${BLUE}  start   - Start the NetSkope VPN services${RESET}"
+    echo -e "${BLUE}  stop    - Stop the NetSkope VPN services${RESET}"
+    echo -e "${BLUE}  restart - Restart the NetSkope VPN services${RESET}"
+}
 
 start() {
     echo -e "${BLUE}Starting system service${RESET}"
@@ -37,6 +40,12 @@ stop() {
     echo -e "${GREEN}NetSkope VPN stopped${RESET}"
 }
 
+restart() {
+    echo -e "${BLUE}Restarting NetSkope VPN...${RESET}"
+    stop
+    start
+}
+
 # Function to disable NetSkope, because this thing re-enables itself on start
 disable_services() {
     echo -e "${BLUE}Disabling system services${RESET}"
@@ -52,29 +61,24 @@ disable_services() {
 if [ $# -ge 1 ]; then
     case "$1" in
         start)
-            echo -e "${BLUE}Forcing NetSkope VPN to start...${RESET}"
             start
             disable_services
             ;;
         stop)
-            echo -e "${BLUE}Forcing NetSkope VPN to stop...${RESET}"
             stop
             disable_services
             ;;
+        restart)
+            restart
+            disable_services
+            ;;
         *)
-            echo -e "${BLUE}Invalid option. Usage: $0 [start|stop]${RESET}"
+            echo -e "${BLUE}Invalid option. Usage: $0 [start|stop|restart]${RESET}"
             exit 1
             ;;
     esac
 else
-    # Original toggle behavior
-    if systemctl is-active --quiet stagentd.service; then
-        echo -e "${BLUE}NetSkope VPN is active. Stopping...${RESET}"
-        stop
-        disable_services
-    else
-        echo -e "${BLUE}NetSkope VPN is inactive. Starting...${RESET}"
-        start
-        disable_services
-    fi
+    echo -e "${BLUE}No operation provided.${RESET}"
+    usage
+    exit 1
 fi
