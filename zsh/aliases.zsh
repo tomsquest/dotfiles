@@ -48,6 +48,12 @@ alias     gp='git pull; git log -n 1 | grep -q -c "\-\-wip\-\-" && echo "\033[0;
 alias    gaa='git add -A'
 alias    gcm='git rev-parse --abbrev-ref origin/HEAD | cut -c8- | xargs -n 1 git checkout' # checkout master/main/develop automatically
 alias     gc='git checkout -'
+alias    gco='git checkout'
+alias    gcb='git checkout -b'
+alias    gci='git commit'
+alias    gbr='git branch'
+alias   gbra='git branch -a'
+alias  gdiff='git diff --word-diff=color'
 alias    gpf='git push --force-with-lease'
 alias   gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m "--wip-- [skip ci]"'
 alias  gwipp='gwip && git push --force-with-lease'

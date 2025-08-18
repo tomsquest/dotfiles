@@ -3,12 +3,6 @@
 	email = tom@tomsquest.com
 	signingkey = 0x46ABEB7FF623F5EB
 [alias]
-	co  = checkout
-	ci  = commit
-	st  = status
-	br  = branch
-	bra = branch -a
-	diffw = diff --word-diff=color
 	fixup = !sh -c 'REV=$(git rev-parse $1) && git commit --fixup $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
 	squash = !sh -c 'REV=$(git rev-parse $1) && git commit --squash $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
 [core]
