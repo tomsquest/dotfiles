@@ -67,7 +67,6 @@ function install-dircolors {
 
 function install-asdf-plugins {
     echo "Installing Direnv through asdf..."
-    source $HOME/.asdf/asdf.sh
     asdf plugin add direnv || true
     asdf plugin add golang || true
     asdf plugin add nodejs || true
@@ -85,6 +84,7 @@ function install-homebrew {
 
 function install-homebrew-apps {
     echo "Installing Home Brew apps..."
+    brew install asdf
     brew install bat
     brew install eza # exa is unmaintained
     brew install fd
@@ -114,12 +114,11 @@ function install-all {
     install-from-git-repo "Zgen"          "https://github.com/tarjoilija/zgen"      "$HOME/.zgen"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
     install-from-git-repo "Vim Vundle"    "https://github.com/VundleVim/Vundle.vim" "$HOME/.vundle"
-    install-from-git-repo "Asdf-vm"       "https://github.com/asdf-vm/asdf"         "$HOME/.asdf"
     install-vim-plugins
     install-dircolors
-    install-asdf-plugins
     install-homebrew
     install-homebrew-apps
+    install-asdf-plugins
     install-terminator-editor-plugin
     copy-sysctl-conf
 }

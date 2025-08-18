@@ -1,13 +1,12 @@
 # set PATH so it includes user's private bin directories
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
-# ASDF
-source $HOME/.asdf/asdf.sh
-fpath+=("${ASDF_DIR}/completions")
-source "$HOME/.config/asdf-direnv/zshrc"
-
 # Linuxbrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# ASDF
+export PATH="$HOME/.asdf/shims:$PATH"
+fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
 
 # ###### START /etc/profile.d/apps-bin-path.sh
 # Expand $PATH to include the directory where snappy applications go.
