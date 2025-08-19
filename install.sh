@@ -66,15 +66,10 @@ function install-dircolors {
 }
 
 function install-asdf-plugins {
-    echo "Installing Direnv through asdf..."
-    asdf plugin add direnv || true
     asdf plugin add golang || true
     asdf plugin add nodejs || true
     asdf plugin add python || true
     asdf plugin add ruby || true
-    asdf install direnv 2.32.1
-    asdf global direnv 2.32.1
-    asdf global python system
 }
 
 function install-homebrew {
@@ -86,6 +81,7 @@ function install-homebrew-apps {
     echo "Installing Home Brew apps..."
     brew install asdf
     brew install bat
+    brew install direnv
     brew install eza # exa is unmaintained
     brew install fd
     brew install fzf
