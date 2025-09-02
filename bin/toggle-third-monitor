@@ -2,8 +2,10 @@
 
 set -euo pipefail
 
-if xrandr | grep -q "DP-5 connected (normal left inverted right x axis y axis)"; then
-  xrandr --output DP-5 --rotate inverted --pos 1600x-1200 --auto --noprimary --nograb --output HDMI-0 --primary
+third_monitor="DP-3"
+
+if xrandr | grep -q "$third_monitor connected (normal left inverted right x axis y axis)"; then
+  xrandr --output "$third_monitor" --rotate inverted --pos 1600x-1200 --auto --noprimary --nograb --output HDMI-0 --primary
 else
-  xrandr --output DP-5 --off --output HDMI-0 --primary
+  xrandr --output "$third_monitor" --off --output HDMI-0 --primary
 fi
