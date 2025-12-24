@@ -62,7 +62,7 @@ bindkey '^[^M' autosuggest-execute
 bindkey '^[^J' autosuggest-execute
 
 # Disable the capslock key and map it to escape
-setxkbmap -option caps:backspace
+#setxkbmap -option caps:backspace
 
 # Disable flow control (ctrl+s, ctrl+q) to enable saving with ctrl+s in Vim
 stty -ixon -ixoff
