@@ -10,8 +10,8 @@ alias up='sudo apt update && sudo apt -V --yes upgrade'
 alias h='history -iD'
 
 # ls/eza
-alias  l='eza --long      --group-directories-first --icons'
-alias la='eza --long -all --group-directories-first --icons'
+alias  l='eza --long      --group-directories-first --icons --hyperlink'
+alias la='eza --long -all --group-directories-first --icons --hyperlink'
 
 # grep
 alias  grep='grep  --color=auto'
