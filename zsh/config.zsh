@@ -61,9 +61,9 @@ export EDITOR="/usr/bin/vim"
 export VISUAL="/usr/bin/vim"
 eval "$(dircolors -b ~/.dircolors)"
 # Less options
-export LESS="--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --tabs=2"
+export LESS="--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --tabs=2 --quit-if-one-screen"
 # Enable using less on archive (eg. `less foo.zip`)
-eval $(lesspipe)
+eval "$(lesspipe)"
 # Use bat to color manpage
 export MANROFFOPT="-c"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
