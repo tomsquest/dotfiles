@@ -68,9 +68,6 @@ alias nsd='printAndRun npm run start:dev'
 alias  nt='printAndRun npm test'
 alias ntw='printAndRun npm run test:watch'
 
-# Scala SBT
-alias st='printAndRun sbt ~test-quick'
-
 # Docker compose
 alias   dup='printAndRun docker compose up -d'
 alias ddown='printAndRun docker compose down -t 5'
