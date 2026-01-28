@@ -76,5 +76,9 @@ alias   dso='printAndRun docker compose stop'
 alias    dl='docker compose logs'
 alias   dlf='docker compose logs -f'
 
+# Just
+alias j='just'
+alias jt='just test'
+
 # Tools
 alias cat="bat --paging=never"
