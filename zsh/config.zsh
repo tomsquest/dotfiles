@@ -51,6 +51,9 @@ setopt local_options
 setopt local_traps
 # Required for alias completion: m c<TAB>
 setopt complete_aliases
+# Allow aliases (eg. `g` for `git`) to be expanded before processing the command line for completion
+# So that `g <TAB>` proposes git subcommands. Without this, only file completion is proposed.
+unsetopt completealiases
 
 #
 # ENV
