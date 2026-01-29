@@ -25,13 +25,13 @@ o() {
   if [ -d "$1" ]; then
     xdg-open "$1"
   elif [ -f "$1" ]; then
-    idea.sh "$1"
+    idea "$1"
   elif ! [ -z "$1" ] && ! [ -f "$1" ]; then
     echo "File $1 does not exist. Create it? (y/n)"
     read -k 1 answer
     if [ -z "$answer" ] || [ "$answer" = "y" ]; then
       touch "$1"
-      idea.sh "$1"
+      idea "$1"
     fi
     echo
   else
@@ -48,7 +48,7 @@ o() {
         ${EDITOR:-vim} "$file"
         ;;
       *)
-        idea.sh "$file"
+        idea "$file"
         ;;
       esac
     fi
