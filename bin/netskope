@@ -46,31 +46,17 @@ restart() {
     start
 }
 
-# Function to disable NetSkope, because this thing re-enables itself on start
-disable_services() {
-    echo -e "${BLUE}Disabling system services${RESET}"
-    sudo systemctl disable stagentd.service
-
-    echo -e "${BLUE}Disabling user services${RESET}"
-    systemctl --user disable stagentapp.service
-    # On my laptop, the user service is enabled globally, so we need to disable it globally
-    sudo systemctl disable --global stagentapp.service
-}
-
 # Check if a parameter was provided
 if [ $# -ge 1 ]; then
     case "$1" in
         start)
             start
-            disable_services
             ;;
         stop)
             stop
-            disable_services
             ;;
         restart)
             restart
-            disable_services
             ;;
         *)
             echo -e "${BLUE}Invalid option. Usage: $0 [start|stop|restart]${RESET}"
