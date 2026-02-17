@@ -78,6 +78,8 @@ alias   dlf='docker compose logs -f'
 
 # Just
 alias j='just'
+alias ja='just all'
+alias js='just serve'
 alias jt='just test'
 
 # Tools
