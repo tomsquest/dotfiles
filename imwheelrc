@@ -1,15 +1,15 @@
 # To correctly match the application name, launch imwheel with the `-f` flag
 #
-# Kill and launch in debug: 
+# Kill and launch in debug:
 #   imwheel -k -q; imwheel -f --debug -d
 
 # Intellij Idea
 # Override: ctrl+W is bound to expand selection in Intellij
-"^jetbrains-idea$"
-None, Thumb2, Control_L|F4
+# "^jetbrains-idea$"
+# None, Thumb2, Control_L|F4
 
 # Defaults
 ".*"
-None, Thumb2, Control_L|W
+None, Thumb2, Control_L|F4
 None, Thumb1, Alt_L|F4
 
