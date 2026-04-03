@@ -48,6 +48,9 @@ export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target --preview 'bat --
 export FZF_ALT_C_OPTS="--walker-skip .git,node_modules,target --preview 'tree -C {}'"
 source <(fzf --zsh)
 
+# Worktrunk
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
 # Local configuration (to this machine)
 # SHOULD BE LAST
 if [ -f ~/.zshrc.local ]; then

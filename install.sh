@@ -89,6 +89,7 @@ function install-homebrew-apps {
     brew install jump
     brew install ripgrep
     brew install starship
+    brew install worktrunk
 }
 
 function install-terminator-editor-plugin {
