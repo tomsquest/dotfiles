@@ -11,6 +11,12 @@ fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
 # Direnv
 eval "$(direnv hook zsh)"
 
+# Flatpak
+flatpak_xdg_path="/var/lib/flatpak/exports/share"
+if [ -n "${XDG_DATA_DIRS##*${flatpak_xdg_path}}" ] && [ -n "${XDG_DATA_DIRS##*${flatpak_xdg_path}:*}" ]; then
+    export XDG_DATA_DIRS="${XDG_DATA_DIRS}:${flatpak_xdg_path}"
+fi
+
 # ###### START /etc/profile.d/apps-bin-path.sh
 # Expand $PATH to include the directory where snappy applications go.
 snap_bin_path="/snap/bin"
