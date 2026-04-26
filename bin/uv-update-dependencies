@@ -1,0 +1,966 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# dependencies = ["tomli-w>=1.0.0", "packaging>=24.0", "rich>=13.0.0"]
+# ///
+"""Update `pyproject.toml` dependencies to the latest stable versions on PyPI.
+
+What it updates:
+- [project].dependencies
+- [dependency-groups].* (all groups)
+
+What it does:
+- Rewrites each requirement to: name[extras]==<latest> (and keeps environment markers)
+- Skips direct references (URLs/VCS/local paths)
+- Finds pyproject.toml by walking up from the current directory (or use --path).
+
+Options:
+  --apply               Write changes to pyproject.toml (dry-run by default)
+  --cooldown-days N     Skip versions published less than N days ago (default: 7, 0 to disable)
+  --group NAME          Limit to specific groups (repeatable). 'prod' = [project].dependencies.
+  --exclude-group NAME  Skip specific groups (repeatable).
+  --force PKG           Bypass cooldown for these packages (repeatable, matches by base name).
+  --path FILE           Explicit path to pyproject.toml (bypasses discovery).
+
+Run:
+  update_uv_dependencies.py                                   # dry-run, 7-day cooldown, all groups
+  update_uv_dependencies.py --apply                           # write changes
+  update_uv_dependencies.py --group prod --group dev          # only two groups
+  update_uv_dependencies.py --force pydantic-ai --apply       # force-bump, ignore cooldown
+  update_uv_dependencies.py --path ~/code/other/pyproject.toml
+
+Install (dotfiles):
+  Symlink into ~/.local/bin (or wherever) and make sure `uv` is on your PATH.
+  The shebang (#!/usr/bin/env -S uv run --script) handles dependencies on first run.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+import tomllib
+import urllib.error
+import urllib.parse
+import urllib.request
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta, timezone
+from enum import Enum
+from pathlib import Path
+from typing import Any
+
+import tomli_w
+from packaging.version import InvalidVersion, Version
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
+
+console = Console(highlight=False)
+err_console = Console(stderr=True, highlight=False)
+
+
+# -------------------
+# Version helpers
+# -------------------
+
+
+def _as_version(v: str) -> Version | None:
+    try:
+        return Version(v.strip())
+    except InvalidVersion:
+        return None
+
+
+def _is_prerelease(version: str) -> bool:
+    vv = _as_version(version)
+    if vv is None:
+        return True
+    return bool(vv.is_prerelease or vv.is_devrelease)
+
+
+def _version_sort_key(version: str) -> tuple[int, Version]:
+    vv = _as_version(version)
+    if vv is None:
+        return (1, Version("0"))
+    return (1 if (vv.is_prerelease or vv.is_devrelease) else 0, vv)
+
+
+# -------------------
+# Requirement parsing
+# -------------------
+
+_NAME_RX = re.compile(r"^\s*([A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?)")
+_EXTRAS_RX = re.compile(r"^\s*\[([^]]+)\]")
+
+
+def _normalize_name(name: str) -> str:
+    """PEP 503 normalization: lowercase, collapse runs of ._- to single -."""
+    return re.sub(r"[-_.]+", "-", name).lower()
+
+
+def _is_direct_reference(req: str) -> bool:
+    s = req.strip()
+    if "@" in s:
+        return True
+    lower = s.lower()
+    return lower.startswith(
+        ("http://", "https://", "git+", "ssh://", "file://")
+    ) or s.startswith(("../", "./", "/"))
+
+
+@dataclass(frozen=True)
+class Requirement:
+    """Parsed dependency string."""
+
+    name: str
+    extras: str = ""
+    marker: str = ""
+    _pinned: Version | None = field(default=None, repr=False, compare=False)
+
+    @property
+    def display_name(self) -> str:
+        return f"{self.name}{self.extras}"
+
+    @property
+    def pinned_version(self) -> Version | None:
+        return self._pinned
+
+    @property
+    def pinned_str(self) -> str:
+        return str(self._pinned) if self._pinned else "—"
+
+    def rewrite(self, version: str) -> str:
+        return f"{self.name}{self.extras}=={version}{self.marker}"
+
+    @classmethod
+    def parse(cls, raw: str) -> Requirement | None:
+        if _is_direct_reference(raw):
+            return None
+
+        marker = ""
+        left = raw
+        if ";" in raw:
+            left, right = raw.split(";", 1)
+            marker = "; " + right.strip()
+
+        m = _NAME_RX.match(left)
+        if not m:
+            return None
+
+        name = m.group(1)
+        rest = left[m.end():].lstrip()
+
+        extras = ""
+        m2 = _EXTRAS_RX.match(rest)
+        if m2:
+            extras = "[" + m2.group(1).strip() + "]"
+
+        pinned: Version | None = None
+        if "==" in left:
+            pinned = _as_version(left.split("==", 1)[1].split(";", 1)[0].strip())
+
+        return cls(name=name, extras=extras, marker=marker, _pinned=pinned)
+
+
+# -------------------
+# PyPI resolution
+# -------------------
+
+
+@dataclass(frozen=True)
+class VersionResult:
+    """Outcome of resolving a package against PyPI."""
+
+    version: str | None = None
+    cooldown_skipped: bool = False
+    unconstrained: str | None = None
+    changelog_url: str | None = None
+
+
+# PyPI `project_urls` key names that commonly point at release notes.
+# Ordered by preference — first match wins.
+_CHANGELOG_URL_KEYS: tuple[str, ...] = (
+    "changelog", "change log", "changes", "release notes", "releasenotes",
+    "history", "whats new", "what's new", "news",
+)
+
+
+def _pick_changelog_url(payload: dict[str, Any], name: str, version: str | None) -> str | None:
+    """Pick a sensible 'release notes' URL for a package.
+
+    Prefers an explicit Changelog/Release Notes entry from `info.project_urls`,
+    falls back to the PyPI release page (which always exists).
+    """
+    info = payload.get("info") or {}
+    urls = info.get("project_urls") or {}
+    if isinstance(urls, dict):
+        # Case-insensitive lookup, tolerant of punctuation.
+        norm: dict[str, str] = {
+            re.sub(r"[^a-z0-9 ]", "", k.lower()).strip(): v
+            for k, v in urls.items()
+            if isinstance(k, str) and isinstance(v, str)
+        }
+        for key in _CHANGELOG_URL_KEYS:
+            if key in norm:
+                return norm[key]
+    # Fallback: PyPI's own release page.
+    if version:
+        return f"https://pypi.org/project/{urllib.parse.quote(name)}/{version}/"
+    return f"https://pypi.org/project/{urllib.parse.quote(name)}/"
+
+
+def _version_upload_time(files: list[dict[str, Any]]) -> datetime | None:
+    times: list[datetime] = []
+    for f in files:
+        if not isinstance(f, dict):
+            continue
+        raw = f.get("upload_time")
+        if not raw:
+            continue
+        try:
+            times.append(datetime.fromisoformat(raw).replace(tzinfo=timezone.utc))
+        except (ValueError, TypeError):
+            continue
+    return min(times) if times else None
+
+
+def _pick_version(payload: dict[str, Any], min_age: timedelta | None) -> VersionResult:
+    releases = payload.get("releases")
+    if not isinstance(releases, dict) or not releases:
+        return VersionResult()
+
+    def is_yanked_only(ver: str) -> bool:
+        files = releases.get(ver, [])
+        if not isinstance(files, list) or not files:
+            return False
+        flags = [bool(f.get("yanked", False)) for f in files if isinstance(f, dict)]
+        return bool(flags) and all(flags)
+
+    candidates = [v for v in releases if not is_yanked_only(v)] or list(releases)
+    stable = [v for v in candidates if not _is_prerelease(v)]
+    pool = stable or candidates
+    pool.sort(key=_version_sort_key)
+
+    if not pool:
+        return VersionResult()
+
+    absolute_latest = pool[-1]
+
+    if min_age is None:
+        return VersionResult(version=absolute_latest, unconstrained=absolute_latest)
+
+    now = datetime.now(tz=timezone.utc)
+    cooldown_skipped = False
+
+    for ver in reversed(pool):
+        files = releases.get(ver, [])
+        if not isinstance(files, list):
+            continue
+        upload_dt = _version_upload_time(files)
+        if upload_dt is None:
+            return VersionResult(ver, cooldown_skipped, absolute_latest)
+        if (now - upload_dt) >= min_age:
+            return VersionResult(ver, cooldown_skipped, absolute_latest)
+        cooldown_skipped = True
+
+    return VersionResult(cooldown_skipped=True, unconstrained=absolute_latest)
+
+
+class PackageResolver:
+    """Fetches and caches PyPI version resolution.
+
+    Cache key is (name, force) — forced lookups bypass cooldown and are cached
+    separately so a later non-forced resolve of the same package still works.
+    """
+
+    MAX_WORKERS = 10
+
+    def __init__(self, min_age: timedelta | None = None) -> None:
+        self.min_age = min_age
+        self._cache: dict[tuple[str, bool], VersionResult] = {}
+
+    def _fetch_payload(self, name: str) -> dict[str, Any] | None:
+        try:
+            url = f"https://pypi.org/pypi/{urllib.parse.quote(name)}/json"
+            req = urllib.request.Request(
+                url,
+                headers={
+                    "Accept": "application/json",
+                    "User-Agent": "pyproject-deps-bumper/1.0",
+                },
+            )
+            with urllib.request.urlopen(req, timeout=20.0) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, json.JSONDecodeError):
+            return None
+
+    def _resolve_one(self, name: str, *, force: bool) -> VersionResult:
+        payload = self._fetch_payload(name)
+        if payload is None:
+            return VersionResult()
+        min_age = None if force else self.min_age
+        base = _pick_version(payload, min_age)
+        changelog = _pick_changelog_url(payload, name, base.version or base.unconstrained)
+        # Reconstruct with the changelog URL attached.
+        return VersionResult(
+            version=base.version,
+            cooldown_skipped=base.cooldown_skipped,
+            unconstrained=base.unconstrained,
+            changelog_url=changelog,
+        )
+
+    def resolve(self, name: str, *, force: bool = False) -> VersionResult:
+        key = (name, force)
+        if key in self._cache:
+            return self._cache[key]
+        result = self._resolve_one(name, force=force)
+        self._cache[key] = result
+        return result
+
+    def prefetch(self, names: list[tuple[str, bool]]) -> None:
+        """Warm the cache for a batch of (name, force) pairs in parallel."""
+        # Deduplicate, skip already-cached.
+        pending = list({k for k in names if k not in self._cache})
+        if not pending:
+            return
+        # Simple bounded parallelism — PyPI is fine with ~10 concurrent reads.
+        from concurrent.futures import ThreadPoolExecutor
+
+        workers = min(self.MAX_WORKERS, len(pending))
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = {
+                pool.submit(self._resolve_one, name, force=force): (name, force)
+                for name, force in pending
+            }
+            for fut in futures:
+                name, force = futures[fut]
+                try:
+                    self._cache[(name, force)] = fut.result()
+                except Exception:
+                    self._cache[(name, force)] = VersionResult()
+
+    @property
+    def packages_checked(self) -> int:
+        # Count unique package names regardless of force/non-force entries.
+        return len({name for name, _force in self._cache})
+
+
+# -------------------
+# Update logic
+# -------------------
+
+
+class ChangeKind(str, Enum):
+    UPDATE = "update"
+    COOLDOWN_FALLBACK = "cooldown_fallback"
+    COOLDOWN_SKIP = "cooldown_skip"
+    COOLDOWN_KEPT = "cooldown_kept"
+    UP_TO_DATE = "up_to_date"
+    SKIPPED = "skipped"
+    ERROR = "error"
+
+    @property
+    def is_applied(self) -> bool:
+        return self in (ChangeKind.UPDATE, ChangeKind.COOLDOWN_FALLBACK)
+
+
+# Display sort order: important stuff first, boring stuff last.
+_CHANGE_ORDER: dict[ChangeKind, int] = {
+    ChangeKind.UPDATE: 0,
+    ChangeKind.COOLDOWN_FALLBACK: 1,
+    ChangeKind.COOLDOWN_KEPT: 2,
+    ChangeKind.COOLDOWN_SKIP: 3,
+    ChangeKind.ERROR: 4,
+    ChangeKind.SKIPPED: 5,
+    ChangeKind.UP_TO_DATE: 6,
+}
+
+
+@dataclass(frozen=True)
+class DepChange:
+    """One dependency row for the summary table."""
+
+    name: str
+    current: str
+    target: str
+    kind: ChangeKind
+    group: str = ""
+    latest: str = ""
+    forced: bool = False
+    changelog_url: str = ""
+
+    @property
+    def sort_key(self) -> tuple[int, str, int, str]:
+        # prod first, then other groups alphabetically.
+        group_order = (0, "") if self.group == "prod" else (1, self.group.lower())
+        kind_order = _CHANGE_ORDER.get(self.kind, 99)
+        return (group_order[0], group_order[1], kind_order, self.name.lower())
+
+
+@dataclass
+class UpdateStats:
+    deps: list[Any] = field(default_factory=list)
+    changes: list[DepChange] = field(default_factory=list)
+
+    @property
+    def updated(self) -> int:
+        return sum(1 for c in self.changes if c.kind.is_applied)
+
+    @property
+    def up_to_date(self) -> int:
+        return sum(1 for c in self.changes if c.kind == ChangeKind.UP_TO_DATE)
+
+    @property
+    def held_back(self) -> int:
+        return sum(1 for c in self.changes if c.kind in (
+            ChangeKind.COOLDOWN_SKIP, ChangeKind.COOLDOWN_KEPT,
+        ))
+
+    def __iadd__(self, other: UpdateStats) -> UpdateStats:
+        self.changes.extend(other.changes)
+        return self
+
+
+def update_dep_list(
+    deps: list[Any],
+    resolver: PackageResolver,
+    *,
+    group: str = "",
+    forced_names: frozenset[str] = frozenset(),
+) -> UpdateStats:
+    stats = UpdateStats()
+
+    for item in deps:
+        if not isinstance(item, str):
+            # Include-group dicts — not a real dep.
+            stats.deps.append(item)
+            continue
+
+        req = Requirement.parse(item)
+        if req is None:
+            m = _NAME_RX.match(item)
+            name = m.group(1) if m else item[:30]
+            stats.changes.append(DepChange(
+                name=name, current="—", target="—", kind=ChangeKind.SKIPPED, group=group,
+            ))
+            stats.deps.append(item)
+            continue
+
+        is_forced = _normalize_name(req.name) in forced_names
+        result = resolver.resolve(req.name, force=is_forced)
+        dname = req.display_name
+        changelog = result.changelog_url or ""
+
+        # All versions within cooldown.
+        if result.cooldown_skipped and not result.version:
+            stats.changes.append(DepChange(
+                name=dname, current=req.pinned_str, target="—",
+                kind=ChangeKind.COOLDOWN_SKIP, group=group, latest=result.unconstrained or "",
+                forced=is_forced, changelog_url=changelog,
+            ))
+            stats.deps.append(item)
+            continue
+
+        # Fetch/resolution failed.
+        if not result.version:
+            stats.changes.append(DepChange(
+                name=dname, current=req.pinned_str, target="—",
+                kind=ChangeKind.ERROR, group=group, forced=is_forced,
+            ))
+            stats.deps.append(item)
+            continue
+
+        # Never downgrade.
+        candidate = _as_version(result.version)
+        if req.pinned_version is not None and candidate is not None and candidate < req.pinned_version:
+            if result.cooldown_skipped:
+                stats.changes.append(DepChange(
+                    name=dname, current=req.pinned_str, target=req.pinned_str,
+                    kind=ChangeKind.COOLDOWN_KEPT, group=group, latest=result.unconstrained or "",
+                    forced=is_forced, changelog_url=changelog,
+                ))
+            else:
+                stats.changes.append(DepChange(
+                    name=dname, current=req.pinned_str, target=req.pinned_str,
+                    kind=ChangeKind.UP_TO_DATE, group=group,
+                    forced=is_forced, changelog_url=changelog,
+                ))
+            stats.deps.append(item)
+            continue
+
+        # Apply update or mark up-to-date.
+        new_item = req.rewrite(result.version)
+        if new_item != item:
+            kind = ChangeKind.COOLDOWN_FALLBACK if result.cooldown_skipped else ChangeKind.UPDATE
+            stats.changes.append(DepChange(
+                name=dname, current=req.pinned_str, target=result.version,
+                kind=kind, group=group, latest=result.unconstrained or "",
+                forced=is_forced, changelog_url=changelog,
+            ))
+            stats.deps.append(new_item)
+        else:
+            # No file change — but a newer version might be held back by cooldown.
+            if result.cooldown_skipped and result.unconstrained != result.version:
+                stats.changes.append(DepChange(
+                    name=dname, current=req.pinned_str, target=req.pinned_str,
+                    kind=ChangeKind.COOLDOWN_KEPT, group=group, latest=result.unconstrained or "",
+                    forced=is_forced, changelog_url=changelog,
+                ))
+            else:
+                stats.changes.append(DepChange(
+                    name=dname, current=req.pinned_str, target=result.version,
+                    kind=ChangeKind.UP_TO_DATE, group=group,
+                    forced=is_forced, changelog_url=changelog,
+                ))
+            stats.deps.append(item)
+
+    return stats
+
+
+# -------------------
+# Display
+# -------------------
+
+
+def _notes_link(url: str) -> Text:
+    """Short clickable label pointing at a changelog or release page.
+
+    Uses Rich's `link` style which emits OSC-8 escapes — clickable in modern
+    terminals (kitty, iTerm2, WezTerm, Konsole, recent GNOME Terminal),
+    degrades to plain text elsewhere.
+    """
+    if not url:
+        return Text("")
+    label = "notes ↗"
+    return Text(label, style=f"link {url} dim cyan")
+
+
+def _render_summary_table(changes: list[DepChange]) -> Table:
+    """Build a Rich table listing every dependency."""
+    table = Table(
+        title="Dependencies",
+        title_style="bold",
+        show_lines=False,
+        padding=(0, 1),
+        expand=False,
+    )
+    table.add_column("Group", style="dim")
+    table.add_column("Package")
+    table.add_column("Current", justify="right")
+    table.add_column("", justify="center", width=3)
+    table.add_column("Target", justify="left")
+    table.add_column("Status")
+    table.add_column("Why", style="dim")
+    table.add_column("Notes", style="dim", justify="left")
+
+    sorted_changes = sorted(changes, key=lambda c: c.sort_key)
+    prev_group: str | None = None
+
+    for change in sorted_changes:
+        # Section separator between groups.
+        if prev_group is not None and change.group != prev_group:
+            table.add_section()
+        show_group = change.group if change.group != prev_group else ""
+        prev_group = change.group
+
+        name: Text
+        current: Text
+        arrow: Text
+        target: Text
+        status: Text
+        reason: Text
+
+        match change.kind:
+            case ChangeKind.UPDATE:
+                name = Text(change.name, style="bold")
+                current = Text(change.current, style="dim")
+                arrow = Text("→", style="bold green")
+                target = Text(change.target, style="bold green")
+                status = Text("✓ update", style="green")
+                if change.forced:
+                    reason = Text("forced, cooldown bypassed", style="magenta")
+                else:
+                    reason = Text("")
+
+            case ChangeKind.COOLDOWN_FALLBACK:
+                name = Text(change.name, style="bold")
+                current = Text(change.current, style="dim")
+                arrow = Text("→", style="bold yellow")
+                target = Text(change.target, style="bold yellow")
+                status = Text("⏳ cooldown", style="yellow")
+                if change.latest and change.latest != change.target:
+                    reason = Text(f"latest {change.latest} too fresh, stepping to {change.target}")
+                else:
+                    reason = Text("latest too fresh, stepping to older version")
+
+            case ChangeKind.COOLDOWN_SKIP:
+                name = Text(change.name, style="bold yellow")
+                current = Text(change.current)
+                arrow = Text("✗", style="yellow")
+                target = Text("—", style="dim")
+                status = Text("⏳ blocked", style="yellow")
+                if change.latest:
+                    reason = Text(f"all versions (incl. {change.latest}) too fresh")
+                else:
+                    reason = Text("all versions too fresh")
+
+            case ChangeKind.COOLDOWN_KEPT:
+                name = Text(change.name, style="bold yellow")
+                current = Text(change.current)
+                arrow = Text("=", style="dim")
+                target = Text(change.current, style="dim")
+                status = Text("⏳ kept", style="yellow")
+                if change.latest and change.latest != change.current:
+                    reason = Text(f"{change.latest} too fresh, staying on current")
+                else:
+                    reason = Text("staying on current, newer version too fresh")
+
+            case ChangeKind.UP_TO_DATE:
+                name = Text(change.name, style="dim")
+                current = Text(change.current, style="dim")
+                arrow = Text("·", style="dim")
+                target = Text(change.target, style="dim")
+                status = Text("✓", style="dim")
+                reason = Text("")
+
+            case ChangeKind.ERROR:
+                name = Text(change.name, style="red")
+                current = Text(change.current)
+                arrow = Text("✗", style="red")
+                target = Text("—", style="dim")
+                status = Text("✗ error", style="red")
+                reason = Text("PyPI lookup failed", style="red")
+
+            case ChangeKind.SKIPPED:
+                name = Text(change.name, style="dim")
+                current = Text("—", style="dim")
+                arrow = Text("·", style="dim")
+                target = Text("—", style="dim")
+                status = Text("○ direct ref", style="dim")
+                reason = Text("URL/VCS/local — not managed")
+
+        # Changelog link is always shown when available — useful even for
+        # up-to-date packages (browse recent history, check what's coming next).
+        notes = _notes_link(change.changelog_url)
+
+        table.add_row(show_group, name, current, arrow, target, status, reason, notes)
+
+    return table
+
+
+def _log(tag: str, message: str | Text, *, stderr: bool = False) -> None:
+    tags: dict[str, tuple[str, str]] = {
+        "step":  ("bold cyan",   ""),
+        "note":  ("bold yellow", "dim"),
+        "ok":    ("bold green",  ""),
+        "done":  ("bold green",  ""),
+        "error": ("bold red",    ""),
+        "group": ("dim",         ""),
+    }
+    label_style, text_style = tags.get(tag, ("", ""))
+    out = err_console if stderr else console
+
+    label = Text(f" {tag:>5} ", style=f"{label_style} reverse")
+
+    if isinstance(message, str):
+        msg = Text.from_markup(f" {message}")
+        if text_style:
+            msg.stylize(text_style)
+    else:
+        msg = Text(" ")
+        msg.append_text(message)
+
+    out.print(label, msg, sep="")
+
+
+# -------------------
+# Entrypoint
+# -------------------
+
+
+def load_pyproject(path: Path) -> dict[str, Any]:
+    with path.open("rb") as f:
+        data = tomllib.load(f)
+    if not isinstance(data, dict):
+        raise TypeError("Invalid TOML root")
+    return data
+
+
+def find_pyproject(start: Path | None = None) -> Path | None:
+    """Walk up from `start` (default: CWD) looking for a pyproject.toml.
+
+    Returns the path to the file, or None if not found before the filesystem root.
+    """
+    start = (start or Path.cwd()).resolve()
+    for directory in (start, *start.parents):
+        candidate = directory / "pyproject.toml"
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Update pyproject.toml dependencies to the latest stable PyPI versions.",
+    )
+    parser.add_argument(
+        "--cooldown-days",
+        type=int,
+        default=7,
+        metavar="N",
+        help=(
+            "Skip versions published less than N days ago (default: 7). "
+            "Falls back to the most recent version that satisfies the cooldown. "
+            "Protects against supply chain attacks on freshly published packages. "
+            "Pass 0 to disable."
+        ),
+    )
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        default=False,
+        help="Write changes to pyproject.toml. Without this flag, runs in dry-run mode.",
+    )
+    parser.add_argument(
+        "--group",
+        action="append",
+        default=[],
+        metavar="NAME",
+        help=(
+            "Limit processing to these groups (repeatable). 'prod' = [project].dependencies. "
+            "If omitted, all groups are processed."
+        ),
+    )
+    parser.add_argument(
+        "--exclude-group",
+        action="append",
+        default=[],
+        metavar="NAME",
+        help="Skip these groups (repeatable). Applied after --group.",
+    )
+    parser.add_argument(
+        "--force",
+        action="append",
+        default=[],
+        metavar="PKG",
+        help=(
+            "Bypass cooldown for these packages (repeatable). "
+            "Matches by base name (PEP 503 normalized), so --force pydantic-ai "
+            "affects both 'pydantic-ai' and 'pydantic-ai[eval]'."
+        ),
+    )
+    parser.add_argument(
+        "--path",
+        type=Path,
+        default=None,
+        metavar="FILE",
+        help=(
+            "Path to pyproject.toml. If omitted, walks up from the current "
+            "directory to find one."
+        ),
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+
+    min_age: timedelta | None = None
+    if args.cooldown_days is not None:
+        if args.cooldown_days < 0:
+            _log("error", "--cooldown-days must be >= 0", stderr=True)
+            return 2
+        min_age = timedelta(days=args.cooldown_days)
+
+    # Locate pyproject.toml: explicit --path wins, otherwise walk up from CWD.
+    if args.path is not None:
+        path = args.path.expanduser().resolve()
+        if not path.is_file():
+            _log("error", f"pyproject.toml not found at {path}", stderr=True)
+            return 2
+    else:
+        found = find_pyproject()
+        if found is None:
+            _log("error", f"No pyproject.toml found in {Path.cwd()} or any parent directory", stderr=True)
+            return 2
+        path = found
+
+    # Normalize group filters and force list.
+    include_groups: set[str] = {g.lower() for g in (args.group or [])}
+    exclude_groups: set[str] = {g.lower() for g in (args.exclude_group or [])}
+    forced_names: frozenset[str] = frozenset(_normalize_name(n) for n in (args.force or []))
+
+    def group_selected(name: str) -> bool:
+        n = name.lower()
+        if include_groups and n not in include_groups:
+            return False
+        if n in exclude_groups:
+            return False
+        return True
+
+    # --- Header ---
+    badges: list[str] = []
+    if not args.apply:
+        badges.append("[yellow bold]DRY-RUN[/yellow bold]")
+    else:
+        badges.append("[green bold]APPLY[/green bold]")
+    if min_age is not None and args.cooldown_days > 0:
+        badges.append(f"[cyan]cooldown {args.cooldown_days}d[/cyan]")
+    elif args.cooldown_days == 0:
+        badges.append("[dim]cooldown off[/dim]")
+    if include_groups:
+        badges.append(f"[cyan]groups: {', '.join(sorted(include_groups))}[/cyan]")
+    if exclude_groups:
+        badges.append(f"[dim]excl: {', '.join(sorted(exclude_groups))}[/dim]")
+    if forced_names:
+        badges.append(f"[magenta]force: {', '.join(sorted(forced_names))}[/magenta]")
+
+    # Display the path relative to CWD when it's a child of it — keeps the
+    # header compact for the common case of running from the project root.
+    try:
+        display_path = path.relative_to(Path.cwd())
+    except ValueError:
+        display_path = path
+
+    console.print(
+        Panel(
+            f"  [bold]{display_path}[/bold]  │  {'  '.join(badges)}",
+            title="[bold cyan]pyproject-deps-bumper[/bold cyan]",
+            border_style="cyan",
+            expand=False,
+            padding=(0, 1),
+        )
+    )
+    console.print()
+
+    data = load_pyproject(path)
+    resolver = PackageResolver(min_age)
+    totals = UpdateStats()
+
+    # --- Collect (name, force) pairs from selected groups for parallel prefetch ---
+    prefetch_keys: list[tuple[str, bool]] = []
+    seen_forced: set[str] = set()  # forced names actually encountered
+
+    def collect(deps: list[Any]) -> None:
+        for item in deps:
+            if not isinstance(item, str):
+                continue
+            req = Requirement.parse(item)
+            if req is None:
+                continue
+            is_forced = _normalize_name(req.name) in forced_names
+            if is_forced:
+                seen_forced.add(_normalize_name(req.name))
+            prefetch_keys.append((req.name, is_forced))
+
+    project = data.get("project")
+    project_has_deps = (
+        isinstance(project, dict) and isinstance(project.get("dependencies"), list)
+    )
+    if project_has_deps and group_selected("prod"):
+        collect(project["dependencies"])
+
+    dep_groups = data.get("dependency-groups")
+    if isinstance(dep_groups, dict) and dep_groups:
+        for grp_name, deps_val in dep_groups.items():
+            if not isinstance(deps_val, list):
+                continue
+            if not group_selected(grp_name):
+                continue
+            collect(deps_val)
+
+    # Warn about unmatched --force entries.
+    unmatched = forced_names - seen_forced
+    if unmatched:
+        _log("note", f"--force packages not found in selected groups: {', '.join(sorted(unmatched))}")
+
+    # Parallel PyPI fetches — populates resolver cache.
+    if prefetch_keys:
+        _log("step", f"Fetching metadata for {len({k[0] for k in prefetch_keys})} package(s) from PyPI")
+        resolver.prefetch(prefetch_keys)
+
+    # --- [project].dependencies ---
+    if project_has_deps:
+        if group_selected("prod"):
+            deps = project["dependencies"]
+            _log("step", f"\\[project].dependencies ({len(deps)} entries)")
+            result = update_dep_list(deps, resolver, group="prod", forced_names=forced_names)
+            project["dependencies"] = result.deps
+            totals += result
+        else:
+            _log("group", "  prod (skipped by group filter)")
+    else:
+        _log("note", "No \\[project].dependencies")
+
+    # --- [dependency-groups].* ---
+    if isinstance(dep_groups, dict) and dep_groups:
+        _log("step", f"\\[dependency-groups].* ({len(dep_groups)} groups)")
+        for grp_name, deps_val in dep_groups.items():
+            if not isinstance(deps_val, list):
+                continue
+            if not group_selected(grp_name):
+                _log("group", f"  {grp_name} (skipped by group filter)")
+                continue
+            _log("group", f"  {grp_name} ({len(deps_val)} entries)")
+            result = update_dep_list(deps_val, resolver, group=grp_name, forced_names=forced_names)
+            dep_groups[grp_name] = result.deps
+            totals += result
+    else:
+        _log("note", "No \\[dependency-groups]")
+
+    # --- Summary table ---
+    console.print()
+    console.print(_render_summary_table(totals.changes))
+    console.print()
+
+    # Counter line
+    parts: list[str] = []
+    if totals.updated:
+        parts.append(f"[bold green]{totals.updated}[/bold green] to update")
+    if totals.held_back:
+        parts.append(f"[yellow]{totals.held_back}[/yellow] held back")
+    if totals.up_to_date:
+        parts.append(f"[dim]{totals.up_to_date} up to date[/dim]")
+    parts.append(f"[dim]{resolver.packages_checked} checked[/dim]")
+    console.print("  " + "  ·  ".join(parts))
+    console.print()
+
+    # --- Action ---
+    if totals.updated == 0:
+        _log("ok", "Nothing to update")
+        return 0
+
+    if not args.apply:
+        cmd_parts = ["uv run update_uv_dependencies.py"]
+        if args.cooldown_days != 7:
+            cmd_parts.append(f"--cooldown-days {args.cooldown_days}")
+        for g in args.group or []:
+            cmd_parts.append(f"--group {g}")
+        for g in args.exclude_group or []:
+            cmd_parts.append(f"--exclude-group {g}")
+        for f in args.force or []:
+            cmd_parts.append(f"--force {f}")
+        cmd_parts.append("--apply")
+        cmd = " ".join(cmd_parts)
+
+        console.print(
+            Panel(
+                f"[yellow]{totals.updated} update(s) available.[/yellow]\n"
+                f"Run to apply:\n\n"
+                f"  [bold]{cmd}[/bold]",
+                border_style="yellow",
+                expand=False,
+                padding=(0, 2),
+            )
+        )
+        return 0
+
+    _log("step", "Writing pyproject.toml")
+    path.write_text(tomli_w.dumps(data), encoding="utf-8")
+    _log("done", f"[bold]{display_path}[/bold] — {totals.updated} package(s) updated")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
