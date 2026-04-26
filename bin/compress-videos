@@ -1,0 +1,684 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#     "rich>=13.0",
+# ]
+# ///
+"""
+Compress family videos to H.265/HEVC or H.264 with optional downscale to 1080p.
+
+Safety:
+  - Dry-run by default (use --run to actually compress)
+  - Original is deleted ONLY after the compressed file is fully written and verified
+  - Safe file replacement via .bak intermediate (no data loss on rename failure)
+  - Skips files already in target codec ≤ 1080p
+  - Skips if size gain < 1%
+  - Cleans up temp files on Ctrl+C
+
+Usage:
+  uv run compress_videos.py /path/to/videos                  # dry-run, h265 (default)
+  uv run compress_videos.py /path/to/videos --run             # actually compress
+  uv run compress_videos.py /path/to/videos --preset h264     # h264 for compatibility
+  uv run compress_videos.py /path/to/videos --run --crf 26    # tweak quality
+"""
+
+from __future__ import annotations
+
+import argparse
+import atexit
+import enum
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+from dataclasses import dataclass
+from pathlib import Path
+
+from rich.console import Console
+from rich.panel import Panel
+from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
+    Progress,
+    SpinnerColumn,
+    TaskProgressColumn,
+    TextColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+)
+from rich.table import Table
+from rich.text import Text
+
+console = Console()
+
+VIDEO_EXTENSIONS = {".mp4", ".avi"}
+MIN_GAIN_PERCENT = 1.0
+
+# Track temp files globally for cleanup on interrupt
+_active_temp_files: set[Path] = set()
+
+
+def _cleanup_temp_files() -> None:
+    for p in _active_temp_files:
+        try:
+            p.unlink(missing_ok=True)
+        except OSError:
+            pass
+
+
+atexit.register(_cleanup_temp_files)
+
+
+# ---------------------------------------------------------------------------
+# Enums
+# ---------------------------------------------------------------------------
+
+
+class Action(enum.Enum):
+    COMPRESSED = "compressed"
+    SKIPPED = "skipped"
+    WOULD_COMPRESS = "would compress"
+    ERROR = "error"
+
+    @property
+    def style(self) -> str:
+        return {
+            Action.COMPRESSED: "bold green",
+            Action.SKIPPED: "dim",
+            Action.WOULD_COMPRESS: "bold cyan",
+            Action.ERROR: "bold red",
+        }[self]
+
+
+# ---------------------------------------------------------------------------
+# Preset configuration
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class PresetConfig:
+    """Codec + encoder settings bundled under a user-friendly name."""
+
+    label: str
+    codec: str        # libx264 or libx265
+    x26x_preset: str  # encoder preset (slow, medium, etc.)
+    default_crf: int
+    profile: str      # h264: high, h265: main
+    level: str        # compatibility level
+    video_tag: str    # container tag for compatibility
+
+
+PRESETS: dict[str, PresetConfig] = {
+    "h265": PresetConfig(
+        label="h265", codec="libx265", x26x_preset="slow", default_crf=28,
+        profile="main", level="4.1", video_tag="hvc1",
+    ),
+    "h264": PresetConfig(
+        label="h264", codec="libx264", x26x_preset="slow", default_crf=23,
+        profile="high", level="4.1", video_tag="avc1",
+    ),
+}
+
+
+# ---------------------------------------------------------------------------
+# Data structures
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class VideoInfo:
+    path: Path
+    codec: str = ""
+    height: int = 0
+    width: int = 0
+    duration: float = 0.0
+    size: int = 0
+    audio_codec: str = ""
+
+    @property
+    def resolution_label(self) -> str:
+        return f"{self.width}x{self.height}"
+
+
+@dataclass
+class CompressResult:
+    source: VideoInfo
+    rel_path: str = ""
+    action: Action = Action.SKIPPED
+    reason: str = ""
+    output_size: int = 0
+    gain_bytes: int = 0
+    gain_percent: float = 0.0
+    duration_secs: float = 0.0
+    target_height: int = 0
+    error: str = ""
+
+
+# ---------------------------------------------------------------------------
+# FFprobe helpers
+# ---------------------------------------------------------------------------
+
+
+def probe_video(path: Path) -> VideoInfo | None:
+    """Extract video + audio metadata in a single ffprobe call."""
+    cmd = [
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "stream=codec_name,codec_type,height,width",
+        "-show_entries",
+        "format=duration",
+        "-print_format",
+        "json",
+        str(path),
+    ]
+    try:
+        raw = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        if raw.returncode != 0:
+            return None
+        data = json.loads(raw.stdout)
+    except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
+        return None
+
+    streams = data.get("streams", [])
+    fmt = data.get("format", {})
+
+    video_stream = None
+    audio_codec = ""
+    for s in streams:
+        if s.get("codec_type") == "video" and video_stream is None:
+            video_stream = s
+        elif s.get("codec_type") == "audio" and not audio_codec:
+            audio_codec = s.get("codec_name", "")
+
+    if video_stream is None:
+        return None
+
+    return VideoInfo(
+        path=path,
+        codec=video_stream.get("codec_name", "unknown"),
+        height=int(video_stream.get("height", 0)),
+        width=int(video_stream.get("width", 0)),
+        duration=float(fmt.get("duration", 0)),
+        size=path.stat().st_size,
+        audio_codec=audio_codec,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Compression logic
+# ---------------------------------------------------------------------------
+
+
+def should_skip(info: VideoInfo, preset: PresetConfig) -> str | None:
+    """Return a reason to skip, or None if we should compress."""
+    target_codec_name = "hevc" if preset.codec == "libx265" else "h264"
+    if info.codec == target_codec_name and info.height <= 1080:
+        return f"already {target_codec_name} @ {info.resolution_label}"
+    return None
+
+
+def compute_target_height(info: VideoInfo) -> int | None:
+    """Return target height, or None to keep original."""
+    if info.height > 1080:
+        return 1080
+    return None
+
+
+def build_ffmpeg_cmd(
+    input_path: Path,
+    output_path: Path,
+    target_height: int | None,
+    preset: PresetConfig,
+    crf: int,
+    threads: int,
+) -> list[str]:
+    cmd = [
+        "ffmpeg",
+        "-y",
+        "-hide_banner",
+        "-i",
+        str(input_path),
+        "-c:v",
+        preset.codec,
+        "-crf",
+        str(crf),
+        "-preset",
+        preset.x26x_preset,
+        "-profile:v",
+        preset.profile,
+        "-level",
+        preset.level,
+        "-tag:v",
+        preset.video_tag,
+        "-pix_fmt",
+        "yuv420p",
+        "-threads",
+        str(threads),
+    ]
+
+    if target_height is not None:
+        cmd += ["-vf", f"scale=-2:{target_height}"]
+
+    cmd += ["-c:a", "aac", "-b:a", "128k", "-ar", "48000"]
+    cmd += ["-movflags", "+faststart"]
+    cmd += [str(output_path)]
+
+    return cmd
+
+
+def _build_temp_path(original: Path) -> Path:
+    """Build a safe temp output path next to the original."""
+    return original.parent / f"{original.stem}.tmp.compressed.mp4"
+
+
+def _build_final_path(original: Path) -> Path:
+    """Final path is always .mp4 (handles .avi → .mp4 conversion)."""
+    return original.parent / f"{original.stem}.mp4"
+
+
+def _replace_original(
+    original: Path,
+    temp_path: Path,
+    final_path: Path,
+) -> None:
+    """Safely replace the original file with the compressed version.
+
+    Strategy:
+      1. Rename original → .bak
+      2. Rename temp → final
+      3. Delete .bak
+    If step 2 fails, we restore .bak → original so nothing is lost.
+    """
+    bak_path = original.parent / f"{original.stem}.bak{original.suffix}"
+
+    # Step 1: original → bak
+    original.rename(bak_path)
+
+    try:
+        # Step 2: temp → final
+        temp_path.rename(final_path)
+    except OSError:
+        # Restore original from backup
+        bak_path.rename(original)
+        raise
+
+    # Step 3: remove backup (original)
+    bak_path.unlink()
+
+
+def _describe_action(
+    info: VideoInfo,
+    target_height: int | None,
+    preset: PresetConfig,
+    check: VideoInfo | None = None,
+) -> str:
+    """Build a human-readable description of what was/would be done."""
+    target_codec_name = "hevc" if preset.codec == "libx265" else "h264"
+    parts: list[str] = []
+    if info.codec != target_codec_name:
+        parts.append(f"{info.codec} → {target_codec_name}")
+    if target_height and check:
+        parts.append(f"{info.resolution_label} → {check.resolution_label}")
+    elif target_height:
+        parts.append(f"{info.resolution_label} → *x{target_height}")
+    return ", ".join(parts) if parts else "re-encode"
+
+
+def _cleanup_and_error(
+    output_path: Path,
+    result: CompressResult,
+    error: str,
+) -> CompressResult:
+    """Clean up temp file and return an error result."""
+    output_path.unlink(missing_ok=True)
+    _active_temp_files.discard(output_path)
+    result.action = Action.ERROR
+    result.error = error
+    return result
+
+
+# Maximum acceptable duration drift between source and output (seconds).
+# Allows for minor rounding differences in container formats.
+_MAX_DURATION_DRIFT_SECS = 2.0
+
+
+def compress_video(
+    info: VideoInfo,
+    rel_path: str,
+    preset: PresetConfig,
+    crf: int,
+    threads: int,
+    dry_run: bool,
+) -> CompressResult:
+    """Compress a single video. Returns result with details."""
+    result = CompressResult(source=info, rel_path=rel_path)
+
+    # Check skip
+    skip_reason = should_skip(info, preset)
+    if skip_reason:
+        result.action = Action.SKIPPED
+        result.reason = skip_reason
+        return result
+
+    target_height = compute_target_height(info)
+    result.target_height = target_height or info.height
+
+    output_path = _build_temp_path(info.path)
+    final_path = _build_final_path(info.path)
+
+    # --- Safety: collision checks ---
+
+    # If converting .avi → .mp4, make sure we won't overwrite an existing .mp4
+    if final_path != info.path and final_path.exists():
+        result.action = Action.ERROR
+        result.error = f"target {final_path.name} already exists, would overwrite"
+        return result
+
+    # Make sure temp path doesn't collide with a real user file
+    # (could happen if someone has a file literally named "X.tmp.compressed.mp4")
+    if output_path.exists() and output_path.suffix != ".mp4":
+        # Looks like a real file, don't touch it
+        result.action = Action.ERROR
+        result.error = f"temp path {output_path.name} already exists as a non-temp file"
+        return result
+
+    if dry_run:
+        result.action = Action.WOULD_COMPRESS
+        result.reason = _describe_action(info, target_height, preset)
+        return result
+
+    cmd = build_ffmpeg_cmd(
+        input_path=info.path,
+        output_path=output_path,
+        target_height=target_height,
+        preset=preset,
+        crf=crf,
+        threads=threads,
+    )
+
+    _active_temp_files.add(output_path)
+    t0 = time.monotonic()
+
+    try:
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=7200,  # 2h max per video
+        )
+        if proc.returncode != 0:
+            stderr = proc.stderr[-500:] if proc.stderr else "unknown ffmpeg error"
+            return _cleanup_and_error(output_path, result, stderr)
+    except subprocess.TimeoutExpired:
+        return _cleanup_and_error(output_path, result, "ffmpeg timeout (>2h)")
+    except Exception as e:
+        return _cleanup_and_error(output_path, result, str(e))
+
+    result.duration_secs = time.monotonic() - t0
+
+    # Verify output exists and is valid
+    if not output_path.exists() or output_path.stat().st_size == 0:
+        return _cleanup_and_error(output_path, result, "output file empty or missing")
+
+    check = probe_video(output_path)
+    if check is None:
+        return _cleanup_and_error(output_path, result, "output file not readable by ffprobe")
+
+    # Verify duration: a truncated encode could still be "readable" by ffprobe
+    if info.duration > 0 and abs(check.duration - info.duration) > _MAX_DURATION_DRIFT_SECS:
+        return _cleanup_and_error(
+            output_path,
+            result,
+            f"duration mismatch: source={info.duration:.1f}s, output={check.duration:.1f}s",
+        )
+
+    result.output_size = output_path.stat().st_size
+    result.gain_bytes = info.size - result.output_size
+    result.gain_percent = (result.gain_bytes / info.size * 100) if info.size > 0 else 0
+
+    # If gain < threshold, discard compressed version
+    if result.gain_percent < MIN_GAIN_PERCENT:
+        output_path.unlink(missing_ok=True)
+        _active_temp_files.discard(output_path)
+        result.action = Action.SKIPPED
+        result.reason = f"gain too small ({result.gain_percent:.1f}%)"
+        return result
+
+    # Safe replacement via .bak
+    try:
+        _replace_original(info.path, output_path, final_path)
+    except OSError as e:
+        return _cleanup_and_error(output_path, result, f"file replacement failed: {e}")
+
+    _active_temp_files.discard(output_path)
+
+    result.action = Action.COMPRESSED
+    result.reason = _describe_action(info, target_height, preset, check)
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Discovery
+# ---------------------------------------------------------------------------
+
+
+def discover_videos(root: Path) -> list[Path]:
+    """Recursively find video files."""
+    videos = []
+    for dirpath, _, filenames in os.walk(root):
+        for fname in sorted(filenames):
+            if Path(fname).suffix.lower() in VIDEO_EXTENSIONS:
+                videos.append(Path(dirpath) / fname)
+    return videos
+
+
+# ---------------------------------------------------------------------------
+# Formatting helpers
+# ---------------------------------------------------------------------------
+
+
+def fmt_size(size_bytes: int) -> str:
+    if size_bytes < 1024:
+        return f"{size_bytes} B"
+    elif size_bytes < 1024**2:
+        return f"{size_bytes / 1024:.1f} KB"
+    elif size_bytes < 1024**3:
+        return f"{size_bytes / 1024 ** 2:.1f} MB"
+    else:
+        return f"{size_bytes / 1024 ** 3:.2f} GB"
+
+
+def fmt_duration(secs: float) -> str:
+    if secs < 60:
+        return f"{secs:.0f}s"
+    m, s = divmod(int(secs), 60)
+    if m < 60:
+        return f"{m}m{s:02d}s"
+    h, m = divmod(m, 60)
+    return f"{h}h{m:02d}m{s:02d}s"
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Compress family videos to H.265. Dry-run by default.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("directory", type=Path, help="Root directory to scan recursively")
+    parser.add_argument("--run", action="store_true", help="Actually compress (default is dry-run)")
+    parser.add_argument(
+        "--preset",
+        default="h265",
+        choices=list(PRESETS),
+        help="Compression preset: h265 (smaller, default) or h264 (more compatible). (default: h265)",
+    )
+    parser.add_argument("--crf", type=int, default=None, help="Override CRF value (default: 28 for h265, 23 for h264). Lower = better quality, bigger file.")
+    parser.add_argument("--threads", type=int, default=0, help="FFmpeg threads (0 = auto, default: 0)")
+
+    args = parser.parse_args()
+
+    preset = PRESETS[args.preset]
+    crf = args.crf if args.crf is not None else preset.default_crf
+
+    if not args.directory.is_dir():
+        console.print(f"[bold red]Error:[/] {args.directory} is not a directory")
+        sys.exit(1)
+
+    for tool in ("ffmpeg", "ffprobe"):
+        if shutil.which(tool) is None:
+            console.print(f"[bold red]Error:[/] {tool} not found. Install with: sudo apt install ffmpeg")
+            sys.exit(1)
+
+    mode = "[bold green]RUN[/]" if args.run else "[bold cyan]DRY-RUN[/]"
+    console.print(
+        Panel(
+            f"Mode: {mode}\n"
+            f"Directory: {args.directory.resolve()}\n"
+            f"Preset: {preset.label} ({preset.codec}, {preset.x26x_preset}) | CRF: {crf} | Threads: {args.threads or 'auto'}",
+            title="[bold]Video Compressor[/]",
+            border_style="blue",
+        )
+    )
+
+    # Discover
+    console.print("\n[bold]Scanning for videos...[/]")
+    videos = discover_videos(args.directory)
+
+    if not videos:
+        console.print("[yellow]No video files found.[/]")
+        sys.exit(0)
+
+    console.print(f"Found [bold]{len(videos)}[/] video(s)\n")
+
+    # Probe all videos
+    infos: list[tuple[VideoInfo, str]] = []
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        MofNCompleteColumn(),
+        console=console,
+    ) as progress:
+        task = progress.add_task("Analyzing videos", total=len(videos))
+        for vpath in videos:
+            info = probe_video(vpath)
+            rel = str(vpath.relative_to(args.directory))
+            if info is not None:
+                infos.append((info, rel))
+            else:
+                console.print(f"  [yellow]Warning:[/] could not read {vpath.name}, skipping")
+            progress.advance(task)
+
+    total_input_size = sum(info.size for info, _ in infos)
+    console.print(f"\n[bold]{len(infos)}[/] readable video(s), total size: [bold]{fmt_size(total_input_size)}[/]\n")
+
+    # Process
+    results: list[CompressResult] = []
+
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        TimeElapsedColumn(),
+        TimeRemainingColumn(),
+        console=console,
+    ) as progress:
+        task = progress.add_task("Processing videos", total=len(infos))
+        for info, rel in infos:
+            progress.update(task, description=f"[bold]{rel}[/]")
+
+            result = compress_video(
+                info=info,
+                rel_path=rel,
+                preset=preset,
+                crf=crf,
+                threads=args.threads,
+                dry_run=not args.run,
+            )
+            results.append(result)
+
+            # Inline status
+            status = f"[{result.action.style}]{result.action.value}[/]"
+            detail = result.reason
+            if result.action is Action.COMPRESSED:
+                detail += f" | {fmt_size(info.size)} → {fmt_size(result.output_size)} ({result.gain_percent:.1f}% saved)"
+            elif result.action is Action.ERROR:
+                detail = result.error[:80]
+            console.print(f"  {status}: {rel} — {detail}")
+
+            progress.advance(task)
+
+    # Summary table
+    console.print()
+    table = Table(title="Summary", show_lines=False, border_style="blue")
+    table.add_column("File", style="bold", max_width=50, no_wrap=False)
+    table.add_column("Codec", justify="center")
+    table.add_column("Resolution", justify="center")
+    table.add_column("Original", justify="right")
+    table.add_column("Result", justify="right")
+    table.add_column("Gain", justify="right")
+    table.add_column("Action", justify="center")
+
+    for r in results:
+        info = r.source
+        gain_text = ""
+        result_text = ""
+        if r.action is Action.COMPRESSED:
+            result_text = fmt_size(r.output_size)
+            gain_text = f"[green]-{r.gain_percent:.1f}%[/]"
+        elif r.action is Action.WOULD_COMPRESS:
+            result_text = "—"
+            gain_text = "—"
+        elif r.action is Action.ERROR:
+            result_text = "[red]ERROR[/]"
+
+        table.add_row(
+            r.rel_path,
+            info.codec,
+            info.resolution_label,
+            fmt_size(info.size),
+            result_text,
+            gain_text,
+            Text(r.action.value, style=r.action.style),
+        )
+
+    console.print(table)
+
+    # Grand totals
+    compressed = [r for r in results if r.action is Action.COMPRESSED]
+    skipped = [r for r in results if r.action is Action.SKIPPED]
+    errors = [r for r in results if r.action is Action.ERROR]
+    would = [r for r in results if r.action is Action.WOULD_COMPRESS]
+
+    total_saved = sum(r.gain_bytes for r in compressed)
+    total_time = sum(r.duration_secs for r in compressed)
+
+    console.print()
+    if args.run:
+        console.print(f"[bold green]Compressed:[/] {len(compressed)} file(s)")
+        if compressed:
+            console.print(f"[bold green]Total saved:[/] {fmt_size(total_saved)} in {fmt_duration(total_time)}")
+    else:
+        console.print(f"[bold cyan]Would compress:[/] {len(would)} file(s)")
+
+    if skipped:
+        console.print(f"[dim]Skipped:[/] {len(skipped)} file(s)")
+    if errors:
+        console.print(f"[bold red]Errors:[/] {len(errors)} file(s)")
+
+    if not args.run and would:
+        console.print("\n[bold yellow]→ Run with --run to actually compress[/]")
+
+
+if __name__ == "__main__":
+    main()
