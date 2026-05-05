@@ -2,10 +2,21 @@
 
 set -euo pipefail
 
-third_monitor="DP-3"
+third_monitor="DP-6"
 
-if xrandr | grep -q "$third_monitor connected (normal left inverted right x axis y axis)"; then
-  xrandr --output "$third_monitor" --rotate inverted --pos 1600x-1200 --auto --noprimary --nograb --output HDMI-0 --primary
+status=$(kscreen-doctor -o 2>/dev/null \
+    | grep -A2 "Output.*${third_monitor}" \
+    | grep -oE "enabled|disabled")
+
+if [[ "$status" == "enabled" ]]; then
+    kscreen-doctor "output.${third_monitor}.disable"
+    echo "🖥️ ❌ ${third_monitor} disabled"
+elif [[ "$status" == "disabled" ]]; then
+    kscreen-doctor \
+        "output.${third_monitor}.enable" \
+        "output.${third_monitor}.position.1600,-1200"
+    echo "🖥️ ✅ ${third_monitor} enabled"
 else
-  xrandr --output "$third_monitor" --off --output HDMI-0 --primary
+    echo "❌ Display ${third_monitor} not detected" >&2
+    exit 1
 fi
