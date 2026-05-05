@@ -105,7 +105,7 @@ set mouse=a
 set ttymouse=xterm2
 
 " Merge selection and system clipboard
-set clipboard=unnamedplus,unnamed,autoselect,exclude:cons\|linux
+set clipboard=unnamedplus,unnamed
 
 " Isolate swap and backup files from current file
 set backupdir=~/.vimbackupdir,/tmp
