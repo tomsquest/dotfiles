@@ -36,6 +36,7 @@ function create-links {
     create-link "$PWD/zsh"                    "$HOME/.zsh"
     # files
     create-link "$PWD/bashrc"                 "$HOME/.bashrc"
+    create-link "$PWD/ghostty-config"         "$HOME/.config/ghostty/config"
     create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
     create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"

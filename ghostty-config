@@ -1,0 +1,27 @@
+theme = Alabaster
+font-family = JetBrainsMono Nerd Font
+
+# Default: 10000000 (10.000.000)
+scrollback-limit = 100000000
+
+maximize = true
+gtk-single-instance = true
+gtk-titlebar-hide-when-maximized = true
+
+# Disable cursor as a bar at the prompt
+shell-integration-features = no-cursor
+
+# Security
+clipboard-paste-protection = true
+
+# Terminator shortcuts
+keybind = ctrl+shift+e=new_split:right
+keybind = ctrl+shift+o=new_split:down
+keybind = ctrl+shift+n=goto_split:next
+
+# Only perform ctrl+c if something is selected
+keybind = performable:ctrl+c=copy_to_clipboard
+# Classical ctrl+v to paste
+keybind = ctrl+v=paste_from_clipboard
+
+
