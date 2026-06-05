@@ -4,7 +4,7 @@ alias df='df -h'
 alias free='free -h'
 alias f='find -iname'
 alias v='vim'
-alias up='sudo apt update && sudo apt -V --yes upgrade'
+alias up='sudo apt update && sudo apt -V --yes upgrade && brew upgrade'
 
 # History with timestamps and elapsed time
 alias h='history -iD'
