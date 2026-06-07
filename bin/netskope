@@ -8,8 +8,9 @@ GREEN="\033[1;32m"
 RESET="\033[0m"
 
 usage() {
-    echo -e "${BLUE}Usage: $0 [start|stop|restart]${RESET}"
+    echo -e "${BLUE}Usage: $0 [start|status|stop|restart]${RESET}"
     echo -e "${BLUE}  start   - Start the NetSkope VPN services${RESET}"
+    echo -e "${BLUE}  status  - Status of the NetSkope VPN services${RESET}"
     echo -e "${BLUE}  stop    - Stop the NetSkope VPN services${RESET}"
     echo -e "${BLUE}  restart - Restart the NetSkope VPN services${RESET}"
 }
@@ -25,6 +26,12 @@ start() {
     dex /usr/share/applications/stagentui.desktop
 
     echo -e "${GREEN}NetSkope VPN started${RESET}"
+}
+
+status() {
+    sudo systemctl is-active stagentd.service > /dev/null && echo -e "${GREEN}System service: active${RESET}" || echo -e "${BLUE}System service: inactive${RESET}"
+    systemctl --user is-active stagentapp.service > /dev/null && echo -e "${GREEN}User service: active${RESET}" || echo -e "${BLUE}User service: inactive${RESET}"
+    pgrep -f /opt/netskope/stagent/stAgentUI > /dev/null && echo -e "${GREEN}UI (tray): running${RESET}" || echo -e "${BLUE}UI (tray): not running${RESET}"
 }
 
 stop() {
@@ -51,6 +58,9 @@ if [ $# -ge 1 ]; then
     case "$1" in
         start)
             start
+            ;;
+        status)
+            status
             ;;
         stop)
             stop
