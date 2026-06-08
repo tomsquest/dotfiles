@@ -61,4 +61,9 @@ fi
 # SHOULD BE LAST
 /usr/bin/rm -f ~/.zcompdump || true
 autoload -Uz compinit
-compinit
+if [[ -n ~/.zcompdump(#qNmh-24) ]]; then
+  # Skip checks and just load the cache if it's less than 24 hours old
+  compinit -C
+else
+  compinit
+fi
