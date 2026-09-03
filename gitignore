@@ -7,6 +7,9 @@ Thumbs.db
 
 # Temp files
 .sass-cache/
+__pycache__/
+.ruff_cache/
+.pytest_cache/
 jmeter.log
 *.swp
 *~
@@ -22,8 +25,7 @@ jmeter.log
 node_modules/
 dist/
 target/
+.venv/
 *wallaby.js
 .env
-# Direnv
 .envrc
-
