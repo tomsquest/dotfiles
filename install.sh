@@ -61,11 +61,6 @@ function install-vim-plugins {
     vim +PluginInstall +qall
 }
 
-function install-dircolors {
-    echo "Installing dircolors..."
-    curl -sl "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark" > ~/.dircolors
-}
-
 function install-asdf-plugins {
     asdf plugin add golang || true
     asdf plugin add nodejs || true
@@ -113,7 +108,6 @@ function install-all {
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
     install-from-git-repo "Vim Vundle"    "https://github.com/VundleVim/Vundle.vim" "$HOME/.vundle"
     install-vim-plugins
-    install-dircolors
     install-homebrew
     install-homebrew-apps
     install-asdf-plugins
