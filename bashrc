@@ -19,7 +19,7 @@ xterm*|rxvt*)
 esac
 
 # Colors
-test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+eval "$(dircolors -b)"
 
 # Completions
 if ! shopt -oq posix; then
@@ -36,7 +36,7 @@ alias  l='ls -l              --human-readable --classify --group-directories-fir
 alias ll='ls -l              --human-readable --classify --group-directories-first --color=auto'
 alias la='ls -l --almost-all --human-readable --classify --group-directories-first --color=auto'
 alias  grep='grep --color=auto'
-alias egrep='grep --color=auto'
-alias zgrep='grep --color=auto'
+alias egrep='grep -E --color=auto'
+alias zgrep='zgrep --color=auto'
 alias du='du -h'
 alias df='df -h'
