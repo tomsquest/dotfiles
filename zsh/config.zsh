@@ -4,13 +4,10 @@
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
-HISTORY_IGNORE="(ls|cd|pwd|exit|cd)*"
+HISTORY_IGNORE="(ls|ls *|cd|cd *|pwd|exit)"
 # Share history between multiple terminal sessions
+# Also writes commands as they are typed (no need for inc_append_history/appendhistory, the zsh doc advises against combining them)
 setopt share_history
-# Append history, instead of replace, when a terminal session exits
-setopt appendhistory
-# Add commands as they are typed, don't wait until shell exit
-setopt inc_append_history
 # Ignore commands with a space before
 setopt hist_ignore_space
 # Remove the old entry and append the new one
@@ -45,12 +42,6 @@ setopt notify
 setopt long_list_jobs
 # Don't kill background jobs on logout
 setopt nohup
-# Allow functions to have local options
-setopt local_options
-# Allow functions to have local traps
-setopt local_traps
-# Required for alias completion: m c<TAB>
-setopt complete_aliases
 # Allow aliases (eg. `g` for `git`) to be expanded before processing the command line for completion
 # So that `g <TAB>` proposes git subcommands. Without this, only file completion is proposed.
 unsetopt completealiases
