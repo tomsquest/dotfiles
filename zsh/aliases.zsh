@@ -2,7 +2,6 @@ alias szshrc='source ~/.zshrc'
 alias du='du -h'
 alias df='df -h'
 alias free='free -h'
-alias f='find -iname'
 alias v='vim'
 alias up='sudo apt update && sudo apt -V --yes upgrade && brew upgrade --yes && flatpak update --noninteractive'
 
