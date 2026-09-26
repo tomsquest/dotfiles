@@ -1,14 +1,18 @@
 # Ubuntu: don't run compinit in /etc/zsh/zshrc, it is done (with a cache) at the end of ~/.zshrc
 skip_global_compinit=1
 
+# Remove duplicates in PATH and FPATH (they accumulate in nested shells, which inherit the parent PATH)
+# Only effective on array assignments (`path=(...)`), not on `PATH="..."`
+typeset -U path fpath
+
 # set PATH so it includes user's private bin directories
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+path=("$HOME/bin" "$HOME/.local/bin" $path)
 
 # LinuxBrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Asdf
-export PATH="$HOME/.asdf/shims:$PATH"
+path=("$HOME/.asdf/shims" $path)
 fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
 
 # Direnv
