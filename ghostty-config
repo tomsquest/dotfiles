@@ -9,7 +9,8 @@ gtk-single-instance = true
 gtk-titlebar-hide-when-maximized = true
 
 # Disable cursor as a bar at the prompt
-shell-integration-features = no-cursor
+# ssh-env: advertise TERM=xterm-256color to remote hosts, ssh-terminfo: install xterm-ghostty terminfo on remote hosts
+shell-integration-features = no-cursor,ssh-env,ssh-terminfo
 
 # Security
 clipboard-paste-protection = true

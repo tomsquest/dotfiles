@@ -58,7 +58,6 @@ unsetopt completealiases
 #
 # ENV
 #
-export TERM=xterm-256color
 export TMPDIR="/tmp"
 export EDITOR="/usr/bin/vim"
 export VISUAL="/usr/bin/vim"
