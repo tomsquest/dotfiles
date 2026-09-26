@@ -15,8 +15,6 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/sudo
   # Provides additional completions
   zgen load zsh-users/zsh-completions src
-  # Enhances the terminal environment with 256 colors
-  zgen load chrissicool/zsh-256color
   # Allows you to foreground the last backgrounded job (when you would normally do fg) using Ctrl+Z
   zgen load theunraveler/zsh-fancy_ctrl_z
   # Enable Q support in ZSH
@@ -59,11 +57,15 @@ fi
 
 # Completions
 # SHOULD BE LAST
-/usr/bin/rm -f ~/.zcompdump || true
 autoload -Uz compinit
-if [[ -n ~/.zcompdump(#qNmh-24) ]]; then
-  # Skip checks and just load the cache if it's less than 24 hours old
-  compinit -C
-else
-  compinit
-fi
+# Anonymous function to enable extendedglob (needed by the `(#q...)` glob qualifier) only locally,
+# as enabling it globally breaks commands like `git reset HEAD^`
+() {
+  setopt local_options extended_glob
+  if [[ -n ~/.zcompdump(#qNmh-24) ]]; then
+    # Skip checks and just load the cache if it's less than 24 hours old
+    compinit -C
+  else
+    compinit
+  fi
+}

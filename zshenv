@@ -1,3 +1,6 @@
+# Ubuntu: don't run compinit in /etc/zsh/zshrc, it is done (with a cache) at the end of ~/.zshrc
+skip_global_compinit=1
+
 # set PATH so it includes user's private bin directories
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
