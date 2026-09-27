@@ -43,7 +43,6 @@ function create-links {
     create-link "$PWD/libinput-gestures.conf" "$HOME/.config/libinput-gestures.conf"
     create-link "$PWD/npmrc"                  "$HOME/.npmrc"
     create-link "$PWD/profile"                "$HOME/.profile"
-    create-link "$PWD/pythonstartup"          "$HOME/.pythonstartup"
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
     create-link "$PWD/safe-rm"                "$HOME/.safe-rm"
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"

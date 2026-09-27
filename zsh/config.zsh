@@ -72,8 +72,6 @@ export SSH_ASKPASS="/usr/bin/ssh-askpass"
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
 # Default is: *?_-.[]~=/&;!#$%^(){}<>
 export WORDCHARS="*?_-.[]~=&;!#$%^(){}<>"
-# Python REPL initialization
-export PYTHONSTARTUP="$HOME/.pythonstartup"
 # Node 22/23... cache
 # The recommendation is to set to a tmp directory to avoid the cache growing too much. But I will see.
 # See: https://nodejs.org/api/module.html#module-compile-cache
