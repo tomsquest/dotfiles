@@ -1,3 +1,5 @@
+# Don't let zgen call compinit, it is done (with a cache) at the end of this file
+ZGEN_AUTOLOAD_COMPINIT=0
 source ~/.zgen/zgen.zsh
 if ! zgen saved; then
   echo "Creating a zgen save"
@@ -64,5 +66,7 @@ autoload -Uz compinit
     compinit -C
   else
     compinit
+    # compinit does not rewrite the dump when nothing changed: refresh its date to use the cache for the next 24 hours
+    touch ~/.zcompdump
   fi
 }
