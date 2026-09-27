@@ -81,6 +81,9 @@ export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 # ZSH Modules config
 #
 
+# zsh-autosuggestions: suggest from history first, then from completions (eg. `git che` -> `git checkout`)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 # Force refresh the terminal title before each command.
 autoload add-zsh-hook
 update_terminal_title() {
