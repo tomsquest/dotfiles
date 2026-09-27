@@ -32,6 +32,8 @@ fi
 # After zgen (plugins add completions to fpath), before the files using `compdef` (eg. aliases.zsh)
 autoload -Uz compinit
 compinit
+# Compile the completion cache (faster to load). zsh ignores the .zwc when older than the cache
+[[ ~/.zcompdump.zwc -nt ~/.zcompdump ]] || zcompile ~/.zcompdump
 
 source ~/.zsh/config.zsh
 source ~/.zsh/completion.zsh
