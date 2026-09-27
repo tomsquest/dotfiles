@@ -1,4 +1,4 @@
-# Don't let zgen call compinit, it is done (with a cache) at the end of this file
+# Don't let zgen call compinit, it is done (with a cache) below
 ZGEN_AUTOLOAD_COMPINIT=0
 source ~/.zgen/zgen.zsh
 if ! zgen saved; then
@@ -28,6 +28,23 @@ if ! zgen saved; then
   zgen save
 fi
 
+# Completions
+# After zgen (plugins add completions to fpath), before the files using `compdef` (eg. aliases.zsh)
+autoload -Uz compinit
+# Anonymous function to enable extendedglob (needed by the `(#q...)` glob qualifier) only locally,
+# as enabling it globally breaks commands like `git reset HEAD^`
+() {
+  setopt local_options extended_glob
+  if [[ -n ~/.zcompdump(#qNmh-24) ]]; then
+    # Skip checks and just load the cache if it's less than 24 hours old
+    compinit -C
+  else
+    compinit
+    # compinit does not rewrite the dump when nothing changed: refresh its date to use the cache for the next 24 hours
+    touch ~/.zcompdump
+  fi
+}
+
 source ~/.zsh/config.zsh
 source ~/.zsh/completion.zsh
 source ~/.zsh/aliases.zsh
@@ -53,20 +70,3 @@ source <(fzf --zsh)
 if [ -f ~/.zshrc.local ]; then
   source ~/.zshrc.local
 fi
-
-# Completions
-# SHOULD BE LAST
-autoload -Uz compinit
-# Anonymous function to enable extendedglob (needed by the `(#q...)` glob qualifier) only locally,
-# as enabling it globally breaks commands like `git reset HEAD^`
-() {
-  setopt local_options extended_glob
-  if [[ -n ~/.zcompdump(#qNmh-24) ]]; then
-    # Skip checks and just load the cache if it's less than 24 hours old
-    compinit -C
-  else
-    compinit
-    # compinit does not rewrite the dump when nothing changed: refresh its date to use the cache for the next 24 hours
-    touch ~/.zcompdump
-  fi
-}
