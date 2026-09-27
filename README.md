@@ -32,7 +32,7 @@ cd ~/.dotfiles
 
 - Heavily commented ZSH configuration: completion, key bindings...
 - Heavily commented Vim configuration: plugins, key bindings...
-- ZSH plugins with [Zgen](https://github.com/tarjoilija/zgen)
+- ZSH plugins with [Zgenom](https://github.com/jandamm/zgenom)
 - Vim config, using [Vundle](https://github.com/gmarik/vundle)
 - Bash ["Sensible" config](https://github.com/mrzool/bash-sensible)
 - Linux Brew to install utilities (Eza, Jump, Fzf, etc.)

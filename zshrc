@@ -1,35 +1,36 @@
-# Don't let zgen call compinit, it is done below
+# Don't let zgenom call compinit, it is done below
 ZGEN_AUTOLOAD_COMPINIT=0
-source ~/.zgen/zgen.zsh
-if ! zgen saved; then
-  echo "Creating a zgen save"
+source ~/.zgenom/zgenom.zsh
+if ! zgenom saved; then
+  echo "Creating a zgenom save"
 
   # Suggests commands as you type based on history and completions.
-  zgen load zsh-users/zsh-autosuggestions
+  zgenom load zsh-users/zsh-autosuggestions
   # Provides syntax highlighting for the shell zsh.
-  zgen load zsh-users/zsh-syntax-highlighting
+  zgenom load zsh-users/zsh-syntax-highlighting
   # Provides completion from history using UP and DOWN arrows
   # MUST be after zsh-syntax-highlighting
-  zgen oh-my-zsh plugins/history-substring-search
+  zgenom ohmyzsh plugins/history-substring-search
   # Provides suggested packages to be installed if a command cannot be found.
-  zgen oh-my-zsh plugins/command-not-found
+  zgenom ohmyzsh plugins/command-not-found
   # Provides ESC-ESC keybind to prepend last command with 'sudo'
-  zgen oh-my-zsh plugins/sudo
+  zgenom ohmyzsh plugins/sudo
   # Provides additional completions
-  zgen load zsh-users/zsh-completions src
+  zgenom load zsh-users/zsh-completions src
   # Allows you to foreground the last backgrounded job (when you would normally do fg) using Ctrl+Z
-  zgen load theunraveler/zsh-fancy_ctrl_z
+  zgenom load theunraveler/zsh-fancy_ctrl_z
   # Enable Q support in ZSH
-  zgen load tomsquest/q.plugin.zsh
+  zgenom load tomsquest/q.plugin.zsh
 
   # Remove Zsh completion cache, given we may have updated a completion
   /usr/bin/rm ~/.zcompdump || true
 
-  zgen save
+  # extendedglob is required by `zgenom compile` (called by save), otherwise no plugin is compiled
+  () { setopt local_options extended_glob; zgenom save }
 fi
 
 # Completions
-# After zgen (plugins add completions to fpath), before the files using `compdef` (eg. aliases.zsh)
+# After zgenom (plugins add completions to fpath), before the files using `compdef` (eg. aliases.zsh)
 autoload -Uz compinit
 compinit
 # Compile the completion cache (faster to load). zsh ignores the .zwc when older than the cache

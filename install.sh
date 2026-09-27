@@ -103,7 +103,7 @@ function copy-sysctl-conf {
 
 function install-all {
     create-links
-    install-from-git-repo "Zgen"          "https://github.com/tarjoilija/zgen"      "$HOME/.zgen"
+    install-from-git-repo "Zgenom"        "https://github.com/jandamm/zgenom"       "$HOME/.zgenom"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
     install-from-git-repo "Vim Vundle"    "https://github.com/VundleVim/Vundle.vim" "$HOME/.vundle"
     install-vim-plugins
