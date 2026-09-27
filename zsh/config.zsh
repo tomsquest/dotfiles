@@ -56,7 +56,9 @@ eval "$(dircolors -b)"
 # Less options
 export LESS="--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --tabs=2 --quit-if-one-screen"
 # Enable using less on archive (eg. `less foo.zip`)
-eval "$(lesspipe)"
+# Static output of `lesspipe`
+export LESSOPEN="| /usr/bin/lesspipe %s"
+export LESSCLOSE="/usr/bin/lesspipe %s %s"
 # Use bat to color manpage
 export MANROFFOPT="-c"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
