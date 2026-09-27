@@ -11,8 +11,6 @@ if ! zgenom saved; then
   # Provides completion from history using UP and DOWN arrows
   # MUST be after zsh-syntax-highlighting
   zgenom ohmyzsh plugins/history-substring-search
-  # Provides suggested packages to be installed if a command cannot be found.
-  zgenom ohmyzsh plugins/command-not-found
   # Provides ESC-ESC keybind to prepend last command with 'sudo'
   zgenom ohmyzsh plugins/sudo
   # Provides additional completions
