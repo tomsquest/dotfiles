@@ -2,20 +2,6 @@
 
 My config files, aka `dotfiles`, heavily commented.
 
-## Required software
-
-```
-sudo apt install \
-    safe-rm \
-    jq \
-    xclip \
-    htop \
-    tree \
-    libnotify-bin
-```
-
-- safe-rm: safer rm command for not crying in despair after `rm -rf /home/tom /something` (notice the space)
-
 ## Installation
 
 ``` bash

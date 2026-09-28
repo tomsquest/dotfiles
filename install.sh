@@ -56,6 +56,21 @@ function install-asdf-plugins {
     asdf plugin add nodejs || true
 }
 
+function install-apt-packages {
+    echo "Installing apt packages..."
+    # safe-rm: safer rm, for not crying in despair after `rm -rf /home/tom /something` (notice the space)
+    # libnotify-bin: `notify-send`, used by `alert`
+    # ffmpeg: `ffplay` used by `beep`, and `compress-videos`
+    sudo apt install --yes \
+        safe-rm \
+        jq \
+        wl-clipboard \
+        htop \
+        tree \
+        libnotify-bin \
+        ffmpeg
+}
+
 function install-homebrew {
     echo "Installing Home Brew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -89,6 +104,7 @@ function install-all {
     create-links
     install-from-git-repo "Zgenom"        "https://github.com/jandamm/zgenom"       "$HOME/.zgenom"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
+    install-apt-packages
     install-homebrew
     install-homebrew-apps
     install-asdf-plugins
