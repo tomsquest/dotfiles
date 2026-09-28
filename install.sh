@@ -107,7 +107,6 @@ function install-homebrew-apps {
     brew install kubernetes-cli
     brew install neovim
     brew install opencode
-    brew install pipx
     brew install pnpm
     brew install ripgrep
     brew install starship
