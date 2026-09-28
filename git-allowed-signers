@@ -1,0 +1,3 @@
+# Keys trusted to sign commits, used by git to verify SSH signatures (eg. `git log --show-signature`)
+# Format: <email> <public key>
+tom@tomsquest.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDcSXEIkDfq+Q17098Iwke4xpRv0xaxjjjcE0yMuL1SeUAZf5qzlalO/IFx6rXrifnPo9qt/QhuLC4MFB/jvMOWU8NA55y6awQczeep7mJ2Sw7J/3JjnDzmE+AIegW6G9M8x0ObaCULfbjm538rFyN43pns9GWH2efp8beknfjWn2+wsMhbmJPIgi00nEEtXLgM8MSVXLbnhyTCusWC5c489taKxOLwfhb8OKEmyeQCfpvgV+oy6Zt+HX6MIHwgQ4f2GOcl06dy41sn22NIczRGFuEn39mJcr4MYXezFh2QYCUGNfaTc+16P8hsM8YhzWEO1/YLvxCtH/rZ2JO5vzcf

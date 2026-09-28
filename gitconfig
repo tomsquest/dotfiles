@@ -21,6 +21,9 @@
 	autoupdate = true
 [gpg]
 	format = ssh
+[gpg "ssh"]
+	# Trusted keys, to verify the SSH signatures locally
+	allowedSignersFile = ~/.dotfiles/git-allowed-signers
 [commit]
 	gpgsign = true
 [rebase]
