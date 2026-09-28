@@ -115,6 +115,18 @@ function install-homebrew-apps {
     brew install uv
 }
 
+function install-font {
+    local -r dest="$HOME/.local/share/fonts/JetBrainsMono"
+    if [ -d "$dest" ]; then
+        echo "Skipping, JetBrainsMono Nerd Font already installed"
+        return
+    fi
+    echo "Installing JetBrainsMono Nerd Font..."
+    mkdir -p "$dest"
+    curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" | tar -xJ -C "$dest"
+    fc-cache -f "$dest"
+}
+
 function copy-sysctl-conf {
     echo "Copying sysctl config files..."
     for file in $PWD/sysctl.d/*
@@ -131,6 +143,7 @@ function install-all {
     install-homebrew
     install-homebrew-apps
     install-asdf-plugins
+    install-font
     copy-sysctl-conf
 }
 
