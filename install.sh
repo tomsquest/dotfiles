@@ -60,7 +60,13 @@ function install-apt-packages {
     # safe-rm: safer rm, for not crying in despair after `rm -rf /home/tom /something` (notice the space)
     # libnotify-bin: `notify-send`, used by `alert`
     # ffmpeg: `ffplay` used by `beep`, and `compress-videos`
+    # build-essential, curl, git: required by Home Brew
+    sudo apt update
     sudo apt install --yes \
+        zsh \
+        git \
+        curl \
+        build-essential \
         safe-rm \
         jq \
         wl-clipboard \
@@ -118,10 +124,10 @@ function copy-sysctl-conf {
 }
 
 function install-all {
+    install-apt-packages
     create-links
     install-from-git-repo "Zgenom"        "https://github.com/jandamm/zgenom"       "$HOME/.zgenom"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
-    install-apt-packages
     install-homebrew
     install-homebrew-apps
     install-asdf-plugins
