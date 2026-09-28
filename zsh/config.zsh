@@ -79,13 +79,6 @@ export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 # zsh-autosuggestions: suggest from history first, then from completions (eg. `git che` -> `git checkout`)
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-# Force refresh the terminal title before each command.
-autoload add-zsh-hook
-update_terminal_title() {
-  print -Pn "\e]0;%~ - Terminal\a"
-}
-add-zsh-hook precmd update_terminal_title
-
 # Edit command line by pressing Ctrl+x Ctrl+e
 autoload -U edit-command-line
 zle -N edit-command-line
