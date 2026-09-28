@@ -47,15 +47,6 @@ bindkey "^[m" copy-prev-shell-word
 # Ctrl+space: print Git status
 bindkey -s '^ ' ' git status --short^M'
 
-# Alt+~: run Git WTF script
-function _git_wtf {
-  echo
-  git-wtf
-  zle reset-prompt
-}
-zle -N _git_wtf
-bindkey '^[`' _git_wtf
-
 # Execute the current suggestion (using zsh-autosuggestions)
 # Alt+Enter = '^[^M' on recent VTE and '^[^J' for older (Lxterminal)
 bindkey '^[^M' autosuggest-execute

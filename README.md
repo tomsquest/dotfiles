@@ -7,7 +7,6 @@ My config files, aka `dotfiles`, heavily commented.
 ```
 sudo apt install \
     safe-rm \
-    ruby \
     jq \
     xclip \
     htop \
@@ -16,7 +15,6 @@ sudo apt install \
 ```
 
 - safe-rm: safer rm command for not crying in despair after `rm -rf /home/tom /something` (notice the space)
-- ruby: required for `git wtf` script
 
 ## Installation
 

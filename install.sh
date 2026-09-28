@@ -56,7 +56,6 @@ function install-asdf-plugins {
     asdf plugin add golang || true
     asdf plugin add nodejs || true
     asdf plugin add python || true
-    asdf plugin add ruby || true
 }
 
 function install-homebrew {
