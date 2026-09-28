@@ -15,8 +15,6 @@
 	autocorrect = -1
 [tag]
 	sort = version:refname
-[credential]
-	helper = cache
 [rerere]
 	enabled = true
 	autoupdate = true
