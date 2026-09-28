@@ -97,7 +97,6 @@ function install-homebrew-apps {
     brew install opencode
     brew install pipx
     brew install pnpm
-    brew install protobuf
     brew install ripgrep
     brew install starship
     brew install tree-sitter-cli # for nvim-treesitter
