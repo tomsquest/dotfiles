@@ -38,7 +38,6 @@ function create-links {
     create-link "$PWD/ghostty-config"         "$HOME/.config/ghostty/config"
     create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
-    create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
     create-link "$PWD/libinput-gestures.conf" "$HOME/.config/libinput-gestures.conf"
     create-link "$PWD/nvim"                   "$HOME/.config/nvim"
     create-link "$PWD/npmrc"                  "$HOME/.npmrc"

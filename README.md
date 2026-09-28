@@ -12,13 +12,11 @@ sudo apt install \
     xclip \
     htop \
     tree \
-    libnotify-bin \
-    imwheel
+    libnotify-bin
 ```
 
 - safe-rm: safer rm command for not crying in despair after `rm -rf /home/tom /something` (notice the space)
 - ruby: required for `git wtf` script
-- imwheel: to use the additional buttons of my mouse to close tabs and windows
 
 ## Installation
 
