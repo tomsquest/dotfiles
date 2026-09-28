@@ -68,7 +68,8 @@ function install-apt-packages {
         htop \
         tree \
         libnotify-bin \
-        ffmpeg
+        ffmpeg \
+        git-lfs
 }
 
 function install-homebrew {
