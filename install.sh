@@ -55,7 +55,6 @@ function create-links {
 function install-asdf-plugins {
     asdf plugin add golang || true
     asdf plugin add nodejs || true
-    asdf plugin add python || true
 }
 
 function install-homebrew {
