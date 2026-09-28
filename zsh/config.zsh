@@ -50,8 +50,8 @@ unsetopt completealiases
 # ENV
 #
 export TMPDIR="/tmp"
-export EDITOR="/usr/bin/vim"
-export VISUAL="/usr/bin/vim"
+export EDITOR="nvim"
+export VISUAL="nvim"
 eval "$(dircolors -b)"
 # Less options
 export LESS="--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --hilite-unread --tabs=2 --quit-if-one-screen"

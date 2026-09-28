@@ -32,7 +32,6 @@ function create-links {
     echo "Creating links..."
     # directories
     create-link "$PWD/bin"                    "$HOME/bin"
-    create-link "$PWD/vim"                    "$HOME/.vim"
     create-link "$PWD/zsh"                    "$HOME/.zsh"
     # files
     create-link "$PWD/bashrc"                 "$HOME/.bashrc"
@@ -41,23 +40,18 @@ function create-links {
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
     create-link "$PWD/imwheelrc"              "$HOME/.imwheelrc"
     create-link "$PWD/libinput-gestures.conf" "$HOME/.config/libinput-gestures.conf"
+    create-link "$PWD/nvim"                   "$HOME/.config/nvim"
     create-link "$PWD/npmrc"                  "$HOME/.npmrc"
     create-link "$PWD/profile"                "$HOME/.profile"
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
     create-link "$PWD/safe-rm"                "$HOME/.safe-rm"
     create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
-    create-link "$PWD/vimrc"                  "$HOME/.vimrc"
     create-link "$PWD/zshenv"                 "$HOME/.zshenv"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"
     for file in $PWD/desktop-shortcuts/*
     do
       create-link "$file" "$HOME/.local/share/applications/$(basename "$file")"
     done
-}
-
-function install-vim-plugins {
-    echo "Installing Vim plugins..."
-    vim +PluginInstall +qall
 }
 
 function install-asdf-plugins {
@@ -82,6 +76,8 @@ function install-homebrew-apps {
     brew install fzf
     brew install httpie
     brew install jump
+    brew install neovim
+    brew install tree-sitter-cli # for nvim-treesitter
     brew install ripgrep
     brew install starship
 }
@@ -104,8 +100,6 @@ function install-all {
     create-links
     install-from-git-repo "Zgenom"        "https://github.com/jandamm/zgenom"       "$HOME/.zgenom"
     install-from-git-repo "Bash-Sensible" "https://github.com/mrzool/bash-sensible" "$HOME/.bash-sensible"
-    install-from-git-repo "Vim Vundle"    "https://github.com/VundleVim/Vundle.vim" "$HOME/.vundle"
-    install-vim-plugins
     install-homebrew
     install-homebrew-apps
     install-asdf-plugins

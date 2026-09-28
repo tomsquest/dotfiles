@@ -2,7 +2,8 @@ alias szshrc='source ~/.zshrc'
 alias du='du -h'
 alias df='df -h'
 alias free='free -h'
-alias v='vim'
+alias v='nvim'
+alias vim='nvim'
 alias up='sudo apt update && sudo apt -V --yes upgrade && brew upgrade --yes && flatpak update --noninteractive'
 
 # History with timestamps and elapsed time

@@ -19,7 +19,7 @@ docker-clean() {
 # Usage:   o [FUZZY PATTERN]
 # Example: o file.py
 #    - press ctrl-o to open
-#    - press ctrl-e to edit in vim
+#    - press ctrl-e to edit in $EDITOR
 #    - press enter to open in Jetbrains IntelliJ IDEA
 o() {
   if [ -d "$1" ]; then
@@ -45,7 +45,7 @@ o() {
         xdg-open "$file"
         ;;
       "ctrl-e")
-        ${EDITOR:-vim} "$file"
+        ${EDITOR:-nvim} "$file"
         ;;
       *)
         idea "$file"

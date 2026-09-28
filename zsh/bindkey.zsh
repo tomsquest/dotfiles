@@ -64,5 +64,5 @@ bindkey '^[^J' autosuggest-execute
 # Disable the capslock key and map it to escape
 #setxkbmap -option caps:backspace
 
-# Disable flow control (ctrl+s, ctrl+q) to enable saving with ctrl+s in Vim
+# Disable flow control (ctrl+s, ctrl+q) so that ctrl+s does not freeze the terminal (resumed by ctrl+q)
 stty -ixon -ixoff

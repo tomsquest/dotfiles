@@ -5,6 +5,8 @@ font-family = JetBrainsMono Nerd Font
 scrollback-limit = 100000000
 
 maximize = true
+# Spread the extra space (window size not a multiple of the cell size) on all edges, instead of only at the bottom/right
+window-padding-balance = true
 gtk-single-instance = true
 gtk-titlebar-hide-when-maximized = true
 
