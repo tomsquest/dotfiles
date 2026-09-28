@@ -127,6 +127,15 @@ function install-font {
     fc-cache -f "$dest"
 }
 
+function set-zsh-as-default-shell {
+    if [ "$(getent passwd "$USER" | cut -d: -f7)" = "/usr/bin/zsh" ]; then
+        echo "Skipping, zsh is already the default shell"
+    else
+        echo "Setting zsh as default shell..."
+        chsh -s /usr/bin/zsh
+    fi
+}
+
 function copy-sysctl-conf {
     echo "Copying sysctl config files..."
     for file in $PWD/sysctl.d/*
@@ -144,6 +153,7 @@ function install-all {
     install-homebrew-apps
     install-asdf-plugins
     install-font
+    set-zsh-as-default-shell
     copy-sysctl-conf
 }
 
