@@ -48,12 +48,9 @@ bindkey "^[m" copy-prev-shell-word
 bindkey -s '^ ' ' git status --short^M'
 
 # Execute the current suggestion (using zsh-autosuggestions)
-# Alt+Enter = '^[^M' on recent VTE and '^[^J' for older (Lxterminal)
+# Alt+Enter: '^[^M', or '^[^J' in some terminals
 bindkey '^[^M' autosuggest-execute
 bindkey '^[^J' autosuggest-execute
 
-# Disable the capslock key and map it to escape
-#setxkbmap -option caps:backspace
-
 # Disable flow control (ctrl+s, ctrl+q) so that ctrl+s does not freeze the terminal (resumed by ctrl+q)
-stty -ixon -ixoff
+unsetopt flow_control
