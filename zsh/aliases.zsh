@@ -21,7 +21,7 @@ alias zgrep='zgrep --color=auto'
 # More verbose fileutils
 alias cp='nocorrect cp -iv' # -i to prompt for every file
 alias mv='nocorrect mv -iv'
-alias rm='nocorrect rm -Iv' # -I to prompt when more than 3 files
+alias rm='nocorrect safe-rm -Iv' # -I to prompt when more than 3 files. safe-rm refuses to delete the paths listed in ~/.safe-rm
 alias rmdir='rmdir -v'
 alias chmod='chmod -v'
 alias chown='chown -v'
