@@ -1,7 +1,8 @@
 [user]
 	name = Thomas Queste
 	email = tom@tomsquest.com
-	signingkey = 0x46ABEB7FF623F5EB
+	# Sign with the SSH key used for GitHub (see [gpg] format)
+	signingkey = ~/.ssh/id_tomsquest@github.pub
 [alias]
 	fixup = !sh -c 'REV=$(git rev-parse $1) && git commit --fixup $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
 	squash = !sh -c 'REV=$(git rev-parse $1) && git commit --squash $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
@@ -18,9 +19,10 @@
 [rerere]
 	enabled = true
 	autoupdate = true
+[gpg]
+	format = ssh
 [commit]
-    # disable until I create a sub-key for git signing
-    # gpgsign = true
+	gpgsign = true
 [rebase]
 	autoStash = true
 	autoSquash = true
