@@ -64,8 +64,6 @@ export MANROFFOPT="-c"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # Print dates in ISO format (in `ls -l` for example)
 export TIME_STYLE="long-iso"
-# Ripgrep config
-export RIPGREP_CONFIG_PATH="/home/tom/.ripgreprc"
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
 # Default is: *?_-.[]~=/&;!#$%^(){}<>

@@ -41,7 +41,6 @@ function create-links {
     create-link "$PWD/nvim"                   "$HOME/.config/nvim"
     create-link "$PWD/npmrc"                  "$HOME/.npmrc"
     create-link "$PWD/profile"                "$HOME/.profile"
-    create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
     create-link "$PWD/safe-rm"                "$HOME/.safe-rm"
     create-link "$PWD/zshenv"                 "$HOME/.zshenv"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"

@@ -84,3 +84,4 @@ alias jt='just test'
 
 # Tools
 alias cat="bat --paging=never"
+alias rg="rg --smart-case"
