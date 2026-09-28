@@ -80,16 +80,28 @@ function install-homebrew-apps {
     echo "Installing Home Brew apps..."
     brew install asdf
     brew install bat
+    brew install btop
     brew install direnv
+    brew install dust
     brew install eza # exa is unmaintained
     brew install fd
     brew install fzf
+    brew install gh
     brew install httpie
     brew install jump
+    brew install just
+    brew install k9s
+    brew install kubectx
+    brew install kubernetes-cli
     brew install neovim
-    brew install tree-sitter-cli # for nvim-treesitter
+    brew install opencode
+    brew install pipx
+    brew install pnpm
+    brew install protobuf
     brew install ripgrep
     brew install starship
+    brew install tree-sitter-cli # for nvim-treesitter
+    brew install uv
 }
 
 function copy-sysctl-conf {
