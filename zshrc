@@ -48,6 +48,9 @@ eval "$(starship init zsh)"
 # Adds fuzzy matching which zoxide does not have
 eval "$(jump shell --bind=z)"
 
+# Direnv: load/unload the .envrc of the current directory
+eval "$(direnv hook zsh)"
+
 # FZF
 export FZF_DEFAULT_OPTS="--height=50% --reverse --multi --highlight-line"
 export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target,.venv --preview 'bat --style=numbers --color=always {}'"

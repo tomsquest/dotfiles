@@ -15,9 +15,6 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 path=("$HOME/.asdf/shims" $path)
 fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
 
-# Direnv
-eval "$(direnv hook zsh)"
-
 # Flatpak
 flatpak_xdg_path="/var/lib/flatpak/exports/share"
 if [ -n "${XDG_DATA_DIRS##*${flatpak_xdg_path}}" ] && [ -n "${XDG_DATA_DIRS##*${flatpak_xdg_path}:*}" ]; then
