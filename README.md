@@ -2,24 +2,37 @@
 
 My config files, aka `dotfiles`, heavily commented.
 
+Target: Ubuntu with KDE Plasma (Wayland).
+
 ## Installation
 
 ``` bash
-git clone https://tomsquest@github.com/tomsquest/dotfiles.git ~/.dotfiles
+git clone https://github.com/tomsquest/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh
 ```
 
+`install.sh` can be run again safely. It:
+- installs the apt packages (zsh, git, safe-rm, ffmpeg...)
+- links the config files into `$HOME`
+- installs [Zgenom](https://github.com/jandamm/zgenom) and [Bash Sensible](https://github.com/mrzool/bash-sensible)
+- installs [Homebrew](https://brew.sh) and the CLI tools (bat, eza, fd, fzf, jump, neovim, ripgrep, starship, uv...)
+- installs the asdf plugins (Go, Node.js)
+- installs the JetBrainsMono Nerd Font
+- sets zsh as the default shell
+- copies the sysctl config (inotify watches for IntelliJ)
+
 ## Main features
 
-- Heavily commented ZSH configuration: completion, key bindings...
+- Heavily commented ZSH configuration: completion, key bindings, aliases...
 - ZSH plugins with [Zgenom](https://github.com/jandamm/zgenom)
+- Prompt with [Starship](https://starship.rs)
+- [Ghostty](https://ghostty.org) terminal config
 - Neovim config, based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
-- Bash ["Sensible" config](https://github.com/mrzool/bash-sensible)
-- Linux Brew to install utilities (Eza, Jump, Fzf, etc.)
 - Search file and directories with [Fzf](https://github.com/junegunn/fzf)
-- Git config
-- etc.
+- Git config (commits signed with SSH)
+- `rm` protected by [safe-rm](https://launchpad.net/safe-rm)
+- Scripts in `bin/`: `alert` (notify when a command ends), `retry`, `ww` (run or raise a window in KDE)...
 
 The current prompt is simple and efficient:
 - Time, Directory, Git branch/state, Last command error if it failed
