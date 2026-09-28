@@ -49,7 +49,6 @@ unsetopt completealiases
 #
 # ENV
 #
-export TMPDIR="/tmp"
 export EDITOR="nvim"
 export VISUAL="nvim"
 eval "$(dircolors -b)"
