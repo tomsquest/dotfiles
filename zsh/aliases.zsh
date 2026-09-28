@@ -76,6 +76,9 @@ alias   dso='printAndRun docker compose stop'
 alias    dl='docker compose logs'
 alias   dlf='docker compose logs -f'
 
+# Docker: delete stopped containers, unused images, networks and build cache older than 90 days, then unused anonymous volumes
+alias docker-clean='docker system prune --all --filter "until=2160h" && docker volume prune'
+
 # Just
 alias j='just'
 alias ja='just all'
