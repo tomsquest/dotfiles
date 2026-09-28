@@ -43,7 +43,6 @@ function create-links {
     create-link "$PWD/profile"                "$HOME/.profile"
     create-link "$PWD/ripgreprc"              "$HOME/.ripgreprc"
     create-link "$PWD/safe-rm"                "$HOME/.safe-rm"
-    create-link "$PWD/terminator.conf"        "$HOME/.config/terminator/config"
     create-link "$PWD/zshenv"                 "$HOME/.zshenv"
     create-link "$PWD/zshrc"                  "$HOME/.zshrc"
     for file in $PWD/desktop-shortcuts/*
@@ -78,12 +77,6 @@ function install-homebrew-apps {
     brew install starship
 }
 
-function install-terminator-editor-plugin {
-    echo "Installing Terminator Editor plugin..."
-    mkdir -p ~/.config/terminator/plugins
-    curl -sl "https://raw.githubusercontent.com/mchelem/terminator-editor-plugin/master/editor_plugin.py" > ~/.config/terminator/plugins/editor_plugin.py
-}
-
 function copy-sysctl-conf {
     echo "Copying sysctl config files..."
     for file in $PWD/sysctl.d/*
@@ -99,7 +92,6 @@ function install-all {
     install-homebrew
     install-homebrew-apps
     install-asdf-plugins
-    install-terminator-editor-plugin
     copy-sysctl-conf
 }
 
