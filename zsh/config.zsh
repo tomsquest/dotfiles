@@ -66,8 +66,6 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export TIME_STYLE="long-iso"
 # Ripgrep config
 export RIPGREP_CONFIG_PATH="/home/tom/.ripgreprc"
-# SSH ask-pass. Require pkg ssh-askpass
-export SSH_ASKPASS="/usr/bin/ssh-askpass"
 # Allows to kill backward word path by path using ctrl+w
 # With this, ctrl+w on '/usr/bin' will produce '/usr'. Without it, '/usr/bin' is removed.
 # Default is: *?_-.[]~=/&;!#$%^(){}<>
