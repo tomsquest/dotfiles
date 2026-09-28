@@ -26,10 +26,6 @@ color_2 = '#E4D6F9'
 color_3 = '#FFC5E4'
 color_text = '#444444'
 
-#[character]
-#success_symbol = "[❯](color_green)"
-#error_symbol = "[❗](color_red)"
-
 [time]
 disabled = false # the module is disabled by default
 format = '[ $time ]($style)'
