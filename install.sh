@@ -72,8 +72,14 @@ function install-apt-packages {
 }
 
 function install-homebrew {
-    echo "Installing Home Brew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+        echo "Skipping, Home Brew already installed"
+    else
+        echo "Installing Home Brew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    # Add brew (and the apps it installs, eg. asdf) to the PATH of this script
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 }
 
 function install-homebrew-apps {
