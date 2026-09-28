@@ -45,9 +45,6 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[diff "lockb"]
-	textconv = bun
-	binary = true
 [diff]
     # Better diff algorithm
 	algorithm = histogram
