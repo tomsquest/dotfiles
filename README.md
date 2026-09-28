@@ -20,7 +20,6 @@ cd ~/.dotfiles
 - installs the asdf plugins (Go, Node.js)
 - installs the JetBrainsMono Nerd Font
 - sets zsh as the default shell
-- copies the sysctl config (inotify watches for IntelliJ)
 
 ## Main features
 

@@ -135,14 +135,6 @@ function set-zsh-as-default-shell {
     fi
 }
 
-function copy-sysctl-conf {
-    echo "Copying sysctl config files..."
-    for file in $PWD/sysctl.d/*
-    do
-      sudo cp "$file" "/etc/sysctl.d/$(basename "$file")"
-    done
-}
-
 function install-all {
     install-apt-packages
     create-links
@@ -153,7 +145,6 @@ function install-all {
     install-asdf-plugins
     install-font
     set-zsh-as-default-shell
-    copy-sysctl-conf
 }
 
 install-all
