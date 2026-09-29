@@ -17,7 +17,7 @@ cd ~/.dotfiles
 - links the config files into `$HOME`
 - installs [Zgenom](https://github.com/jandamm/zgenom) and [Bash Sensible](https://github.com/mrzool/bash-sensible)
 - installs [Homebrew](https://brew.sh) and the CLI tools (bat, eza, fd, fzf, jump, neovim, ripgrep, starship, uv...)
-- installs the asdf plugins (Go, Node.js)
+- installs the asdf plugins
 - installs the JetBrainsMono Nerd Font
 - sets zsh as the default shell
 
