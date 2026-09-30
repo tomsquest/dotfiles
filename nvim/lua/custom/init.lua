@@ -1,7 +1,10 @@
 -- Personal configuration, loaded at the end of `init.lua` (kickstart.nvim)
 
 -- Light theme
-vim.cmd.colorscheme 'tokyonight-day'
+vim.pack.add { 'https://github.com/navarasu/onedark.nvim' }
+vim.o.background = 'light' -- not set by the theme, and kickstart loads tokyonight-night first
+require('onedark').setup { style = 'light' }
+require('onedark').load()
 
 -- mini.ai: `s` for the nearest surrounding, whatever the kind: brackets or quotes (eg. `cis`, `dis`, `yas`)
 -- Replaces the built-in `s` (sentence) textobject
