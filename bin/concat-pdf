@@ -1,0 +1,231 @@
+#!/bin/bash
+
+# Concatenates PDFs with qpdf, without re-encoding anything, then optionally
+# deletes the sources once the result is verified.
+# See: concat-pdf --help
+
+set -euo pipefail
+
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+usage() {
+    cat <<'EOF'
+Usage: concat-pdf --src GLOB [--src GLOB...] --dest OUTPUT.pdf
+                  [--apply [--delete-originals [--yes]]]
+
+Concatenates the PDFs matched by GLOB into OUTPUT.pdf with qpdf. Quote the
+glob so that the shell does not expand it: concat-pdf --src '2025*.pdf' --dest 2025.pdf
+
+Dry run by default: runs the checks on the sources and shows the plan, writes
+nothing, deletes nothing. Add --apply to do it.
+
+Files are ordered by --src, then by name within each glob (byte order).
+Streams (photos, page contents) are copied byte for byte, never re-encoded:
+image quality is kept, and Kopia deduplicates the result against the sources.
+
+Options:
+  --src GLOB          PDFs to concatenate. Can be repeated.
+  --dest FILE         Output. Never overwritten: fails if it already exists.
+  --apply             Write OUTPUT (and delete the sources if asked).
+  --delete-originals  Delete the sources (rm, no trash) once OUTPUT is verified.
+                      Asks for confirmation.
+  --yes               Do not ask for confirmation before deleting.
+
+Checks before writing OUTPUT:
+  - every source is a readable, unencrypted PDF, listed once
+  - OUTPUT is not one of the sources and does not exist
+Checks on OUTPUT, before moving it in place (a failure keeps all sources):
+  - qpdf --check passes without any warning
+  - page count = sum of the source page counts
+  - every image and content stream, page by page, is byte-identical (sha256)
+    to the one in the sources
+EOF
+}
+
+info() { echo -e "${BLUE}$*${NC}"; }
+ok() { echo -e "${GREEN}$*${NC}"; }
+warn() { echo -e "${YELLOW}$*${NC}" >&2; }
+die() {
+    echo -e "${RED}Error: $*${NC}" >&2
+    exit 1
+}
+
+TMP=""
+cleanup() {
+    if [ -n "$TMP" ] && [ -e "$TMP" ]; then
+        rm -f -- "$TMP"
+    fi
+}
+trap cleanup EXIT
+trap 'exit 130' INT TERM
+
+# Prints one sha256 per stream (images, then content), page by page, in order.
+# The object numbers differ between the sources and the output, not the bytes.
+stream_hashes() {
+    local file="$1" ref
+    qpdf --show-pages --with-images -- "$file" 2>/dev/null \
+        | awk '/^page / { next } match($0, /[0-9]+ [0-9]+ R/) {
+                   split(substr($0, RSTART, RLENGTH), r, " "); print r[1] "," r[2]
+               }' \
+        | while read -r ref; do
+            qpdf --show-object="$ref" --raw-stream-data -- "$file" 2>/dev/null | sha256sum | cut -d' ' -f1
+        done
+}
+
+# --- Arguments
+
+PATTERNS=()
+DEST=""
+DELETE=false
+YES=false
+APPLY=false
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --src) [ $# -ge 2 ] || die "--src needs a value"; PATTERNS+=("$2"); shift 2 ;;
+        --dest) [ $# -ge 2 ] || die "--dest needs a value"; DEST="$2"; shift 2 ;;
+        --delete-originals) DELETE=true; shift ;;
+        --yes) YES=true; shift ;;
+        --apply) APPLY=true; shift ;;
+        -h | --help | help) usage; exit 0 ;;
+        *) usage >&2; die "unknown argument: $1" ;;
+    esac
+done
+
+[ ${#PATTERNS[@]} -gt 0 ] || { usage >&2; die "--src is required"; }
+[ -n "$DEST" ] || { usage >&2; die "--dest is required"; }
+[[ "$DEST" == *.pdf ]] || die "--dest must end with .pdf: $DEST"
+
+command -v qpdf >/dev/null || die "qpdf is not installed (sudo apt install qpdf)"
+
+# --- Sources
+
+SOURCES=()
+for pattern in "${PATTERNS[@]}"; do
+    # Glob expansion without word splitting (paths with spaces), in byte order
+    matches=()
+    # A leading ./ keeps qpdf from reading a name starting with - as an option
+    while IFS= read -r -d '' f; do
+        [[ "$f" == -* ]] && f="./$f"
+        matches+=("$f")
+    done < <(
+        shopt -s nullglob
+        LC_ALL=C
+        IFS=
+        for f in $pattern; do printf '%s\0' "$f"; done
+    )
+    [ ${#matches[@]} -gt 0 ] || die "no file matches --src '$pattern'"
+    SOURCES+=("${matches[@]}")
+done
+
+[ ${#SOURCES[@]} -ge 2 ] || die "only one source (${SOURCES[0]}): nothing to concatenate"
+
+DEST_DIR=$(dirname -- "$DEST")
+[ -d "$DEST_DIR" ] || die "directory of --dest does not exist: $DEST_DIR"
+if [ -e "$DEST" ] || [ -L "$DEST" ]; then
+    die "$DEST already exists, it is never overwritten"
+fi
+DEST_REAL=$(realpath -m -- "$DEST")
+
+declare -A SEEN=()
+declare -A PAGES=()
+TOTAL_PAGES=0
+for f in "${SOURCES[@]}"; do
+    [ -f "$f" ] || die "not a regular file: $f"
+    [ -r "$f" ] || die "not readable: $f"
+    real=$(realpath -- "$f")
+    [ "$real" != "$DEST_REAL" ] || die "--dest is also a source: $f"
+    [ -z "${SEEN[$real]:-}" ] || die "listed twice: $f"
+    SEEN[$real]=1
+
+    rc=0
+    qpdf --is-encrypted -- "$f" 2>/dev/null || rc=$?
+    case $rc in
+        0) die "encrypted PDF, not supported: $f" ;;
+        2) ;;
+        *) die "not a PDF, or unreadable by qpdf: $f" ;;
+    esac
+
+    # Warnings on a source are only reported: qpdf repairs them when writing,
+    # and OUTPUT must pass the check without any warning.
+    rc=0
+    out=$(qpdf --check -- "$f" 2>&1) || rc=$?
+    case $rc in
+        0) ;;
+        3) warn "Warning on $f (repaired in OUTPUT):"; grep -i '^WARNING' <<<"$out" | sed 's/^/  /' >&2 || true ;;
+        *) echo "$out" >&2; die "qpdf --check failed: $f" ;;
+    esac
+
+    n=$(qpdf --show-npages -- "$f" 2>/dev/null) || [ $? -eq 3 ]
+    [[ "$n" =~ ^[0-9]+$ ]] && [ "$n" -gt 0 ] || die "cannot count the pages of $f"
+    PAGES[$f]=$n
+    TOTAL_PAGES=$((TOTAL_PAGES + n))
+done
+
+info "Concatenate, in this order:"
+for f in "${SOURCES[@]}"; do
+    printf '  %4d p.  %s\n' "${PAGES[$f]}" "$f"
+done
+info "into $DEST ($TOTAL_PAGES pages)"
+if $DELETE; then
+    info "then delete the ${#SOURCES[@]} sources"
+fi
+
+if ! $APPLY; then
+    warn "Dry run: nothing written, nothing deleted. Add --apply to do it."
+    exit 0
+fi
+
+# --- Concatenate into a temporary file, next to DEST (same filesystem: atomic mv)
+
+TMP=$(mktemp --tmpdir="$DEST_DIR" ".concat-pdf.XXXXXX.pdf")
+info "Concatenating..."
+# Streams copied byte for byte: by default, qpdf would recompress the Flate
+# streams (--decode-level) and compress the uncompressed ones (--compress-streams)
+qpdf --decode-level=none --compress-streams=n --empty --pages "${SOURCES[@]}" -- "$TMP" 2>/dev/null || {
+    rc=$?
+    [ $rc -eq 3 ] || die "qpdf failed to concatenate (exit code $rc)"
+}
+
+# --- Verify
+
+info "Verifying..."
+rc=0
+out=$(qpdf --check -- "$TMP" 2>&1) || rc=$?
+[ $rc -eq 0 ] || { echo "$out" >&2; die "qpdf --check on the result failed (exit code $rc, 3 = warnings)"; }
+
+n=$(qpdf --show-npages -- "$TMP")
+[ "$n" = "$TOTAL_PAGES" ] || die "the result has $n pages, expected $TOTAL_PAGES"
+
+expected=$(for f in "${SOURCES[@]}"; do stream_hashes "$f"; done)
+actual=$(stream_hashes "$TMP")
+[ -n "$expected" ] || die "no stream found in the sources"
+[ "$expected" = "$actual" ] || die "the streams of the result differ from the sources"
+ok "OK: $n pages, $(wc -l <<<"$actual") streams identical to the sources"
+
+# --- Move in place, never overwriting (-n), and check it really moved
+
+mv -n -- "$TMP" "$DEST"
+[ ! -e "$TMP" ] || die "$DEST appeared meanwhile, result left in $TMP"
+TMP=""
+ok "Written: $DEST ($(du -h -- "$DEST" | cut -f1))"
+
+# --- Delete the sources
+
+$DELETE || exit 0
+
+if ! $YES; then
+    [ -t 0 ] || die "not deleting the sources: no terminal to confirm, use --yes"
+    read -r -p "Delete the ${#SOURCES[@]} sources? [y/N] " answer
+    [[ "$answer" =~ ^[yYoO]$ ]] || { warn "Sources kept."; exit 0; }
+fi
+
+for f in "${SOURCES[@]}"; do
+    rm -- "$f"
+    echo "Deleted: $f"
+done
+ok "Done."
