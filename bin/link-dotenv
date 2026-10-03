@@ -1,0 +1,308 @@
+#!/bin/bash
+
+# Links ~/<path> to ~/Sync/dotenv/<path> for each path declared in ~/Sync/dotenv/links.conf
+# See: link-dotenv help
+
+set -euo pipefail
+
+SOURCE_DIR="${DOTENV_DIR:-$HOME/Sync/dotenv}"
+TARGET_HOME="${DOTENV_HOME:-$HOME}"
+LINKS_FILE="$SOURCE_DIR/links.conf"
+
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+usage() {
+    cat <<'EOF'
+Usage: link-dotenv [status | apply [-p] [-f] | add <path> | help]
+
+~/Sync/dotenv is a mirror of ~, synced by Syncthing. For each path declared
+in ~/Sync/dotenv/links.conf, ~/<path> is a symlink to ~/Sync/dotenv/<path>.
+
+Commands:
+  status      Show what apply would do (default). Changes nothing.
+  apply       Create missing links, and fix links pointing to an old place in
+              ~/Sync/dotenv. Never touches an existing file, and never creates
+              a missing parent directory (the project is not on this machine):
+    -p        also create missing parent directories (e.g. on a new machine)
+    -f        also replace existing files and directories (deleted, no backup!)
+              status and apply list what differs from ~/Sync/dotenv first:
+              file names only, never file contents (secrets)
+  add <path>  Move <path> to the same place in ~/Sync/dotenv, declare it in
+              links.conf and link it back. The line is appended at the end of
+              links.conf: move it to the right section.
+
+links.conf, one path relative to ~ per line:
+  .zshrc.local         a file
+  .claude/skills       a directory, linked as a whole
+  Dev/foo/.env
+  !.directory          a glob ignored in ~/Sync/dotenv (not reported as unmapped)
+  # a comment
+
+Examples:
+  link-dotenv add ~/Dev/foo/.env   # sync a new project file
+  link-dotenv apply -p             # set up a new machine
+
+Limits: a source has a single destination, no spaces in paths, and a path
+cannot be inside another declared path.
+
+Exit status: 1 when something is left to do (missing source, skipped link,
+unmapped file...), 0 when everything is linked.
+
+Environment (for tests):
+  DOTENV_DIR    the mirror (default: ~/Sync/dotenv)
+  DOTENV_HOME   the mirrored home (default: $HOME)
+EOF
+}
+
+die() {
+    echo -e "${RED}✗ ERROR${NC} $1" >&2
+    exit 1
+}
+
+die_usage() {
+    echo -e "${RED}✗ ERROR${NC} $1" >&2
+    echo "" >&2
+    usage >&2
+    exit 1
+}
+
+# Print an aligned status line and count it: report <color> <symbol> <label> <text>
+declare -A COUNT=()
+report() {
+    printf "%b%s %-9s%b %s\n" "$1" "$2" "$3" "$NC" "$4"
+    COUNT[$3]=$(( ${COUNT[$3]:-0} + 1 ))
+}
+
+# Parse arguments
+MODE=status
+FORCE=false
+PARENTS=false
+case "${1:-status}" in
+    status)
+        [[ $# -gt 1 ]] && die_usage "status takes no option"
+        ;;
+    apply)
+        MODE=apply
+        shift
+        for arg in "$@"; do
+            case $arg in
+                -f|--force) FORCE=true ;;
+                -p|--parents) PARENTS=true ;;
+                *) die_usage "Unknown option for apply: $arg" ;;
+            esac
+        done
+        ;;
+    add)
+        MODE=add
+        [[ $# -ne 2 ]] && die_usage "add takes a single path"
+        ADD_PATH="$2"
+        ;;
+    help|-h|--help)
+        usage
+        exit 0
+        ;;
+    *)
+        die_usage "Unknown command: $1"
+        ;;
+esac
+
+[[ -f "$LINKS_FILE" ]] || die "Links file not found: $LINKS_FILE"
+SOURCE_REAL="$(realpath "$SOURCE_DIR")"
+
+# True if <dest> is, or would be, inside the mirror (or contains it), following
+# the symlinks of its parent directories. Linking or replacing it would loop or
+# delete the source itself, e.g. when ~/.claude is a link into the mirror.
+in_mirror() {
+    local real
+    real="$(realpath -m "$(dirname "$1")")/$(basename "$1")"
+    [[ "$real" == "$SOURCE_REAL" || "$real" == "$SOURCE_REAL"/* || "$SOURCE_REAL" == "$real"/* ]]
+}
+
+# Load paths and ignored globs
+declare -a PATHS=() IGNORED=()
+declare -A DECLARED=()
+while read -r path extra; do
+    [[ -z "$path" || "$path" == \#* ]] && continue
+    [[ -n "$extra" ]] && die "One path per line in $LINKS_FILE, got: $path $extra"
+    if [[ "$path" == !* ]]; then
+        IGNORED+=("${path#!}")
+        continue
+    fi
+    path="${path%/}"
+    [[ "$path" == /* || "$path" == \~* || "/$path/" == */./* || "/$path/" == */../* ]] \
+        && die "Path must be relative to ~, without '.' or '..', in $LINKS_FILE: $path"
+    [[ -n "${DECLARED[$path]:-}" ]] && die "Declared twice in $LINKS_FILE: $path"
+    PATHS+=("$path")
+    DECLARED[$path]=1
+done < <(cat "$LINKS_FILE"; echo)
+
+# A path inside another one would link into the mirror itself
+for a in "${PATHS[@]}"; do
+    for b in "${PATHS[@]}"; do
+        [[ "$b" == "$a"/* ]] && die "$b is inside $a in $LINKS_FILE, keep only one"
+    done
+done
+
+# Compare an existing destination with its source, without showing any file content.
+# Sets DIFF_TAG (e.g. "differs from Sync") and DIFF_LINES (file names, for directories)
+compare() {
+    local dest="$1" source="$2" here sync f
+    local -a changed=()
+    DIFF_LINES=()
+    if [[ -L "$dest" ]]; then
+        DIFF_TAG="link to $(readlink "$dest")"
+    elif [[ -f "$dest" && -f "$source" ]]; then
+        if cmp -s "$dest" "$source"; then DIFF_TAG="identical to Sync"; else DIFF_TAG="differs from Sync"; fi
+    elif [[ -d "$dest" && -d "$source" ]]; then
+        here="$(cd "$dest" && find . -type f -printf '%P\n' | sort)"
+        sync="$(cd "$source" && find . -type f -printf '%P\n' | sort)"
+        while IFS= read -r f; do
+            if [[ -n "$f" ]] && ! cmp -s "$dest/$f" "$source/$f"; then changed+=("$f"); fi
+        done < <(comm -12 <(echo "$here") <(echo "$sync"))
+        list_files "only here:   " < <(comm -23 <(echo "$here") <(echo "$sync"))
+        list_files "only in Sync:" < <(comm -13 <(echo "$here") <(echo "$sync"))
+        list_files "changed:     " < <(printf '%s\n' "${changed[@]}")
+        if [[ ${#DIFF_LINES[@]} -gt 0 ]]; then DIFF_TAG="differs from Sync"; else DIFF_TAG="identical to Sync"; fi
+    else
+        DIFF_TAG="$(kind "$dest") here, $(kind "$source") in Sync"
+    fi
+}
+
+# Add "<label> a, b, c ... and N more" to DIFF_LINES, from the file names on stdin
+list_files() {
+    local -a files=()
+    local f
+    while IFS= read -r f; do if [[ -n "$f" ]]; then files+=("$f"); fi; done
+    [[ ${#files[@]} -eq 0 ]] && return
+    local line
+    printf -v line '%s, ' "${files[@]:0:10}"
+    line="$1 ${line%, }"
+    [[ ${#files[@]} -gt 10 ]] && line+=" ... and $(( ${#files[@]} - 10 )) more"
+    DIFF_LINES+=("$line")
+}
+
+kind() {
+    if [[ -d "$1" ]]; then echo directory; else echo file; fi
+}
+
+# Move a file into the mirror, declare it in links.conf and link it back
+add_file() {
+    local dest path source p
+    dest="$(realpath -s "$ADD_PATH")"
+    path="${dest#$TARGET_HOME/}"
+    source="$SOURCE_DIR/$path"
+
+    [[ -L "$dest" ]] && die "$dest is already a symlink (to $(readlink "$dest"))"
+    [[ -e "$dest" ]] || die "$dest does not exist"
+    [[ "$dest" == "$TARGET_HOME"/* ]] || die "$dest is not under $TARGET_HOME"
+    in_mirror "$dest" && die "$dest is inside $SOURCE_DIR (or inside a linked directory)"
+    [[ "$dest" =~ [[:space:]] ]] && die "Paths with spaces are not supported by links.conf: $dest"
+    [[ "$path" == !* || "$path" == \#* ]] && die "Path cannot start with '!' or '#': $path"
+    for p in "${PATHS[@]}"; do
+        [[ "$p" == "$path" ]] && die "Already declared in links.conf: $path"
+        [[ "$path" == "$p"/* ]] && die "$path is inside $p, already declared in links.conf"
+        [[ "$p" == "$path"/* ]] && die "$path contains $p, already declared in links.conf"
+    done
+    [[ -e "$source" || -L "$source" ]] && die "Source already exists: $source"
+
+    mkdir -p "$(dirname "$source")"
+    mv "$dest" "$source"
+    echo -e "${GREEN}✓ MOVED${NC}    $dest -> $source"
+
+    # Do not glue the new line to the last one
+    [[ -s "$LINKS_FILE" && -n "$(tail -c1 "$LINKS_FILE")" ]] && echo >> "$LINKS_FILE"
+    echo "$path" >> "$LINKS_FILE"
+    echo -e "${GREEN}✓ DECLARED${NC} $path (appended to links.conf, move it to the right section)"
+
+    ln -s "$source" "$dest"
+    echo -e "${GREEN}✓ LINKED${NC}   $dest -> $source"
+}
+
+if [[ "$MODE" == add ]]; then
+    add_file
+    exit 0
+fi
+
+# Files of the mirror that are not declared (declared directories are not walked)
+declare -a prune=()
+for path in "${PATHS[@]}"; do
+    [[ -d "$SOURCE_DIR/$path" ]] && prune+=(-path "$SOURCE_DIR/$path" -prune -o)
+done
+while IFS= read -r -d '' file; do
+    rel="${file#$SOURCE_DIR/}"
+    [[ "$rel" == links.conf || -n "${DECLARED[$rel]:-}" || "$rel" == *.sync-conflict-* ]] && continue
+    for pattern in "${IGNORED[@]}"; do
+        [[ "$rel" == $pattern ]] && continue 2
+    done
+    report "$YELLOW" "⚠" UNMAPPED "$SOURCE_DIR/$rel (not in links.conf)"
+done < <(find "$SOURCE_DIR" "${prune[@]}" -type f -print0)
+
+for path in "${PATHS[@]}"; do
+    source="$SOURCE_DIR/$path"
+    dest="$TARGET_HOME/$path"
+
+    if [[ ! -e "$source" ]]; then
+        report "$RED" "✗" MISSING "$dest (source not found: $source)"
+    elif in_mirror "$dest"; then
+        report "$RED" "✗" UNSAFE "$dest (is inside $SOURCE_DIR through a linked parent, fix it by hand)"
+    elif [[ -L "$dest" && "$(readlink -f "$dest")" == "$(readlink -f "$source")" ]]; then
+        report "$GREEN" "✓" EXISTS "$dest"
+    elif [[ -L "$dest" && "$(readlink "$dest")" == "$SOURCE_DIR"/* ]]; then
+        # Our link, pointing to an old place in the mirror
+        if [[ "$MODE" == apply ]]; then
+            ln -sfn "$source" "$dest"
+            report "$GREEN" "✓" RELINKED "$dest"
+        else
+            report "$BLUE" "→" RELINK "$dest (points to $(readlink "$dest"), apply will fix it)"
+        fi
+    elif [[ -e "$dest" || -L "$dest" ]]; then
+        compare "$dest" "$source"
+        if [[ "$MODE" == apply && "$FORCE" == true ]]; then
+            rm -rf "$dest"
+            ln -s "$source" "$dest"
+            report "$GREEN" "✓" REPLACED "$dest (was: $DIFF_TAG)"
+        elif [[ "$MODE" == apply ]]; then
+            report "$YELLOW" "→" SKIPPED "$dest (already exists, $DIFF_TAG, use apply -f to replace it)"
+        else
+            report "$YELLOW" "→" REPLACE "$dest (already exists, $DIFF_TAG, apply -f will replace it)"
+        fi
+        for line in "${DIFF_LINES[@]}"; do
+            echo "            $line"
+        done
+    elif [[ ! -d "$(dirname "$dest")" ]]; then
+        if [[ "$MODE" == apply && "$PARENTS" == true ]]; then
+            mkdir -p "$(dirname "$dest")"
+            ln -s "$source" "$dest"
+            report "$GREEN" "✓" LINKED "$dest (parent directory created)"
+        elif [[ "$MODE" == apply ]]; then
+            report "$YELLOW" "→" SKIPPED "$dest (no parent directory, use apply -p to create it)"
+        else
+            report "$YELLOW" "→" NO_PARENT "$dest (no parent directory, apply -p will create it)"
+        fi
+    else
+        if [[ "$MODE" == apply ]]; then
+            ln -s "$source" "$dest"
+            report "$GREEN" "✓" LINKED "$dest"
+        else
+            report "$BLUE" "→" CREATE "$dest (apply will link it)"
+        fi
+    fi
+done
+
+# Summary of the non-zero counts; exit 1 if something is left to do
+summary=()
+todo=false
+for label in EXISTS LINKED RELINKED REPLACED CREATE RELINK REPLACE NO_PARENT SKIPPED MISSING UNSAFE UNMAPPED; do
+    [[ -z "${COUNT[$label]:-}" ]] && continue
+    summary+=("${COUNT[$label]} $label")
+    case $label in EXISTS|LINKED|RELINKED|REPLACED) ;; *) todo=true ;; esac
+done
+printf -v summary_line '%s, ' "${summary[@]}"
+echo ""
+echo "Summary: ${summary_line%, }"
+
+[[ "$todo" == false ]]
