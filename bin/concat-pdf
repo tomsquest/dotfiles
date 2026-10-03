@@ -166,7 +166,7 @@ for f in "${SOURCES[@]}"; do
     TOTAL_PAGES=$((TOTAL_PAGES + n))
 done
 
-info "Concatenate, in this order:"
+info "Concatenate ${#SOURCES[@]} files, in this order:"
 for f in "${SOURCES[@]}"; do
     printf '  %4d p.  %s\n' "${PAGES[$f]}" "$f"
 done
