@@ -1,0 +1,138 @@
+#!/bin/bash
+#
+# Backs up the KeePass database to the USB key, then unmounts it
+#
+# On the key:
+# - 3 copies overwritten at each run: Passwords.kdbx, .copy1, .copy2
+# - 1 monthly archive, never touched afterwards: Passwords.kdbx.YYYY-MM-01
+# - SHA256SUMS: reference hash of every archive, re-checked at each run to detect bit rot
+#
+# Every hash is computed with O_DIRECT reads, so we check what is on the key, not the page cache.
+#
+# Example: `backup-keepass-db`
+#
+
+set -euo pipefail
+
+readonly SOURCE="$HOME/Documents/Passwords.kdbx"
+readonly USB_UUID="9535-DD04"
+readonly NAME="Passwords.kdbx"
+readonly COPIES=("$NAME" "$NAME.copy1" "$NAME.copy2")
+ARCHIVE="$NAME.$(date +%Y-%m-01)"
+readonly ARCHIVE
+# KDBX 2+ file signature
+readonly KDBX_MAGIC="03d9a29a67fb4bb5"
+
+color_failure=$(tput bold)$(tput setaf 1) || true # Red
+color_success=$(tput bold)$(tput setaf 2) || true # Green
+color_warning=$(tput bold)$(tput setaf 3) || true # Yellow
+color_reset=$(tput sgr0) || true
+
+errors=0
+
+ok() { echo "${color_success}OK${color_reset}   $*"; }
+warn() { echo "${color_warning}WARN${color_reset} $*"; }
+ko() { echo "${color_failure}KO${color_reset}   $*"; errors=$((errors + 1)); }
+die() { echo "${color_failure}$*${color_reset}" >&2; exit 1; }
+
+# uutils dd fails on O_DIRECT reads on vfat ("Invalid input"), prefer GNU dd when installed
+DD=$(command -v gnudd || command -v dd)
+readonly DD
+
+# sha256 of a file, read from the device and not from the page cache
+hash_direct() {
+  "$DD" if="$1" iflag=direct bs=1M status=none | sha256sum | cut -d' ' -f1
+}
+
+# Check a file on the key against an expected hash
+verify() {
+  local file="$1" expected="$2" actual
+  if [ ! -f "$MOUNT/$file" ]; then
+    ko "$file: missing"
+  elif ! actual=$(hash_direct "$MOUNT/$file"); then
+    ko "$file: unreadable"
+  elif [ "$actual" != "$expected" ]; then
+    ko "$file: hash mismatch (expected $expected, got $actual)"
+  else
+    ok "$file"
+  fi
+}
+
+# Copy through a temp file, so a pulled key never leaves a half-written copy
+copy() {
+  cp "$SOURCE" "$MOUNT/$1.tmp"
+  mv -f "$MOUNT/$1.tmp" "$MOUNT/$1"
+}
+
+# 1. Source sanity: never overwrite good copies with a broken database
+[ -s "$SOURCE" ] || die "Source is missing or empty: $SOURCE"
+magic=$(head -c 8 "$SOURCE" | od -An -tx1 | tr -d ' \n')
+[ "$magic" = "$KDBX_MAGIC" ] || die "Source is not a KeePass database (signature: $magic): $SOURCE"
+source_hash=$(sha256sum "$SOURCE" | cut -d' ' -f1)
+source_size=$(stat -c %s "$SOURCE")
+ok "Source $SOURCE ($source_hash)"
+
+# 2. USB key
+MOUNT=$(findmnt -n -o TARGET -S "UUID=$USB_UUID") || die "USB key $USB_UUID is not mounted"
+DEVICE=$(findmnt -n -o SOURCE -S "UUID=$USB_UUID")
+readonly MOUNT DEVICE
+ok "USB key $DEVICE on $MOUNT"
+
+# 3. Previous archives: register unknown ones, check known ones
+SUMS="$MOUNT/SHA256SUMS"
+touch "$SUMS"
+shopt -s nullglob
+for path in "$MOUNT/$NAME".????-??-??; do
+  file=$(basename "$path")
+  grep -q "  $file\$" "$SUMS" && continue
+  if hash=$(hash_direct "$path"); then
+    echo "$hash  $file" >>"$SUMS"
+    warn "$file: not in SHA256SUMS, registered with its current hash"
+  else
+    ko "$file: unreadable"
+  fi
+done
+while read -r hash file; do
+  verify "$file" "$hash"
+done <"$SUMS"
+
+# 4. Free space: new files, plus room for one temp file
+new_files=0
+for file in "${COPIES[@]}" "$ARCHIVE"; do
+  [ -f "$MOUNT/$file" ] || new_files=$((new_files + 1))
+done
+needed=$((source_size * (new_files + 1)))
+available=$(df --output=avail -B1 "$MOUNT" | tail -1 | tr -d ' ')
+[ "$available" -ge "$needed" ] || die "Not enough space on the key: $available bytes available, $needed needed"
+
+# 5. Copy
+for file in "${COPIES[@]}"; do
+  copy "$file"
+done
+archive_created=false
+if grep -q "  $ARCHIVE\$" "$SUMS"; then
+  warn "$ARCHIVE: already archived, left untouched"
+else
+  copy "$ARCHIVE"
+  echo "$source_hash  $ARCHIVE" >>"$SUMS"
+  archive_created=true
+fi
+sync
+
+# 6. Verify the copies and this month's archive against the source
+for file in "${COPIES[@]}"; do
+  verify "$file" "$source_hash"
+done
+if $archive_created; then
+  verify "$ARCHIVE" "$source_hash"
+fi
+
+# 7. Unmount only when everything is fine, to allow inspection otherwise
+if [ "$errors" -gt 0 ]; then
+  die "$errors error(s), USB key left mounted on $MOUNT"
+fi
+if udisksctl unmount -b "$DEVICE"; then
+  echo "${color_success}Backup done, USB key can be removed${color_reset}"
+else
+  die "Backup done, but the USB key could not be unmounted"
+fi
