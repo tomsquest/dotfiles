@@ -14,13 +14,14 @@ Safety:
   - Safe file replacement via .bak intermediate (no data loss on rename failure)
   - Skips files already in target codec ≤ 1080p
   - Skips if size gain < 1%
+  - Keeps the original file modification date
   - Cleans up temp files on Ctrl+C
 
 Usage:
-  uv run compress_videos.py /path/to/videos                  # dry-run, h265 (default)
-  uv run compress_videos.py /path/to/videos --run             # actually compress
-  uv run compress_videos.py /path/to/videos --preset h264     # h264 for compatibility
-  uv run compress_videos.py /path/to/videos --run --crf 26    # tweak quality
+  compress-videos /path/to/videos                  # dry-run, h265 (default)
+  compress-videos /path/to/videos --run            # actually compress
+  compress-videos /path/to/videos --preset h264    # h264 for compatibility
+  compress-videos /path/to/videos --run --crf 26   # tweak quality
 """
 
 from __future__ import annotations
@@ -277,8 +278,9 @@ def _build_temp_path(original: Path) -> Path:
 
 
 def _build_final_path(original: Path) -> Path:
-    """Final path is always .mp4 (handles .avi → .mp4 conversion)."""
-    return original.parent / f"{original.stem}.mp4"
+    """Final path is .mp4, keeping the original case (.MP4); .avi becomes .mp4."""
+    suffix = original.suffix if original.suffix.lower() == ".mp4" else ".mp4"
+    return original.parent / f"{original.stem}{suffix}"
 
 
 def _replace_original(
@@ -286,7 +288,7 @@ def _replace_original(
     temp_path: Path,
     final_path: Path,
 ) -> None:
-    """Safely replace the original file with the compressed version.
+    """Safely replace the original file with the compressed version, keeping its date.
 
     Strategy:
       1. Rename original → .bak
@@ -295,6 +297,9 @@ def _replace_original(
     If step 2 fails, we restore .bak → original so nothing is lost.
     """
     bak_path = original.parent / f"{original.stem}.bak{original.suffix}"
+    # Copy the date on the temp file first: rename keeps it, and a failure leaves the original untouched
+    original_stat = original.stat()
+    os.utime(temp_path, ns=(original_stat.st_atime_ns, original_stat.st_mtime_ns))
 
     # Step 1: original → bak
     original.rename(bak_path)
@@ -377,14 +382,6 @@ def compress_video(
     if final_path != info.path and final_path.exists():
         result.action = Action.ERROR
         result.error = f"target {final_path.name} already exists, would overwrite"
-        return result
-
-    # Make sure temp path doesn't collide with a real user file
-    # (could happen if someone has a file literally named "X.tmp.compressed.mp4")
-    if output_path.exists() and output_path.suffix != ".mp4":
-        # Looks like a real file, don't touch it
-        result.action = Action.ERROR
-        result.error = f"temp path {output_path.name} already exists as a non-temp file"
         return result
 
     if dry_run:
