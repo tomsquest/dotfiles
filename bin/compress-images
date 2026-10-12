@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Compresses images losslessly, in place, with Caesium.
+# See: compress-images --help
+
+set -euo pipefail
+
+RED='\033[0;31m'
+NC='\033[0m'
+
+# Below that, a file is not rewritten: in a git repo, every rewrite stores a
+# whole new copy of the image in the history
+MIN_SAVINGS=1%
+# 0-6, 6 is the slowest and smallest
+PNG_OPT_LEVEL=6
+
+usage() {
+    cat <<EOF
+Usage: compress-images [--dry-run] PATH...
+
+Compresses the images of each PATH (a file, or a directory scanned recursively)
+losslessly, in place, with caesiumclt: the pixels are not changed.
+
+  - JPEG, PNG, WebP. GIF are left untouched (Caesium only compresses them lossy)
+  - metadata stripped (EXIF, GPS...), except the orientation and the ICC profile
+  - file rewritten only if it shrinks by at least $MIN_SAVINGS
+  - modification date kept
+
+Options:
+  --dry-run  Count the images, write nothing (Caesium does not estimate the savings).
+EOF
+}
+
+die() {
+    echo -e "${RED}Error: $*${NC}" >&2
+    exit 1
+}
+
+DRY_RUN=()
+PATHS=()
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --dry-run) DRY_RUN=(--dry-run); shift ;;
+        -h | --help | help) usage; exit 0 ;;
+        --) shift; PATHS+=("$@"); break ;;
+        -*) usage >&2; die "unknown argument: $1" ;;
+        *) PATHS+=("$1"); shift ;;
+    esac
+done
+
+[ ${#PATHS[@]} -gt 0 ] || { usage >&2; die "no PATH given"; }
+
+command -v caesiumclt >/dev/null || die "caesiumclt is not installed (brew install caesiumclt)"
+
+for p in "${PATHS[@]}"; do
+    [ -e "$p" ] || die "no such file or directory: $p"
+done
+
+caesiumclt --lossless \
+    --same-folder-as-input --overwrite bigger --min-savings "$MIN_SAVINGS" \
+    --png-opt-level "$PNG_OPT_LEVEL" \
+    --keep-orientation --keep-dates \
+    --recursive "${DRY_RUN[@]}" -- "${PATHS[@]}"
