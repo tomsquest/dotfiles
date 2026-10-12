@@ -185,8 +185,10 @@ fi
 TMP=$(mktemp --tmpdir="$DEST_DIR" ".concat-pdf.XXXXXX.pdf")
 info "Concatenating..."
 # Streams copied byte for byte: by default, qpdf would recompress the Flate
-# streams (--decode-level) and compress the uncompressed ones (--compress-streams)
-qpdf --decode-level=none --compress-streams=n --empty --pages "${SOURCES[@]}" -- "$TMP" 2>/dev/null || {
+# streams (--decode-level) and compress the uncompressed ones (--compress-streams).
+# Page resources kept as they are: by default, qpdf would drop the images that a
+# page lists but does not display (some scanners list all the images on every page)
+qpdf --decode-level=none --compress-streams=n --remove-unreferenced-resources=no --empty --pages "${SOURCES[@]}" -- "$TMP" 2>/dev/null || {
     rc=$?
     [ $rc -eq 3 ] || die "qpdf failed to concatenate (exit code $rc)"
 }
