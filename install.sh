@@ -94,6 +94,7 @@ function install-homebrew-apps {
     brew install asdf
     brew install bat
     brew install btop
+    brew install caesiumclt # for compress-images
     brew install direnv
     brew install dust
     brew install eza # exa is unmaintained
@@ -106,6 +107,7 @@ function install-homebrew-apps {
     brew install k9s
     brew install kubectx
     brew install kubernetes-cli
+    brew install lefthook
     brew install neovim
     brew install opencode
     brew install pnpm
