@@ -103,9 +103,10 @@ mapfile -t files < <(LC_ALL=C comm -23 <(printf '%s\n' "${candidates[@]}") <(pri
 
 if $LOSSY; then
     # Only the JPEGs saved at LOSSY_MIN_SOURCE_QUALITY or above
+    # stdbuf: line-buffered, or the parallel outputs get mixed mid-line
     mapfile -t files < <(
         printf '%s\0' "${files[@]}" |
-            xargs -0 -r -P "$(nproc)" -n 50 magick identify -format '%Q %i\n' 2>/dev/null |
+            xargs -0 -r -P "$(nproc)" -n 50 stdbuf -oL magick identify -format '%Q %i\n' 2>/dev/null |
             awk -v min="$LOSSY_MIN_SOURCE_QUALITY" '$1 >= min { sub(/^[0-9]+ /, ""); print }' |
             sort
     )
