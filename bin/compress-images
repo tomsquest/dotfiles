@@ -13,21 +13,35 @@ NC='\033[0m'
 MIN_SAVINGS=1%
 # 0-6, 6 is the slowest and smallest
 PNG_OPT_LEVEL=6
+# --lossy: JPEGs saved at this quality or above are recompressed at LOSSY_QUALITY.
+# Phones and cameras often save at 95-99: a third of the size at 85, no visible difference
+LOSSY_MIN_SOURCE_QUALITY=95
+LOSSY_QUALITY=85
+# JPEGs carrying other images after their own (Ultra HDR gain map, portrait depth, motion photo video):
+# Caesium keeps their metadata but drops these images
+EMBEDDED_IMAGES_IF='$NumberOfImages or $DirectoryItemMime or $MotionPhoto or $MicroVideo'
 
 usage() {
     cat <<EOF
-Usage: compress-images [--dry-run] PATH...
+Usage: compress-images [--lossy] [--exclude DIR]... [--dry-run] [--keep-exif] PATH...
 
 Compresses the images of each PATH (a file, or a directory scanned recursively)
 losslessly, in place, with caesiumclt: the pixels are not changed.
 
   - JPEG, PNG, WebP. GIF are left untouched (Caesium only compresses them lossy)
-  - metadata stripped (EXIF, GPS...), except the orientation and the ICC profile
+  - JPEGs carrying other images (Ultra HDR, portrait depth, motion photo) are left
+    untouched: Caesium would drop these images
+  - metadata stripped (EXIF, GPS...), except the orientation and the ICC profile.
+    Use --keep-exif for photos: the capture date is in the EXIF
   - file rewritten only if it shrinks by at least $MIN_SAVINGS
   - modification date kept
 
 Options:
-  --dry-run  Count the images, write nothing (Caesium does not estimate the savings).
+  --dry-run      List the images, write nothing (Caesium does not estimate the savings).
+  --keep-exif    Keep the EXIF metadata: capture date, camera, GPS...
+  --lossy        Instead, recompress at quality $LOSSY_QUALITY the JPEGs saved at quality $LOSSY_MIN_SOURCE_QUALITY or above,
+                 only them. Lossy, cannot be undone, but no visible difference.
+  --exclude DIR  Skip this directory (repeatable).
 EOF
 }
 
@@ -36,11 +50,20 @@ die() {
     exit 1
 }
 
-DRY_RUN=()
+DRY_RUN=false
+KEEP_EXIF=()
+LOSSY=false
+EXCLUDES=()
 PATHS=()
 while [ $# -gt 0 ]; do
     case "$1" in
-        --dry-run) DRY_RUN=(--dry-run); shift ;;
+        --dry-run) DRY_RUN=true; shift ;;
+        --keep-exif) KEEP_EXIF=(--exif); shift ;;
+        --lossy) LOSSY=true; shift ;;
+        --exclude)
+            [ $# -ge 2 ] || die "--exclude needs a directory"
+            [ -d "$2" ] || die "no such directory: $2"
+            EXCLUDES+=("$(realpath "$2")"); shift 2 ;;
         -h | --help | help) usage; exit 0 ;;
         --) shift; PATHS+=("$@"); break ;;
         -*) usage >&2; die "unknown argument: $1" ;;
@@ -51,13 +74,65 @@ done
 [ ${#PATHS[@]} -gt 0 ] || { usage >&2; die "no PATH given"; }
 
 command -v caesiumclt >/dev/null || die "caesiumclt is not installed (brew install caesiumclt)"
+command -v exiftool >/dev/null || die "exiftool is not installed (brew install exiftool)"
+if $LOSSY; then
+    command -v magick >/dev/null || die "magick is not installed (sudo apt install imagemagick)"
+fi
 
 for p in "${PATHS[@]}"; do
     [ -e "$p" ] || die "no such file or directory: $p"
 done
 
-caesiumclt --lossless \
-    --same-folder-as-input --overwrite bigger --min-savings "$MIN_SAVINGS" \
-    --png-opt-level "$PNG_OPT_LEVEL" \
-    --keep-orientation --keep-dates \
-    --recursive "${DRY_RUN[@]}" -- "${PATHS[@]}"
+mapfile -t abs_paths < <(realpath "${PATHS[@]}")
+prune=()
+for dir in "${EXCLUDES[@]}"; do
+    prune+=(-path "$dir" -prune -o)
+done
+if $LOSSY; then
+    names=(-iname '*.jpg' -o -iname '*.jpeg')
+else
+    names=(-iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp')
+fi
+mapfile -t candidates < <(find "${abs_paths[@]}" "${prune[@]}" -type f \( "${names[@]}" \) -print | LC_ALL=C sort)
+
+mapfile -t embedded < <(
+    printf '%s\n' "${candidates[@]}" | grep -iE '\.jpe?g$' |
+        exiftool -q -q -@ - -if "$EMBEDDED_IMAGES_IF" -p '$Directory/$FileName' 2>/dev/null | LC_ALL=C sort
+)
+mapfile -t files < <(LC_ALL=C comm -23 <(printf '%s\n' "${candidates[@]}") <(printf '%s\n' "${embedded[@]}"))
+
+if $LOSSY; then
+    # Only the JPEGs saved at LOSSY_MIN_SOURCE_QUALITY or above
+    mapfile -t files < <(
+        printf '%s\0' "${files[@]}" |
+            xargs -0 -r -P "$(nproc)" -n 50 magick identify -format '%Q %i\n' 2>/dev/null |
+            awk -v min="$LOSSY_MIN_SOURCE_QUALITY" '$1 >= min { sub(/^[0-9]+ /, ""); print }' |
+            sort
+    )
+fi
+
+size=0
+for f in "${files[@]}"; do
+    size=$((size + $(stat -c %s "$f")))
+done
+if $LOSSY; then
+    echo "${#files[@]} JPEG(s) saved at quality $LOSSY_MIN_SOURCE_QUALITY or above, $(numfmt --to=iec "$size")B"
+else
+    echo "${#files[@]} image(s), $(numfmt --to=iec "$size")B"
+fi
+echo "${#embedded[@]} JPEG(s) carrying other images left untouched (Ultra HDR, portrait depth, motion photo)"
+[ ${#files[@]} -gt 0 ] || exit 0
+if $DRY_RUN; then
+    printf '%s\n' "${files[@]}"
+    exit 0
+fi
+
+if $LOSSY; then
+    compression=(--quality "$LOSSY_QUALITY")
+else
+    compression=(--lossless --png-opt-level "$PNG_OPT_LEVEL")
+fi
+printf '%s\0' "${files[@]}" |
+    xargs -0 caesiumclt "${compression[@]}" \
+        --same-folder-as-input --overwrite bigger --min-savings "$MIN_SAVINGS" \
+        --keep-orientation --keep-dates "${KEEP_EXIF[@]}" --
