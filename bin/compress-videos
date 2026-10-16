@@ -7,14 +7,15 @@
 # ///
 """
 Compress family videos to H.265/HEVC or H.264 with optional downscale to 1080p.
+Every video ends up as .mp4: .avi, .mov, .m4v, .3gp and .mts are converted.
 
 Safety:
   - Dry-run by default (use --run to actually compress)
   - Original is deleted ONLY after the compressed file is fully written and verified
   - Safe file replacement via .bak intermediate (no data loss on rename failure)
-  - Skips files already in target codec ≤ 1080p
-  - Skips if size gain < 1%
-  - Keeps the original file modification date
+  - Skips .mp4 files already in target codec ≤ 1080p, other containers are only remuxed to .mp4
+  - Skips .mp4 files if size gain < 1% (other containers are converted anyway)
+  - Keeps the original file modification date, and the capture date (metadata)
   - Cleans up temp files on Ctrl+C
 
 Usage:
@@ -55,7 +56,7 @@ from rich.text import Text
 
 console = Console()
 
-VIDEO_EXTENSIONS = {".mp4", ".avi"}
+VIDEO_EXTENSIONS = {".mp4", ".avi", ".mov", ".m4v", ".3gp", ".mts"}
 MIN_GAIN_PERCENT = 1.0
 
 # Track temp files globally for cleanup on interrupt
@@ -215,12 +216,25 @@ def probe_video(path: Path) -> VideoInfo | None:
 # ---------------------------------------------------------------------------
 
 
+def _is_mp4(path: Path) -> bool:
+    return path.suffix.lower() == ".mp4"
+
+
+def _is_compressed(info: VideoInfo, preset: PresetConfig) -> bool:
+    target_codec_name = "hevc" if preset.codec == "libx265" else "h264"
+    return info.codec == target_codec_name and info.height <= 1080
+
+
 def should_skip(info: VideoInfo, preset: PresetConfig) -> str | None:
     """Return a reason to skip, or None if we should compress."""
-    target_codec_name = "hevc" if preset.codec == "libx265" else "h264"
-    if info.codec == target_codec_name and info.height <= 1080:
-        return f"already {target_codec_name} @ {info.resolution_label}"
+    if _is_compressed(info, preset) and _is_mp4(info.path):
+        return f"already {info.codec} @ {info.resolution_label}"
     return None
+
+
+def needs_remux_only(info: VideoInfo, preset: PresetConfig) -> bool:
+    """Already compressed, but not in a .mp4: copy the streams to a .mp4, without re-encoding."""
+    return _is_compressed(info, preset) and not _is_mp4(info.path)
 
 
 def compute_target_height(info: VideoInfo) -> int | None:
@@ -244,6 +258,9 @@ def build_ffmpeg_cmd(
         "-hide_banner",
         "-i",
         str(input_path),
+        # Keep the capture date (QuickTime CreateDate): ffmpeg drops it otherwise
+        "-map_metadata",
+        "0",
         "-c:v",
         preset.codec,
         "-crf",
@@ -272,13 +289,26 @@ def build_ffmpeg_cmd(
     return cmd
 
 
+def build_remux_cmd(input_path: Path, output_path: Path, info: VideoInfo, preset: PresetConfig) -> list[str]:
+    # Only the first video and audio streams: a .m4v may hold data streams (chapters...) a .mp4 cannot
+    cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(input_path), "-map", "0:v:0", "-map", "0:a:0?", "-map_metadata", "0"]
+    cmd += ["-c:v", "copy", "-tag:v", preset.video_tag]
+    if info.audio_codec == "aac":
+        cmd += ["-c:a", "copy"]
+    else:
+        cmd += ["-c:a", "aac", "-b:a", "128k", "-ar", "48000"]
+    cmd += ["-movflags", "+faststart"]
+    cmd += [str(output_path)]
+    return cmd
+
+
 def _build_temp_path(original: Path) -> Path:
     """Build a safe temp output path next to the original."""
     return original.parent / f"{original.stem}.tmp.compressed.mp4"
 
 
 def _build_final_path(original: Path) -> Path:
-    """Final path is .mp4, keeping the original case (.MP4); .avi becomes .mp4."""
+    """Final path is .mp4, keeping the original case (.MP4); .avi, .mov... become .mp4."""
     suffix = original.suffix if original.suffix.lower() == ".mp4" else ".mp4"
     return original.parent / f"{original.stem}{suffix}"
 
@@ -321,10 +351,13 @@ def _describe_action(
     target_height: int | None,
     preset: PresetConfig,
     check: VideoInfo | None = None,
+    remux: bool = False,
 ) -> str:
     """Build a human-readable description of what was/would be done."""
     target_codec_name = "hevc" if preset.codec == "libx265" else "h264"
-    parts: list[str] = []
+    parts: list[str] = ["remux"] if remux else []
+    if not _is_mp4(info.path):
+        parts.append(f"{info.path.suffix.lower()} → .mp4")
     if info.codec != target_codec_name:
         parts.append(f"{info.codec} → {target_codec_name}")
     if target_height and check:
@@ -370,7 +403,8 @@ def compress_video(
         result.reason = skip_reason
         return result
 
-    target_height = compute_target_height(info)
+    remux = needs_remux_only(info, preset)
+    target_height = None if remux else compute_target_height(info)
     result.target_height = target_height or info.height
 
     output_path = _build_temp_path(info.path)
@@ -386,17 +420,20 @@ def compress_video(
 
     if dry_run:
         result.action = Action.WOULD_COMPRESS
-        result.reason = _describe_action(info, target_height, preset)
+        result.reason = _describe_action(info, target_height, preset, remux=remux)
         return result
 
-    cmd = build_ffmpeg_cmd(
-        input_path=info.path,
-        output_path=output_path,
-        target_height=target_height,
-        preset=preset,
-        crf=crf,
-        threads=threads,
-    )
+    if remux:
+        cmd = build_remux_cmd(info.path, output_path, info, preset)
+    else:
+        cmd = build_ffmpeg_cmd(
+            input_path=info.path,
+            output_path=output_path,
+            target_height=target_height,
+            preset=preset,
+            crf=crf,
+            threads=threads,
+        )
 
     _active_temp_files.add(output_path)
     t0 = time.monotonic()
@@ -438,8 +475,8 @@ def compress_video(
     result.gain_bytes = info.size - result.output_size
     result.gain_percent = (result.gain_bytes / info.size * 100) if info.size > 0 else 0
 
-    # If gain < threshold, discard compressed version
-    if result.gain_percent < MIN_GAIN_PERCENT:
+    # If gain < threshold, discard compressed version. Except when changing the container: that is the point
+    if result.gain_percent < MIN_GAIN_PERCENT and _is_mp4(info.path):
         output_path.unlink(missing_ok=True)
         _active_temp_files.discard(output_path)
         result.action = Action.SKIPPED
@@ -455,7 +492,7 @@ def compress_video(
     _active_temp_files.discard(output_path)
 
     result.action = Action.COMPRESSED
-    result.reason = _describe_action(info, target_height, preset, check)
+    result.reason = _describe_action(info, target_height, preset, check, remux=remux)
     return result
 
 
