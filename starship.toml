@@ -5,14 +5,13 @@ add_newline = false
 
 format = """
 $time\
-[](fg:color_1 bg:color_2)\
 $directory\
-[](fg:color_2 bg:color_3)\
 $git_branch\
 $git_state\
 $git_status\
 $status\
 $cmd_duration\
+[](fg:prev_bg)\
 $fill\
 $line_break\
 $character"""
@@ -20,20 +19,21 @@ $character"""
 palette = 'tomsquest'
 
 [palettes.tomsquest]
-color_1 = '#C9C3E6'
-color_2 = '#E4D6F9'
-color_3 = '#FFC5E4'
+color_time = '#C9C3E6'
+color_dir = '#E4D6F9'
+color_git = '#FFC5E4'
 color_text = '#444444'
-color_error = '#FF9D93'
+color_status = '#FF7AC1'
+color_duration = '#C6DEF1'
 
 [time]
 disabled = false # the module is disabled by default
 format = '[ $time ]($style)'
-style = "bold fg:color_text bg:color_1"
+style = "bold fg:color_text bg:color_time"
 
 [directory]
-format = "[ $path ]($style)"
-style = "bold fg:color_text bg:color_2"
+format = "[](fg:prev_bg bg:color_dir)[ $path ]($style)"
+style = "bold fg:color_text bg:color_dir"
 truncate_to_repo = false
 fish_style_pwd_dir_length = 1
 
@@ -42,12 +42,12 @@ symbol = '─'
 style = 'white'
 
 [git_branch]
-format = '[ $branch ]($style)'
-style = "bold fg:color_text bg:color_3"
+format = '[](fg:prev_bg bg:color_git)[ $branch ]($style)'
+style = "bold fg:color_text bg:color_git"
 
 [git_status]
 format = '[$all_status$ahead_behind ]($style)'
-style = "bold fg:color_text bg:color_3"
+style = "bold fg:color_text bg:color_git"
 # Do not show stashed
 stashed = ""
 # Add the count
@@ -59,17 +59,16 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 style = "black"
 
 [status]
-# Also closes the git segment: an arrow on success, a red segment on error
 disabled = false # the module is disabled by default
-format = '$symbol'
-success_symbol = '[](fg:color_3)'
-symbol = '[](fg:color_3 bg:color_error)[ ✘ ($pipestatus → )$status ](bold fg:black bg:color_error)[](fg:color_error)'
+format = '[](fg:prev_bg bg:color_status)[ $symbol $status ]($style)'
+style = 'bold fg:black bg:color_status'
+symbol = '✘'
 pipestatus = true
 pipestatus_separator = ' │ '
 pipestatus_segment_format = '$status'
-pipestatus_format = '$symbol'
+pipestatus_format = '[](fg:prev_bg bg:color_status)[ $symbol $pipestatus → $status ]($style)'
 
 [cmd_duration]
-format = '[ took $duration ]($style)'
-style = "bright white"
-min_time = 30_000
+format = '[](fg:prev_bg bg:color_duration)[ took $duration ]($style)'
+style = "bold fg:color_text bg:color_duration"
+min_time = 1_000
