@@ -27,7 +27,7 @@ color_status = '#FF7AC1'
 color_duration = '#C6DEF1'
 
 [time]
-disabled = false # the module is disabled by default
+disabled = false
 format = '[ $time ]($style)'
 style = "bold fg:color_text bg:color_time"
 
@@ -59,8 +59,8 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 style = "black"
 
 [status]
-disabled = false # the module is disabled by default
-format = '[](fg:prev_bg bg:color_status)[ $symbol $status ]($style)'
+disabled = false
+format = '[](fg:prev_bg bg:color_status)[ $symbol $common_meaning$signal_name$maybe_int ]($style)'
 style = 'bold fg:black bg:color_status'
 symbol = '✘'
 pipestatus = true
