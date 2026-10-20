@@ -11,7 +11,6 @@ $directory\
 $git_branch\
 $git_state\
 $git_status\
-[](fg:color_3)\
 $status\
 $cmd_duration\
 $fill\
@@ -25,6 +24,7 @@ color_1 = '#C9C3E6'
 color_2 = '#E4D6F9'
 color_3 = '#FFC5E4'
 color_text = '#444444'
+color_error = '#FF9D93'
 
 [time]
 disabled = false # the module is disabled by default
@@ -59,11 +59,15 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 style = "black"
 
 [status]
+# Also closes the git segment: an arrow on success, a red segment on error
 disabled = false # the module is disabled by default
-format = '[ $status ]($style)'
-style = 'bold red'
+format = '$symbol'
+success_symbol = '[](fg:color_3)'
+symbol = '[](fg:color_3 bg:color_error)[ ✘ ($pipestatus → )$status ](bold fg:black bg:color_error)[](fg:color_error)'
 pipestatus = true
-pipestatus_format = ' \[$pipestatus\] => [$status ]($style)'
+pipestatus_separator = ' │ '
+pipestatus_segment_format = '$status'
+pipestatus_format = '$symbol'
 
 [cmd_duration]
 format = '[ took $duration ]($style)'
