@@ -71,4 +71,4 @@ pipestatus_format = '[](fg:prev_bg bg:color_status)[ $symbol $pipestatus → 
 [cmd_duration]
 format = '[](fg:prev_bg bg:color_duration)[ took $duration ]($style)'
 style = "bold fg:color_text bg:color_duration"
-min_time = 1_000
+min_time = 10_000
