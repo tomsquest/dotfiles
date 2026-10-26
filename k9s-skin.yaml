@@ -1,0 +1,104 @@
+# k9s light skin, matching Ghostty's Alabaster theme and the starship palette
+
+# Alabaster (Ghostty)
+background: &background "#f7f7f7"
+foreground: &foreground "#000000"
+selection: &selection "#bfdbfe"
+grey: &grey "#777777"
+light_grey: &light_grey "#b7b7b7"
+red: &red "#aa3731"
+green: &green "#448c27"
+yellow: &yellow "#cb9000"
+blue: &blue "#325cc0"
+magenta: &magenta "#7a3e9d"
+cyan: &cyan "#0083b2"
+# Starship (palette 'tomsquest')
+text: &text "#444444"
+lilac: &lilac "#E4D6F9"
+pink: &pink "#FFC5E4"
+pink_strong: &pink_strong "#FF7AC1"
+
+k9s:
+  body:
+    fgColor: *foreground
+    bgColor: *background
+    logoColor: *magenta
+  prompt:
+    fgColor: *foreground
+    bgColor: *background
+    suggestColor: *grey
+  info:
+    fgColor: *magenta
+    sectionColor: *text
+  dialog:
+    fgColor: *foreground
+    bgColor: *background
+    buttonFgColor: *text
+    buttonBgColor: *lilac
+    buttonFocusFgColor: *text
+    buttonFocusBgColor: *pink_strong
+    labelFgColor: *magenta
+    fieldFgColor: *foreground
+  frame:
+    border:
+      fgColor: *light_grey
+      focusColor: *magenta
+    menu:
+      fgColor: *text
+      keyColor: *magenta
+      numKeyColor: *magenta
+    crumbs:
+      fgColor: *text
+      bgColor: *lilac
+      activeColor: *pink
+    status:
+      newColor: *cyan
+      modifyColor: *blue
+      addColor: *green
+      errorColor: *red
+      highlightColor: *yellow
+      killColor: *grey
+      completedColor: *grey
+    title:
+      fgColor: *text
+      bgColor: *background
+      highlightColor: *magenta
+      counterColor: *blue
+      filterColor: *magenta
+  views:
+    charts:
+      bgColor: default
+      defaultDialColors:
+        - *blue
+        - *red
+      defaultChartColors:
+        - *blue
+        - *red
+    table:
+      fgColor: *foreground
+      bgColor: *background
+      cursorFgColor: *foreground
+      cursorBgColor: *selection
+      markColor: *pink_strong
+      header:
+        fgColor: *text
+        bgColor: *background
+        sorterColor: *magenta
+    xray:
+      fgColor: *foreground
+      bgColor: *background
+      cursorColor: *selection
+      graphicColor: *blue
+      showIcons: false
+    yaml:
+      keyColor: *magenta
+      colonColor: *grey
+      valueColor: *foreground
+    logs:
+      fgColor: *foreground
+      bgColor: *background
+      indicator:
+        fgColor: *text
+        bgColor: *lilac
+        toggleOnColor: *magenta
+        toggleOffColor: *grey

@@ -38,6 +38,7 @@ function create-links {
     create-link "$PWD/ghostty-config"         "$HOME/.config/ghostty/config"
     create-link "$PWD/gitconfig"              "$HOME/.gitconfig"
     create-link "$PWD/gitignore"              "$HOME/.gitignore"
+    create-link "$PWD/k9s-skin.yaml"          "$HOME/.config/k9s/skins/tomsquest.yaml"
     create-link "$PWD/nvim"                   "$HOME/.config/nvim"
     create-link "$PWD/npmrc"                  "$HOME/.npmrc"
     create-link "$PWD/profile"                "$HOME/.profile"
