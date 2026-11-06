@@ -11,6 +11,9 @@ path=("$HOME/bin" "$HOME/.local/bin" $path)
 # LinuxBrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+# Bun (package added with `bun link`)
+path=("$HOME/.bun/bin" $path)
+
 # Asdf
 path=("$HOME/.asdf/shims" $path)
 fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
