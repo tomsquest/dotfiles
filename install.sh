@@ -49,6 +49,9 @@ function create-links {
     do
       create-link "$file" "$HOME/.local/share/applications/$(basename "$file")"
     done
+    # used by `ww` to launch apps
+    create-link "$PWD/systemd/ww-launch@.service" "$HOME/.config/systemd/user/ww-launch@.service"
+    systemctl --user daemon-reload || echo "Skipping systemd reload: no user session"
 }
 
 function install-asdf-plugins {

@@ -1,0 +1,8 @@
+[Unit]
+Description=Launch %i (started by ww)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kstart --application %i
+# kstart never exits when the desktop id is unknown
+TimeoutStartSec=10s
