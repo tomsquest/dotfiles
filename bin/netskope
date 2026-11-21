@@ -29,7 +29,7 @@ start() {
 }
 
 status() {
-    sudo systemctl is-active stagentd.service > /dev/null && echo -e "${GREEN}System service: active${RESET}" || echo -e "${BLUE}System service: inactive${RESET}"
+    systemctl is-active stagentd.service > /dev/null && echo -e "${GREEN}System service: active${RESET}" || echo -e "${BLUE}System service: inactive${RESET}"
     systemctl --user is-active stagentapp.service > /dev/null && echo -e "${GREEN}User service: active${RESET}" || echo -e "${BLUE}User service: inactive${RESET}"
     pgrep -f /opt/netskope/stagent/stAgentUI > /dev/null && echo -e "${GREEN}UI (tray): running${RESET}" || echo -e "${BLUE}UI (tray): not running${RESET}"
 }
