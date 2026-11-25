@@ -66,6 +66,26 @@ status() {
     systemctl is-active stagentd.service > /dev/null && echo -e "${GREEN}System service: active${RESET}" || echo -e "${BLUE}System service: inactive${RESET}"
     systemctl --user is-active stagentapp.service > /dev/null && echo -e "${GREEN}User service: active${RESET}" || echo -e "${BLUE}User service: inactive${RESET}"
     pgrep -f /opt/netskope/stagent/stAgentUI > /dev/null && echo -e "${GREEN}UI (tray): running${RESET}" || echo -e "${BLUE}UI (tray): not running${RESET}"
+
+    local output pa_status
+    if ! command -v nsclient > /dev/null 2>&1; then
+        echo -e "${BLUE}Private Access: unavailable (nsclient not found)${RESET}"
+        return
+    fi
+
+    if ! output=$(timeout 15 nsclient show-pa 2> /dev/null); then
+        echo -e "${BLUE}Private Access: unavailable (nsclient show-pa failed)${RESET}"
+        return
+    fi
+
+    pa_status=$(printf '%s\n' "$output" | sed -n 's/^[[:space:]]*Status:[[:space:]]*//p' | head -n 1)
+    if [ -z "$pa_status" ]; then
+        echo -e "${BLUE}Private Access: unknown (no status returned)${RESET}"
+    elif [[ "$pa_status" == Connected || "$pa_status" == Connected\ * ]]; then
+        echo -e "${GREEN}Private Access: ${pa_status}${RESET}"
+    else
+        echo -e "${BLUE}Private Access: ${pa_status}${RESET}"
+    fi
 }
 
 stop() {
