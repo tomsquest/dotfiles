@@ -5,6 +5,7 @@ set -euo pipefail
 
 BLUE="\033[1;34m"
 GREEN="\033[1;32m"
+RED="\033[1;31m"
 RESET="\033[0m"
 
 usage() {
@@ -82,7 +83,9 @@ status() {
     if [ -z "$pa_status" ]; then
         echo -e "${BLUE}Private Access: unknown (no status returned)${RESET}"
     elif [[ "$pa_status" == Connected || "$pa_status" == Connected\ * ]]; then
-        echo -e "${GREEN}Private Access: ${pa_status}${RESET}"
+        echo -e "${GREEN}Connected: true${RESET}"
+    elif [[ "$pa_status" == Disconnected || "$pa_status" == Disconnected\ * ]]; then
+        echo -e "${RED}Connected: false${RESET}"
     else
         echo -e "${BLUE}Private Access: ${pa_status}${RESET}"
     fi
