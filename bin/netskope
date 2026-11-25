@@ -8,11 +8,12 @@ GREEN="\033[1;32m"
 RESET="\033[0m"
 
 usage() {
-    echo -e "${BLUE}Usage: $0 [start|status|stop|restart]${RESET}"
-    echo -e "${BLUE}  start   - Start the NetSkope VPN services${RESET}"
+    echo -e "${BLUE}Usage: $0 [start|status|stop|restart|reauth]${RESET}"
+    echo -e "${BLUE}  start   - Start the NetSkope VPN services and trigger re-authentication${RESET}"
     echo -e "${BLUE}  status  - Status of the NetSkope VPN services${RESET}"
     echo -e "${BLUE}  stop    - Stop the NetSkope VPN services${RESET}"
     echo -e "${BLUE}  restart - Restart the NetSkope VPN services${RESET}"
+    echo -e "${BLUE}  reauth  - Open the NetSkope re-authentication window${RESET}"
 }
 
 start() {
@@ -26,6 +27,39 @@ start() {
     dex /usr/share/applications/stagentui.desktop
 
     echo -e "${GREEN}NetSkope VPN started${RESET}"
+
+    reauth
+}
+
+# Click "Re-authenticate Private Access" in the tray menu through D-Bus,
+# so the login window opens now instead of after the client's own delay.
+reauth() {
+    local dbus_dest="netskope-client.stagentapp"
+    local dbus_path="/org/ayatana/NotificationItem/com_netskope_stagentui/Menu"
+    local dbus_iface="com.canonical.dbusmenu"
+    local item_id=""
+
+    echo -e "${BLUE}Triggering re-authentication${RESET}"
+    for _ in $(seq 1 30); do
+        item_id=$(busctl --user --auto-start=no --json=short call "$dbus_dest" "$dbus_path" "$dbus_iface" \
+            GetLayout iias 0 -- -1 0 2> /dev/null \
+            | jq -r '[.. | arrays
+                | select(length == 3 and (.[0] | type) == "number" and (.[1] | type) == "object")
+                | select((.[1].label.data // "") | test("re-?authenticate"; "i"))
+                | select(.[1].enabled.data != false)
+                | .[0]] | first // empty') || true
+        [ -n "$item_id" ] && break
+        sleep 1
+    done
+
+    if [ -z "$item_id" ]; then
+        echo -e "${BLUE}Re-authenticate menu not available, skipping${RESET}"
+        return 0
+    fi
+
+    busctl --user --auto-start=no call "$dbus_dest" "$dbus_path" "$dbus_iface" \
+        Event isvu "$item_id" clicked i 0 "$(date +%s)"
+    echo -e "${GREEN}Re-authentication window requested${RESET}"
 }
 
 status() {
@@ -68,8 +102,11 @@ if [ $# -ge 1 ]; then
         restart)
             restart
             ;;
+        reauth)
+            reauth
+            ;;
         *)
-            echo -e "${BLUE}Invalid option. Usage: $0 [start|stop|restart]${RESET}"
+            echo -e "${BLUE}Invalid option. Usage: $0 [start|status|stop|restart|reauth]${RESET}"
             exit 1
             ;;
     esac
