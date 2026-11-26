@@ -86,5 +86,5 @@ alias js='just serve'
 alias jt='just test'
 
 # Tools
-alias cat="bat --paging=never"
+alias cat="bat --style=plain --paging=never"
 alias rg="rg --smart-case"
