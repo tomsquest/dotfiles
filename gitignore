@@ -29,3 +29,5 @@ target/
 *wallaby.js
 .env
 .envrc
+
+**/.claude/settings.local.json
